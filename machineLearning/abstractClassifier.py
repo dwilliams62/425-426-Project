@@ -2,20 +2,26 @@ from sklearn.feature_extraction.text import TfidfVectorizer # For vectorization 
 from sklearn.naive_bayes import MultinomialNB # Naive Bayes algorithm
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import classification_report
+from sklearn.model_selection import StratifiedKFold, cross_val_predict
 import csv
 import os
-import nltk # For tokenization of data
-from nltk.tokenize import word_tokenize
+import re
+import spacy
 
 csvPath = r"C:\Users\Olivia\Documents\Fall 2023\COSC 425\Training CSVs" # Path to CSV files
 abstracts = [] # Array for holding the abstracts
 labels = [] # Array for holding the labels each abstract falls under
 
-def customTokenizer(text):
-    words = word_tokenize(text)
-    return words
+nlp = spacy.load("en_core_web_sm") # Loading spacy's English module
 
-tfidf_vectorizer = TfidfVectorizer(tokenizer=customTokenizer, lowercase=True, stop_words='english')
+def customTokenizer(text):
+    doc = nlp(text) # Using spacy to process the abstracts
+    tokens = [token.lemma_ for token in doc if token.is_alpha and not token.is_stop] # Getting the tokens
+    bigrams = [" ".join(tokens[i:i+2]) for i in range(len(tokens) - 1)] # Using bigrams to give the algorithm more context
+    all_grams = tokens + bigrams
+    words = [word.lower() for word in all_grams if re.match("^[a-zA-Z]+$", word)] # Making sure the tokens are alphabetical
+
+    return tokens
 
 for filename in os.listdir(csvPath):
     if filename.endswith(".csv"):
@@ -24,21 +30,30 @@ for filename in os.listdir(csvPath):
         with open(os.path.join(csvPath, filename), mode="r", newline="", encoding="utf-8") as file:
             reader = csv.DictReader(file)
             for row in reader:
-                abstracts.append(row["Abstract Note"]) # Extracts abstracts from the abstract column in the CSV
-                labels.append(category)
+                abstract = row["Abstract Note"]
+                if abstract.strip(): # Doesn't extract abstract if there is a blank space
+                    abstracts.append(row["Abstract Note"]) # Extracts abstracts from the abstract column in the CSV
+                    labels.append(category)
         
+tfidf_vectorizer = TfidfVectorizer(tokenizer=customTokenizer, lowercase=True, stop_words='english')      
 vectors = tfidf_vectorizer.fit_transform(abstracts) # Vectorizing the abstracts
 
-X_train, X_test, y_train, y_test = train_test_split(
-    vectors,  
-    labels,           
-    test_size=0.1, # What percentage of data will be used for testing
-    random_state=42 # Seed for splitting the data up  
-)   
+nb = MultinomialNB() # Loading in multinomial Naive Bayes
 
-nb = MultinomialNB()
-nb.fit(X_train, y_train)
-y_pred = nb.predict(X_test) # Using the training data to make predictions
+skf = StratifiedKFold(n_splits=5, shuffle=True, random_state=42) # Cross validation for the testing data
 
-report = classification_report(y_pred, y_test)
-print(report) # This report displays the accuracy for predictions made by our algorithm with the current data      
+classification_reports = [] # Array to store multiple classification reports 
+
+for train_indices, test_indices in skf.split(vectors, labels):
+    X_train, X_test = vectors[train_indices], vectors[test_indices]
+    y_train, y_test = [labels[i] for i in train_indices], [labels[i] for i in test_indices]
+
+    nb.fit(X_train, y_train) # Fitting training and testing data to the algorithm
+    y_pred = nb.predict(X_test)
+
+    report = classification_report(y_test, y_pred)
+    classification_reports.append(report) # Appends a machine learning algorithm for each fold
+
+overall_report = classification_report(labels, nb.predict(vectors)) # Classification report for all of the data
+print("Overall Classification Report:")
+print(overall_report)       
