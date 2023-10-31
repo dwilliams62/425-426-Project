@@ -8,27 +8,22 @@
     <title> CLIMATE </title>
 
     <style>
-      
-        /* Modify brand and text color */
-         
-        .navbar-custom .navbar-brand,
-        .navbar-custom .navbar-text {
+        .navbar-custom .navbar-brand, .navbar-custom .navbar-text {
             color: rgb(218, 179, 8);
         }
-
         .navbar-light .navbar-nav .nav-link {
             color: rgb(218, 179, 8);
         }
     </style>
-
 </head>
+
 <body>
-  
     <nav class="navbar navbar-expand-lg navbar-custom bg-light">
         <div class="container-fluid">
           <a class="navbar-brand" href="#">CLIMATE3</a>
-          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" 
+              aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+              <span class="navbar-toggler-icon"></span>
           </button>
           <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav ms-auto">
@@ -46,19 +41,11 @@
                   <li><a class="dropdown-item" href="#">About</a></li>
                   <li><a class="dropdown-item" href="#">Download Scraper</a></li>
                   <li><a class="dropdown-item" href="#">Contacts</a></li>
-                  <li><a class="dropdown-item" href="#">TEST BUTTON</a></li>
                 </ul>
               </li>
               <button type="button" class="btn btn-warning">Sign in</button>
               
             </ul>
-            <form class="d-flex">
-              <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-              <button class="btn btn-outline-success" type="submit">Search</button>
-            </form>
-            <form action="databasetest.html">
-              <button type="submit" class="button">HOME</button>
-            </form>
           </div>
         </div>
       </nav>
@@ -70,27 +57,28 @@
       <div class = "col">
         <h2 class = "text-warning text-center">Welcome to CLIMAT3</h2>
         <div class = "container" id = "white">
-          <h5 class = "lead">Classifying information and health research literature through machine learning is our objective. Providing access to a variety of literature catergorized by the Bio-Psycho-Social framework, to spread knowledge about ways to improve overall human health.
+          <h5 class = "lead">Classifying information and health research literature through machine learning is our objective. 
+            Providing access to a variety of literature catergorized by the Bio-Psycho-Social framework, 
+            to spread knowledge about ways to improve overall human health.
           </h5>
         </div>
       </div>
 
       <div class = "col">
-        
         <div class = "container" id = "white">
             <img src="bpse2.png" class="img-fluid mx-auto d-block" alt="Responsive image">
         </div>
       </div>
-      
-
   </div>
-      </main>
-    
-
+  <form class="d-flex">
+    <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+    <button class="btn btn-outline-success" type="submit">Search</button>
+  </form>
+</main>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" 
     integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
-    
+
 </body>
 </html>
 
