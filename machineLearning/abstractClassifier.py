@@ -19,9 +19,8 @@ def customTokenizer(text):
     tokens = [token.lemma_ for token in doc if token.is_alpha and not token.is_stop] # Getting the tokens
     bigrams = [" ".join(tokens[i:i+2]) for i in range(len(tokens) - 1)] # Using bigrams to give the algorithm more context
     all_grams = tokens + bigrams
-    words = [word.lower() for word in all_grams if re.match("^[a-zA-Z]+$", word)] # Making sure the tokens are alphabetical
 
-    return tokens
+    return all_grams
 
 for filename in os.listdir(csvPath):
     if filename.endswith(".csv"):
@@ -35,12 +34,12 @@ for filename in os.listdir(csvPath):
                     abstracts.append(row["Abstract Note"]) # Extracts abstracts from the abstract column in the CSV
                     labels.append(category)
         
-tfidf_vectorizer = TfidfVectorizer(tokenizer=customTokenizer, lowercase=True, stop_words='english')      
+tfidf_vectorizer = TfidfVectorizer(tokenizer=customTokenizer, lowercase=True)      
 vectors = tfidf_vectorizer.fit_transform(abstracts) # Vectorizing the abstracts
 
 nb = MultinomialNB() # Loading in multinomial Naive Bayes
 
-skf = StratifiedKFold(n_splits=5, shuffle=True, random_state=42) # Cross validation for the testing data
+skf = StratifiedKFold(n_splits=10, shuffle=True, random_state=42) # Cross validation for the testing data
 
 classification_reports = [] # Array to store multiple classification reports 
 
