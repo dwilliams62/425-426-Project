@@ -1,5 +1,6 @@
 {
   "hosting": {
+    "site": "climat3",
     "public": "public",
     "ignore": [
       "firebase.json",
