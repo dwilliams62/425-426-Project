@@ -59,8 +59,11 @@ function onReaderLoad(event){
     console.log(event.target.result);
     var obj = JSON.parse(event.target.result);
     var len = Object.keys(obj).length;
+    var str = "DocName";
+    var count = str.match(/\d*$/);
+
     for (let i = 0; i < len; i++) {
-      setDoc(doc(db, document.getElementById('collecName').value, 'docName'), {
+      setDoc(doc(db, document.getElementById('collecName').value, str.substr(0, count.index) + (++count[0])), {
         itemType: obj[i]['itemType'],
         title: obj[i]['title'],
         pubTitle: obj[i]['pubTitle'],
@@ -77,8 +80,8 @@ function onReaderLoad(event){
         manualTags: obj[i]['manualTags'],
         autoTags: obj[i]['autoTags']
       });
+      console.log("Added!");
     }
-    console.log("Added!");
 }
   
 function alert_data(name, family){
