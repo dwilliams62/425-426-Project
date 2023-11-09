@@ -29,7 +29,7 @@ function addNewDocument() {
     //customer: document.getElementById('custName').value,
     //testString: 'updated'
   //});
-  setDoc(doc(db, document.getElementById('collecName').value, 'docName'), {
+  setDoc(doc(db, document.getElementById('collecName').value, document.getElementById('docName').value), {
     customer: document.getElementById('custName').value,
     testString: 'updated'
   });
