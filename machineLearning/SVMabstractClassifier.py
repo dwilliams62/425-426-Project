@@ -2,16 +2,20 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.svm import SVC  # Import the Support Vector Machine classifier
 from sklearn.model_selection import StratifiedKFold
 from sklearn.metrics import classification_report
+import pandas as pd
 import csv
 import os
 import re
 import spacy
 
-csvPath = r"C:\Users\Olivia\Documents\Fall 2023\COSC 425\Training CSVs"
-abstracts = []
-labels = []
+csvPath = r"C:\Users\Olivia\Documents\Fall 2023\COSC 425\Training CSVs\allData.csv"
+allData = pd.read_csv(csvPath, encoding="utf-8")  # Read the data from allData.csv
 
 nlp = spacy.load("en_core_web_sm") # Loading Spacy's English module
+
+abstracts = allData["Abstract"].tolist()  # Extract abstracts from the CSV
+titles = allData["Title"].tolist()  # Extract titles from the CSV
+labels = allData["Category"].tolist()  # Extract labels from the CSV
 
 def customTokenizer(text):
     doc = nlp(text)
@@ -21,20 +25,10 @@ def customTokenizer(text):
 
     return all_grams
 
-for filename in os.listdir(csvPath):
-    if filename.endswith(".csv"):
-        category = os.path.splitext(filename)[0] # The category is stored in the file name
-
-        with open(os.path.join(csvPath, filename), mode="r", newline="", encoding="utf-8") as file:
-            reader = csv.DictReader(file)
-            for row in reader:
-                abstract = row["Abstract Note"]
-                if abstract.strip():
-                    abstracts.append(row["Abstract Note"]) # Appends contents of the Abstract column
-                    labels.append(category)
+combinedFeatures = [f"{title} {abstract}" for title, abstract in zip(titles, abstracts)]
 
 tfidf_vectorizer = TfidfVectorizer(tokenizer=customTokenizer, lowercase=True)
-vectors = tfidf_vectorizer.fit_transform(abstracts) # Vectorizing and tokenizing the contents of the abstracts
+vectors = tfidf_vectorizer.fit_transform(combinedFeatures) # Vectorizing and tokenizing the contents of the abstracts and titles
 
 svm = SVC(C=1.0, kernel='linear', random_state=42)  # Initializing Support Vector Machines
 
