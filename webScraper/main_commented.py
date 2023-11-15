@@ -1040,9 +1040,12 @@ Tab WEB-Scrape:
                                     print("No publication year for: ", articles)
                                     articles_dicts["pubYear"] = ""
                                 else:
-                                    public_year = PUBYear.get_text()
-                                    public_year = public_year.split(" ")[2]
-                                    articles_dicts["pubYear"] = public_year
+                                    try:
+                                        public_year = PUBYear.get_text()
+                                        public_year = public_year.split(" ")[2]
+                                        articles_dicts["pubYear"] = public_year
+                                    except IndexError:
+                                        print("error with pub year")
                                 # Extract DOI
                                 DOI = soup.find('li', class_="c-bibliographic-information__list-item c-bibliographic-information__list-item--doi")
                                 if DOI == None:
