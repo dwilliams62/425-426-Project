@@ -808,10 +808,13 @@ Tab WEB-Scrape:
                                     print("No Volume for: ", articles)
                                     articles_dicts['volume'] = ""
                                 else:
-                                    vol_text = volume.get_text()
-                                    vol_text = vol_text.split(";")[1]
-                                    vol_text = vol_text.split("(")[0]
-                                    articles_dicts["volume"] = vol_text
+                                    try: 
+                                        vol_text = volume.get_text()
+                                        vol_text = vol_text.split(";")[1]
+                                        vol_text = vol_text.split("(")[0]
+                                        articles_dicts["volume"] = vol_text
+                                    except IndexError:
+                                        print("Error with Volume")
                                 # Set the issue to an empty string (not extracted in this script).
                                 articles_dicts["issue"] = ""
                                 # Find the ISSN of the article.
@@ -822,17 +825,34 @@ Tab WEB-Scrape:
                                     print("No ISSN for: ", articles)
                                     articles_dicts['issn'] = ""
                                 else:
-                                    ISSN_text = issn.get_text()
-                                    ISSN_text = ISSN_text.split(":")[0]
-                                    ISSN_text = ISSN_text.split(";")[1]
-                                    ISSN_text = ISSN_text.split(")")[0]
-                                    try:
-                                        ISSN_text.split("(")[1]
-                                    except IndexError:
+                                    try: 
+                                        ISSN_text = issn.get_text()
                                         ISSN_text = ISSN_text.split(":")[0]
-                                    else:
-                                        ISSN_text = ISSN_text.split("(")[1]
-                                    articles_dicts["issn"] = ISSN_text
+                                        ISSN_text = ISSN_text.split(";")[1]
+                                        ISSN_text = ISSN_text.split(")")[0]
+                                        try:
+                                            ISSN_text.split("(")[1]
+                                        except IndexError:
+                                            ISSN_text = ISSN_text.split(":")[0]
+                                        else:
+                                            ISSN_text = ISSN_text.split("(")[1]
+                                        articles_dicts["issn"] = ISSN_text
+                                    except IndexError:
+                                        try:
+                                            ISSN_text = issn.get_text()
+                                            ISSN_text = ISSN_text.split(":")[0]
+                                            ISSN_text = ISSN_text.split(":")[1]
+                                            ISSN_text = ISSN_text.split(")")[0]
+                                        except IndexError: 
+                                            print("Error on ISSN")
+
+                                        try:
+                                            ISSN_text.split("(")[1]
+                                        except IndexError:
+                                            ISSN_text = ISSN_text.split(":")[0]
+                                        else:
+                                            ISSN_text = ISSN_text.split("(")[1]
+                                articles_dicts["issn"] = ISSN_text
                                 # Set the library catalog to "PubMed" for the article.
                                 articles_dicts["libCatalog"] = "PubMed"
                                 # Set manual and auto tags to empty strings (not extracted in this script).
@@ -1042,8 +1062,9 @@ Tab WEB-Scrape:
                                     print("No Abstract for: ", articles)
                                     articles_dicts["abstract"] = ""
                                 else:
+                                    abs = " "
                                     for springer_abstract in abstract.find_all('p'):
-                                        abs = springer_abstract.get_text()
+                                        abs += springer_abstract.get_text()
                                         abs = abs.replace("\n", "")
                                         abs = re.sub(r'(^[ \t]+|[ \t]+(?=:))', '', abs, flags=re.M)
                                         abs = abs.encode("ascii", 'ignore')
@@ -1062,9 +1083,13 @@ Tab WEB-Scrape:
                                     print("No Volume for: ", articles)
                                     articles_dicts['volume'] = ""
                                 else:
-                                    for vol in volume.find('b'):
-                                        vol_text = vol.get_text()
-                                    articles_dicts["volume"] = vol_text
+                                    try: 
+                                        for vol in volume.find('b'):
+                                            vol_text = vol.get_text()
+                                        
+                                    except TypeError:
+                                        print("Error on volume")
+                                articles_dicts["volume"] = vol_text
                                 # Initialize other fields with empty values
                                 articles_dicts["issue"] = ""
                                 articles_dicts['issn'] = ""
