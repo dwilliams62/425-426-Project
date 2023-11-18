@@ -1,6 +1,6 @@
 //Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
-import { getFirestore, doc, collection, addDoc, setDoc } from "firebase/firestore";
+import { getFirestore, doc, setDoc, getDoc } from "firebase/firestore";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -24,11 +24,6 @@ const db = getFirestore(app);
 console.log('Hello Firebase!');
 
 function addNewDocument() {
-  //const testCollection = collection(db, document.getElementById('collecName').value);
-  //const newDoc = addDoc(testCollection, {
-    //customer: document.getElementById('custName').value,
-    //testString: 'updated'
-  //});
   setDoc(doc(db, document.getElementById('collecName').value, document.getElementById('docName').value), {
     customer: document.getElementById('custName').value,
     testString: 'updated'
@@ -36,21 +31,11 @@ function addNewDocument() {
   console.log("Added!");
 }
 
-
-async function parseJsonFile(file) {
-  return new Promise((resolve, reject) => {
-    const fileReader = new FileReader()
-    fileReader.onload = event => resolve(JSON.parse(event.target.result))
-    fileReader.onerror = error => reject(error)
-    fileReader.readAsText(file)
-  })
-}
-
 async function printFile() {
   var reader = new FileReader();
-  reader.addEventListener('load', function() {
-    document.getElementById('file').innerText = this.result;
-  });
+  // reader.addEventListener('load', function() {
+  //   document.getElementById('file').innerText = this.result;
+  // });
   reader.readAsText(document.querySelector('.input').files[0]);
   reader.onload = onReaderLoad;
 }
@@ -83,11 +68,69 @@ function onReaderLoad(event){
       console.log("Added!");
     }
 }
-  
-function alert_data(name, family){
-    alert('Name : ' + name + ', Family : ' + family);
+
+async function CreateXMLRDF() {
+  const docRef = doc(db, document.getElementById('collecName').value, document.getElementById('docName').value);
+  const docSnap = await getDoc(docRef);
+
+  if (docSnap.exists()) {
+    console.log("Document data:", docSnap.data());
+  } else {
+    // docSnap.data() will be undefined in this case
+    console.log("No such document!");
+  }
+
+  var XMLRDF = "<rdf:RDF\n";
+  XMLRDF += 'xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"\n'
+  XMLRDF += 'xmlns:z="http://www.zotero.org/namespaces/export#"\n'
+  XMLRDF += 'xmlns:dcterms="http://purl.org/dc/terms/"\n'
+  XMLRDF += 'xmlns:bib="http://purl.org/net/biblio#"\n'
+  XMLRDF += 'xmlns:foaf="http://xmlns.com/foaf/0.1/"\n'
+  XMLRDF += 'xmlns:dc="http://purl.org/dc/elements/1.1/"\n'
+  XMLRDF += 'xmlns:prism="http://prismstandard.org/namespaces/1.2/basic/">\n'
+  //XMLRDF += docSnap.data().url;
+  XMLRDF += '<bib:Article rdf:about="' + docSnap.data().url + '">\n';
+  XMLRDF += '<z:itemType>journalArticle</z:itemType>\n';
+  XMLRDF += '<dcterms:isPartOf rdf:resource="urn:issn:' + docSnap.data().issn + '"/>\n';
+  XMLRDF += '<bib:authors>\n';
+  XMLRDF += '<rdf:Seq>\n';
+  XMLRDF += '<rdf:li>\n';
+  XMLRDF += '<foaf:Person>\n';
+  XMLRDF += '<foaf:surname>' + docSnap.data().author + '</foaf:surname>\n';
+  XMLRDF += '<foaf:givenName>' + 'Author First Name' + '</foaf:givenName>\n';
+  XMLRDF += '</foaf:Person>\n';
+  XMLRDF += '</rdf:li>\n';
+  XMLRDF += '</rdf:Seq>\n';
+  XMLRDF += '</bib:authors>\n';
+  XMLRDF += '<dc:subject>' + docSnap.data().manualTags + '</dc:subject>\n';
+  XMLRDF += '<dc:title>' + docSnap.data().title + '</dc:title>\n';
+  XMLRDF += '<dcterms:abstract>' + docSnap.data().abstract + '</dcterms:abstract>\n';
+  XMLRDF += '<dc:date>' + docSnap.data().date + '</dc:date>\n';
+  XMLRDF += '<z:language>' + 'English' + '</z:language>\n';
+  XMLRDF += '<dc:identifier>\n';
+  XMLRDF += '<dcterms:URI><rdf:value>' + docSnap.data().url + '</rdf:value></dcterms:URI>\n';
+  XMLRDF += '</dc:identifier>\n';
+  XMLRDF += '<dcterms:dateSubmitted>' + '2023-11-18' + '</dcterms:dateSubmitted>\n';
+  XMLRDF += '</bib:Article>\n'
+  XMLRDF += '<bib:Journal rdf:about="' + docSnap.data().issn + '">\n';
+  XMLRDF += '<prism:volume>' + docSnap.data().volume + '</prism:volume>\n';
+  XMLRDF += '<dc:title>' + docSnap.data().pubTitle + '</dc:title>\n';
+  XMLRDF += '<dc:identifier>' + docSnap.data().doi + '</dc:identifier>\n';
+  XMLRDF += '<prism:number>' + docSnap.data().issue + '</prism:number>\n';
+  XMLRDF += '<dc:identifier>' + docSnap.data().issn + '</dc:identifier>\n';
+  XMLRDF += '</bib:Journal>\n';
+  XMLRDF += '</rdf:RDF>';
+
+  console.log(XMLRDF);
+
+  var link = document.createElement('a');
+link.download = 'data.rdf';
+var blob = new Blob([XMLRDF], {type: 'text/plain'});
+link.href = window.URL.createObjectURL(blob);
+link.click();
 }
 
 document.getElementById('uploadBtn').addEventListener('click', printFile);
 document.getElementById("myBtn").addEventListener("click", addNewDocument);
+document.getElementById("openDocTest").addEventListener("click", CreateXMLRDF);
 
