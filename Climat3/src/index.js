@@ -69,14 +69,13 @@ function onReaderLoad(event){
     }
 }
 
-async function CreateXMLRDF() {
-  const docRef = doc(db, document.getElementById('collecName').value, document.getElementById('docName').value);
+async function AddXMLRDFFile(collectionName, documentName) {
+  const docRef = doc(db, collectionName, documentName);
   const docSnap = await getDoc(docRef);
 
   if (docSnap.exists()) {
     console.log("Document data:", docSnap.data());
   } else {
-    // docSnap.data() will be undefined in this case
     console.log("No such document!");
   }
 
@@ -88,7 +87,6 @@ async function CreateXMLRDF() {
   XMLRDF += 'xmlns:foaf="http://xmlns.com/foaf/0.1/"\n'
   XMLRDF += 'xmlns:dc="http://purl.org/dc/elements/1.1/"\n'
   XMLRDF += 'xmlns:prism="http://prismstandard.org/namespaces/1.2/basic/">\n'
-  //XMLRDF += docSnap.data().url;
   XMLRDF += '<bib:Article rdf:about="' + docSnap.data().url + '">\n';
   XMLRDF += '<z:itemType>journalArticle</z:itemType>\n';
   XMLRDF += '<dcterms:isPartOf rdf:resource="urn:issn:' + docSnap.data().issn + '"/>\n';
@@ -112,7 +110,7 @@ async function CreateXMLRDF() {
   XMLRDF += '</dc:identifier>\n';
   XMLRDF += '<dcterms:dateSubmitted>' + '2023-11-18' + '</dcterms:dateSubmitted>\n';
   XMLRDF += '</bib:Article>\n'
-  XMLRDF += '<bib:Journal rdf:about="' + docSnap.data().issn + '">\n';
+  XMLRDF += '<bib:Journal rdf:about="urn:issn:' + docSnap.data().issn + '">\n';
   XMLRDF += '<prism:volume>' + docSnap.data().volume + '</prism:volume>\n';
   XMLRDF += '<dc:title>' + docSnap.data().pubTitle + '</dc:title>\n';
   XMLRDF += '<dc:identifier>' + docSnap.data().doi + '</dc:identifier>\n';
@@ -122,12 +120,17 @@ async function CreateXMLRDF() {
   XMLRDF += '</rdf:RDF>';
 
   console.log(XMLRDF);
+  return XMLRDF;
+}
+
+async function CreateXMLRDF() {
+  var RDFFile = await(AddXMLRDFFile('delete', 'DocName1'));
 
   var link = document.createElement('a');
-link.download = 'data.rdf';
-var blob = new Blob([XMLRDF], {type: 'text/plain'});
-link.href = window.URL.createObjectURL(blob);
-link.click();
+  link.download = 'data.rdf';
+  var blob = new Blob([RDFFile], {type: 'text/plain'});
+  link.href = window.URL.createObjectURL(blob);
+  link.click();
 }
 
 document.getElementById('uploadBtn').addEventListener('click', printFile);
