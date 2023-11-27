@@ -15,6 +15,7 @@ nlp = spacy.load("en_core_web_sm") # Loading Spacy's English module
 
 abstracts = allData["Abstract"].tolist()  # Extract abstracts from the CSV
 titles = allData["Title"].tolist()  # Extract titles from the CSV
+tags = allData["Tags"].tolist() # Extracting tags from the CSV
 labels = allData["Category"].tolist()  # Extract labels from the CSV
 
 def customTokenizer(text):
@@ -25,7 +26,7 @@ def customTokenizer(text):
 
     return all_grams
 
-combinedFeatures = [f"{title} {abstract}" for title, abstract in zip(titles, abstracts)]
+combinedFeatures = [f"{title} {abstract} {tag}" for title, abstract, tag in zip(titles, abstracts, tags)]
 
 tfidf_vectorizer = TfidfVectorizer(tokenizer=customTokenizer, lowercase=True)
 vectors = tfidf_vectorizer.fit_transform(combinedFeatures) # Vectorizing and tokenizing the contents of the abstracts and titles
