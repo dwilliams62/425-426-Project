@@ -69,62 +69,77 @@ function onReaderLoad(event){
     }
 }
 
-async function AddXMLRDFFile(collectionName, documentName) {
-  const docRef = doc(db, collectionName, documentName);
-  const docSnap = await getDoc(docRef);
+function addHeadingRDFFile() {
+  var articleRDFString = "<rdf:RDF\n";
+  articleRDFString += 'xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"\n'
+  articleRDFString += 'xmlns:z="http://www.zotero.org/namespaces/export#"\n'
+  articleRDFString += 'xmlns:dcterms="http://purl.org/dc/terms/"\n'
+  articleRDFString += 'xmlns:bib="http://purl.org/net/biblio#"\n'
+  articleRDFString += 'xmlns:foaf="http://xmlns.com/foaf/0.1/"\n'
+  articleRDFString += 'xmlns:dc="http://purl.org/dc/elements/1.1/"\n'
+  articleRDFString += 'xmlns:prism="http://prismstandard.org/namespaces/1.2/basic/">\n'
+  return articleRDFString;
+}
 
-  if (docSnap.exists()) {
-    console.log("Document data:", docSnap.data());
-  } else {
-    console.log("No such document!");
+function addArticleRDFFile(document) {
+  var articleRDFString = '<bib:Article rdf:about="' + document.data().url + '">\n';
+  articleRDFString += '<z:itemType>journalArticle</z:itemType>\n';
+  articleRDFString += '<dcterms:isPartOf rdf:resource="urn:issn:' + document.data().issn + '"/>\n';
+  articleRDFString += '<bib:authors>\n';
+  articleRDFString += '<rdf:Seq>\n';
+  articleRDFString += '<rdf:li>\n';
+  articleRDFString += '<foaf:Person>\n';
+  articleRDFString += '<foaf:surname>' + document.data().author + '</foaf:surname>\n';
+  articleRDFString += '<foaf:givenName>' + 'Author First Name' + '</foaf:givenName>\n';
+  articleRDFString += '</foaf:Person>\n';
+  articleRDFString += '</rdf:li>\n';
+  articleRDFString += '</rdf:Seq>\n';
+  articleRDFString += '</bib:authors>\n';
+  articleRDFString += '<dc:subject>' + 'document.data().manualTags' + '</dc:subject>\n';
+  articleRDFString += '<dc:title>' + document.data().title + '</dc:title>\n';
+  articleRDFString += '<dcterms:abstract>' + document.data().abstract + '</dcterms:abstract>\n';
+  articleRDFString += '<dc:date>' + document.data().date + '</dc:date>\n';
+  articleRDFString += '<z:language>' + 'English' + '</z:language>\n';
+  articleRDFString += '<dc:identifier>\n';
+  articleRDFString += '<dcterms:URI><rdf:value>' + document.data().url + '</rdf:value></dcterms:URI>\n';
+  articleRDFString += '</dc:identifier>\n';
+  articleRDFString += '<dcterms:dateSubmitted>' + '2023-11-18' + '</dcterms:dateSubmitted>\n';
+  articleRDFString += '</bib:Article>\n'
+  articleRDFString += '<bib:Journal rdf:about="urn:issn:' + document.data().issn + '">\n';
+  articleRDFString += '<prism:volume>' + document.data().volume + '</prism:volume>\n';
+  articleRDFString += '<dc:title>' + document.data().pubTitle + '</dc:title>\n';
+  articleRDFString += '<dc:identifier>' + document.data().doi + '</dc:identifier>\n';
+  articleRDFString += '<prism:number>' + document.data().issue + '</prism:number>\n';
+  articleRDFString += '<dc:identifier>' + document.data().issn + '</dc:identifier>\n';
+  articleRDFString += '</bib:Journal>\n';
+  return articleRDFString;
+}
+
+async function CreateXMLRDFFile(collectionName, documentName) {
+  var articleRDFString = addHeadingRDFFile();
+
+  var str = "DocName";
+  var count = str.match(/\d*$/);
+
+  for (var i = 0; i < 2; i++) {
+    var docRef = doc(db, collectionName, str.substr(0, count.index) + (++count[0]));
+    var docSnap = await getDoc(docRef);
+    if (docSnap.exists()) {
+      console.log("Document data:", docSnap.data());
+    } else {
+      console.log("No such document named " + documentName + " in the collection "+ collectionName + ".");
+    }
+    articleRDFString += addArticleRDFFile(docSnap);
   }
 
-  var XMLRDF = "<rdf:RDF\n";
-  XMLRDF += 'xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"\n'
-  XMLRDF += 'xmlns:z="http://www.zotero.org/namespaces/export#"\n'
-  XMLRDF += 'xmlns:dcterms="http://purl.org/dc/terms/"\n'
-  XMLRDF += 'xmlns:bib="http://purl.org/net/biblio#"\n'
-  XMLRDF += 'xmlns:foaf="http://xmlns.com/foaf/0.1/"\n'
-  XMLRDF += 'xmlns:dc="http://purl.org/dc/elements/1.1/"\n'
-  XMLRDF += 'xmlns:prism="http://prismstandard.org/namespaces/1.2/basic/">\n'
-  XMLRDF += '<bib:Article rdf:about="' + docSnap.data().url + '">\n';
-  XMLRDF += '<z:itemType>journalArticle</z:itemType>\n';
-  XMLRDF += '<dcterms:isPartOf rdf:resource="urn:issn:' + docSnap.data().issn + '"/>\n';
-  XMLRDF += '<bib:authors>\n';
-  XMLRDF += '<rdf:Seq>\n';
-  XMLRDF += '<rdf:li>\n';
-  XMLRDF += '<foaf:Person>\n';
-  XMLRDF += '<foaf:surname>' + docSnap.data().author + '</foaf:surname>\n';
-  XMLRDF += '<foaf:givenName>' + 'Author First Name' + '</foaf:givenName>\n';
-  XMLRDF += '</foaf:Person>\n';
-  XMLRDF += '</rdf:li>\n';
-  XMLRDF += '</rdf:Seq>\n';
-  XMLRDF += '</bib:authors>\n';
-  XMLRDF += '<dc:subject>' + docSnap.data().manualTags + '</dc:subject>\n';
-  XMLRDF += '<dc:title>' + docSnap.data().title + '</dc:title>\n';
-  XMLRDF += '<dcterms:abstract>' + docSnap.data().abstract + '</dcterms:abstract>\n';
-  XMLRDF += '<dc:date>' + docSnap.data().date + '</dc:date>\n';
-  XMLRDF += '<z:language>' + 'English' + '</z:language>\n';
-  XMLRDF += '<dc:identifier>\n';
-  XMLRDF += '<dcterms:URI><rdf:value>' + docSnap.data().url + '</rdf:value></dcterms:URI>\n';
-  XMLRDF += '</dc:identifier>\n';
-  XMLRDF += '<dcterms:dateSubmitted>' + '2023-11-18' + '</dcterms:dateSubmitted>\n';
-  XMLRDF += '</bib:Article>\n'
-  XMLRDF += '<bib:Journal rdf:about="urn:issn:' + docSnap.data().issn + '">\n';
-  XMLRDF += '<prism:volume>' + docSnap.data().volume + '</prism:volume>\n';
-  XMLRDF += '<dc:title>' + docSnap.data().pubTitle + '</dc:title>\n';
-  XMLRDF += '<dc:identifier>' + docSnap.data().doi + '</dc:identifier>\n';
-  XMLRDF += '<prism:number>' + docSnap.data().issue + '</prism:number>\n';
-  XMLRDF += '<dc:identifier>' + docSnap.data().issn + '</dc:identifier>\n';
-  XMLRDF += '</bib:Journal>\n';
-  XMLRDF += '</rdf:RDF>';
+  articleRDFString += '</rdf:RDF>';
 
-  console.log(XMLRDF);
-  return XMLRDF;
+  console.log(articleRDFString);
+  return articleRDFString;
 }
 
 async function CreateXMLRDF() {
-  var RDFFile = await(AddXMLRDFFile('delete', 'DocName1'));
+  var RDFFile = await(CreateXMLRDFFile('delete', 'DocName1'));
 
   var link = document.createElement('a');
   link.download = 'data.rdf';
