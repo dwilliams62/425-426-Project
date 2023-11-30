@@ -1,3 +1,9 @@
+/*
+
+DYLAN WILLIAMS FALL 2023
+
+*/
+
 //Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
 import { getFirestore, doc, setDoc, getDoc } from "firebase/firestore";
@@ -21,9 +27,12 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-console.log('Hello Firebase!');
+console.log('Hello Firebase!'); //just to show it's working in console (alt f12 i think?)
 
 function addNewDocument() {
+  //this will insert a document into the database
+  //the first value is the database it inserts into, the second is the collection name (will create a new collection if the one of the specified
+  //name does not exist), and the third is the name of the document. the fourth is then all of the data you will insert, seperated by : as follows
   setDoc(doc(db, document.getElementById('collecName').value, document.getElementById('docName').value), {
     customer: document.getElementById('custName').value,
     testString: 'updated'
@@ -31,23 +40,26 @@ function addNewDocument() {
   console.log("Added!");
 }
 
+//this function opens the uploaded file given through the website and sends it to onReaderLoad function
 async function printFile() {
   var reader = new FileReader();
-  // reader.addEventListener('load', function() {
-  //   document.getElementById('file').innerText = this.result;
-  // });
   reader.readAsText(document.querySelector('.input').files[0]);
   reader.onload = onReaderLoad;
 }
 
+//once the file is fully read, this function is called to parse the given JSON and then upload the information to the database using setDoc
 function onReaderLoad(event){
-    console.log(event.target.result);
-    var obj = JSON.parse(event.target.result);
-    var len = Object.keys(obj).length;
+    console.log(event.target.result); //for testing
+    var obj = JSON.parse(event.target.result); //parse the data
+    var len = Object.keys(obj).length; //get how many articles are in the json
+
+    //these two are just for giving unique names to each document by incrememnting the number
     var str = "DocName";
     var count = str.match(/\d*$/);
 
+    //loop through all the articles in the parsed json and input each into the database
     for (let i = 0; i < len; i++) {
+      //sets the doc based off the provided collection name on the website and a incrememnting document name
       setDoc(doc(db, document.getElementById('collecName').value, str.substr(0, count.index) + (++count[0])), {
         itemType: obj[i]['itemType'],
         title: obj[i]['title'],
@@ -69,6 +81,7 @@ function onReaderLoad(event){
     }
 }
 
+//this is just the header of an RDF file that we add first
 function addHeadingRDFFile() {
   var articleRDFString = "<rdf:RDF\n";
   articleRDFString += 'xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"\n'
@@ -81,6 +94,8 @@ function addHeadingRDFFile() {
   return articleRDFString;
 }
 
+//for each article we go through and add this one by one. there will be more functions in here for each piece. 
+//takes a reference to a document gathered from the database as a parameter
 function addArticleRDFFile(document) {
   var articleRDFString = '<bib:Article rdf:about="' + document.data().url + '">\n';
   articleRDFString += '<z:itemType>journalArticle</z:itemType>\n';
@@ -115,12 +130,15 @@ function addArticleRDFFile(document) {
   return articleRDFString;
 }
 
+//creates the RDF file and sends it back as a blob to the user
 async function CreateXMLRDFFile(collectionName, documentName) {
   var articleRDFString = addHeadingRDFFile();
 
+  //just for grabbing the document names. temporary
   var str = "DocName";
   var count = str.match(/\d*$/);
 
+  //loops through two articles to add to the RDF file
   for (var i = 0; i < 2; i++) {
     var docRef = doc(db, collectionName, str.substr(0, count.index) + (++count[0]));
     var docSnap = await getDoc(docRef);
@@ -132,12 +150,14 @@ async function CreateXMLRDFFile(collectionName, documentName) {
     articleRDFString += addArticleRDFFile(docSnap);
   }
 
+  //end the rdf file
   articleRDFString += '</rdf:RDF>';
 
   console.log(articleRDFString);
   return articleRDFString;
 }
 
+//turns the string into a blob that is then downloaded as a .rdf file
 async function CreateXMLRDF() {
   var RDFFile = await(CreateXMLRDFFile('delete', 'DocName1'));
 
@@ -148,6 +168,7 @@ async function CreateXMLRDF() {
   link.click();
 }
 
+//add listeners to the button
 document.getElementById('uploadBtn').addEventListener('click', printFile);
 document.getElementById("myBtn").addEventListener("click", addNewDocument);
 document.getElementById("openDocTest").addEventListener("click", CreateXMLRDF);
