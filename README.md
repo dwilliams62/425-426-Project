@@ -10,3 +10,5 @@ The project development is split between three different categories thus far:
     - Machine Learning, largely developed by Olivia Brague
     - Website/Database, largeley developed by Dylan Williams thus far (with a bit of Frontend help from Rafiedul)
     - Web Scraper, largely developed by Rafiedul Islam and Vincent Fealy
+
+This will be expanded upon over winter break and next semester
