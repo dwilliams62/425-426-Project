@@ -1,3 +1,27 @@
+Last Updated 12/5/23
+
 This folder is largely the work of Dylan Williams
 Rafi set up the initial web page, and the index.html is mostly written by him, including the design of it all
 The firebase, javascript, and databaseTest.html is all written by Dylan
+
+
+
+- The .firebase folder is used for setting up the firebase for deployment and using the cloud firestore database. Shouldn't need to be touched
+
+- The dist folder is currently the default path for when you run 'npm run build' to create a new package for the javascript. 
+    main.js will be created in this folder, as well as a license text, and to see changes on the website, it will need to be moved
+    to /public/js, overwriting the old one. it is compiled with webpack due to the modular nature of the library imports
+
+- The node_modules folder is where the npm libraries are held, such as webpack. should not need to be touched
+
+- The public folder is what is deployed to the website when you run 'firebase deploy', and what is shown when you run 'http-server -c-1'
+    on your local host. there are the images needed for the website, the html for the various pages, and two folders, one for the css files
+    and one for the javascript files (though in our case that is just one file)
+
+- Other files that are lose in the CLIMAT3 folder that shouldn't be touched include
+    - database.rules.json - for use with cloud firestore database
+    - firebase.json - for use with firebase
+    - package-lock.json - for use with npm
+    - package.json - also for use with npm
+
+- The other files not mentioned are simply test input for the database, including an Articles.JSON that was created by the web scraper
