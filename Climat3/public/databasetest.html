@@ -1,6 +1,11 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <title>Test Page</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 </head>
+
 <body>
     <p id="cn"> TEST PAGE
     <form action="index.html">
@@ -29,5 +34,18 @@
     <p> <button id="openDocTest">Show Data</button></p>
     <a> download!!!!! </a>
 
+    <p>
+        <div style="display: flex; max-width: 300px; margin: 0 auto;">
+            <input type="text" id='searchText' placeholder="Search..." style="padding: 10px; border: 2px solid #ccc; border-radius: 5px 0 0 5px; width: 70%; outline: none;">
+            <button type="submit" id='searchBtn' style="padding: 10px 20px; border: none; background-color: #4CAF50; color: white; border-radius: 0 5px 5px 0; cursor: pointer;">
+              Search
+            </button>
+        </div>
+        <div id="output" style="margin-top: 20px; text-align: center;"></div>
+    </p>
+
     <script src="js/main.js"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
