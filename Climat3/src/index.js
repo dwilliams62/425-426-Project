@@ -1,175 +1,25 @@
 /*
-
 DYLAN WILLIAMS FALL 2023
-
 */
 
-//Import the functions you need from the SDKs you need
-import { initializeApp } from "firebase/app";
-import { getFirestore, doc, setDoc, getDoc } from "firebase/firestore";
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
+//import from other files for readability and organization
+import { DownloadXMLRDF } from "./downloadDocumentFunctions.js";
+import { addNewDocument, loadJSONDocument } from "./addDocumentFunctions.js";
+import { } from "./searchDocumentFunctions.js";
 
-// Your web app's Firebase configuration
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
-const firebaseConfig = {
-  apiKey: "AIzaSyAiI2TJwXB8Zyg9GWKspaqpVlFPtFpShu8",
-  authDomain: "climat3.firebaseapp.com",
-  databaseURL: "https://climat3-default-rtdb.firebaseio.com",
-  projectId: "climat3",
-  storageBucket: "climat3.appspot.com",
-  messagingSenderId: "80202285914",
-  appId: "1:80202285914:web:b3f8446bbd1a88dafea963",
-  measurementId: "G-XXWF74D2S0"
-};
+console.log('Hello Firebase!'); //just to show it's working in console (fn f12 i think?)
 
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
+//add listeners to the buttons needed
 
-console.log('Hello Firebase!'); //just to show it's working in console (alt f12 i think?)
+//this button will take the JSON file uploaded in databasetest.html, open the json, retrieve the data, and the input that data
+//into documents in the database, into a collection defined by the user in databasetest.html
+document.getElementById('uploadBtn').addEventListener('click', loadJSONDocument);
 
-function addNewDocument() {
-  //this will insert a document into the database
-  //the first value is the database it inserts into, the second is the collection name (will create a new collection if the one of the specified
-  //name does not exist), and the third is the name of the document. the fourth is then all of the data you will insert, seperated by : as follows
-  setDoc(doc(db, document.getElementById('collecName').value, document.getElementById('docName').value), {
-    customer: document.getElementById('custName').value,
-    testString: 'updated'
-  });
-  console.log("Added!");
-}
-
-//this function opens the uploaded file given through the website and sends it to onReaderLoad function
-async function printFile() {
-  var reader = new FileReader();
-  reader.readAsText(document.querySelector('.input').files[0]);
-  reader.onload = onReaderLoad;
-}
-
-//once the file is fully read, this function is called to parse the given JSON and then upload the information to the database using setDoc
-function onReaderLoad(event){
-    console.log(event.target.result); //for testing
-    var obj = JSON.parse(event.target.result); //parse the data
-    var len = Object.keys(obj).length; //get how many articles are in the json
-
-    //these two are just for giving unique names to each document by incrememnting the number
-    var str = "DocName";
-    var count = str.match(/\d*$/);
-
-    //loop through all the articles in the parsed json and input each into the database
-    for (let i = 0; i < len; i++) {
-      //sets the doc based off the provided collection name on the website and a incrememnting document name
-      setDoc(doc(db, document.getElementById('collecName').value, str.substr(0, count.index) + (++count[0])), {
-        itemType: obj[i]['itemType'],
-        title: obj[i]['title'],
-        pubTitle: obj[i]['pubTitle'],
-        author: obj[i]['author'],
-        pubYear: obj[i]['pubYear'],
-        doi: obj[i]['doi'],
-        url: obj[i]['url'],
-        abstract: obj[i]['abstract'],
-        date: obj[i]['date'],
-        volume: obj[i]['volume'],
-        issue: obj[i]['issue'],
-        issn: obj[i]['issn'],
-        libCatalog: obj[i]['libCatalog'],
-        manualTags: obj[i]['manualTags'],
-        autoTags: obj[i]['autoTags']
-      });
-      console.log("Added!");
-    }
-}
-
-//this is just the header of an RDF file that we add first
-function addHeadingRDFFile() {
-  var articleRDFString = "<rdf:RDF\n";
-  articleRDFString += 'xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"\n'
-  articleRDFString += 'xmlns:z="http://www.zotero.org/namespaces/export#"\n'
-  articleRDFString += 'xmlns:dcterms="http://purl.org/dc/terms/"\n'
-  articleRDFString += 'xmlns:bib="http://purl.org/net/biblio#"\n'
-  articleRDFString += 'xmlns:foaf="http://xmlns.com/foaf/0.1/"\n'
-  articleRDFString += 'xmlns:dc="http://purl.org/dc/elements/1.1/"\n'
-  articleRDFString += 'xmlns:prism="http://prismstandard.org/namespaces/1.2/basic/">\n'
-  return articleRDFString;
-}
-
-//for each article we go through and add this one by one. there will be more functions in here for each piece. 
-//takes a reference to a document gathered from the database as a parameter
-function addArticleRDFFile(document) {
-  var articleRDFString = '<bib:Article rdf:about="' + document.data().url + '">\n';
-  articleRDFString += '<z:itemType>journalArticle</z:itemType>\n';
-  articleRDFString += '<dcterms:isPartOf rdf:resource="urn:issn:' + document.data().issn + '"/>\n';
-  articleRDFString += '<bib:authors>\n';
-  articleRDFString += '<rdf:Seq>\n';
-  articleRDFString += '<rdf:li>\n';
-  articleRDFString += '<foaf:Person>\n';
-  articleRDFString += '<foaf:surname>' + document.data().author + '</foaf:surname>\n';
-  articleRDFString += '<foaf:givenName>' + 'Author First Name' + '</foaf:givenName>\n';
-  articleRDFString += '</foaf:Person>\n';
-  articleRDFString += '</rdf:li>\n';
-  articleRDFString += '</rdf:Seq>\n';
-  articleRDFString += '</bib:authors>\n';
-  articleRDFString += '<dc:subject>' + 'document.data().manualTags' + '</dc:subject>\n';
-  articleRDFString += '<dc:title>' + document.data().title + '</dc:title>\n';
-  articleRDFString += '<dcterms:abstract>' + document.data().abstract + '</dcterms:abstract>\n';
-  articleRDFString += '<dc:date>' + document.data().date + '</dc:date>\n';
-  articleRDFString += '<z:language>' + 'English' + '</z:language>\n';
-  articleRDFString += '<dc:identifier>\n';
-  articleRDFString += '<dcterms:URI><rdf:value>' + document.data().url + '</rdf:value></dcterms:URI>\n';
-  articleRDFString += '</dc:identifier>\n';
-  articleRDFString += '<dcterms:dateSubmitted>' + '2023-11-18' + '</dcterms:dateSubmitted>\n';
-  articleRDFString += '</bib:Article>\n'
-  articleRDFString += '<bib:Journal rdf:about="urn:issn:' + document.data().issn + '">\n';
-  articleRDFString += '<prism:volume>' + document.data().volume + '</prism:volume>\n';
-  articleRDFString += '<dc:title>' + document.data().pubTitle + '</dc:title>\n';
-  articleRDFString += '<dc:identifier>' + document.data().doi + '</dc:identifier>\n';
-  articleRDFString += '<prism:number>' + document.data().issue + '</prism:number>\n';
-  articleRDFString += '<dc:identifier>' + document.data().issn + '</dc:identifier>\n';
-  articleRDFString += '</bib:Journal>\n';
-  return articleRDFString;
-}
-
-//creates the RDF file and sends it back as a blob to the user
-async function CreateXMLRDFFile(collectionName, documentName) {
-  var articleRDFString = addHeadingRDFFile();
-
-  //just for grabbing the document names. temporary
-  var str = "DocName";
-  var count = str.match(/\d*$/);
-
-  //loops through two articles to add to the RDF file
-  for (var i = 0; i < 2; i++) {
-    var docRef = doc(db, collectionName, str.substr(0, count.index) + (++count[0]));
-    var docSnap = await getDoc(docRef);
-    if (docSnap.exists()) {
-      console.log("Document data:", docSnap.data());
-    } else {
-      console.log("No such document named " + documentName + " in the collection "+ collectionName + ".");
-    }
-    articleRDFString += addArticleRDFFile(docSnap);
-  }
-
-  //end the rdf file
-  articleRDFString += '</rdf:RDF>';
-
-  console.log(articleRDFString);
-  return articleRDFString;
-}
-
-//turns the string into a blob that is then downloaded as a .rdf file
-async function CreateXMLRDF() {
-  var RDFFile = await(CreateXMLRDFFile('delete', 'DocName1'));
-
-  var link = document.createElement('a');
-  link.download = 'data.rdf';
-  var blob = new Blob([RDFFile], {type: 'text/plain'});
-  link.href = window.URL.createObjectURL(blob);
-  link.click();
-}
-
-//add listeners to the button
-document.getElementById('uploadBtn').addEventListener('click', printFile);
+//this button is a simple test button to see how things work. it will get the collection name, document name, and the value of
+//customer that the user defines in databasetest.html, and upload a document with that information into the database
 document.getElementById("myBtn").addEventListener("click", addNewDocument);
-document.getElementById("openDocTest").addEventListener("click", CreateXMLRDF);
+
+//this button will go into the database with predetermined collection name and document names, retrieve the data for each of those
+//documents, and format it into a Zotero RDF file that can then be uplaoded to Zotero
+document.getElementById("openDocTest").addEventListener("click", DownloadXMLRDF);
 
