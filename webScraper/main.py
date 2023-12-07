@@ -1,9 +1,6 @@
 from tkinter import ttk
 from tkinter import *
 from tkinter import messagebox
-  # to connect to the database
-import yaml  # to connect to database
-import certifi  # to connect to database
 import math
 import re
 import threading
