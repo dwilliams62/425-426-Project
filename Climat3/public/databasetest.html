@@ -35,11 +35,51 @@
     <a> download!!!!! </a>
 
     <p>
-        <div style="display: flex; max-width: 300px; margin: 0 auto;">
-            <input type="text" id='searchText' placeholder="Search..." style="padding: 10px; border: 2px solid #ccc; border-radius: 5px 0 0 5px; width: 70%; outline: none;">
-            <button type="submit" id='searchBtn' style="padding: 10px 20px; border: none; background-color: #4CAF50; color: white; border-radius: 0 5px 5px 0; cursor: pointer;">
-              Search
-            </button>
+        <div style="max-width: 300px; margin: 0 auto;">
+            <div style="display: flex; flex-direction: column;">
+                <label for="resultsPerPage">resultsPerPage:</label>
+                <select id="resultsPerPage" style="padding: 10px; border: 2px solid #ccc; border-radius: 5px; outline: none;">
+                    <option value="20">20</option>
+                    <option value="50">50</option>
+                    <option value="100">100</option>
+                </select>
+            </div>
+            <div style="display: flex; flex-direction: column; margin-top: 10px;">
+                <label for="climateTag">climateTag:</label>
+                <select id="climateTag" style="padding: 10px; border: 2px solid #ccc; border-radius: 5px; outline: none;">
+                    <option value="All">All</option>
+                    <option value="Biopyhsical-Distal">Biopyhsical-Distal</option>
+                    <option value="Biophysical-Intermediate">Biophysical-Intermediate</option>
+                    <option value="Biophysical-Micro">Biophysical-Micro</option>
+                    <option value="Biophysical-Proximal">Biophysical-Proximal</option>
+                    <option value="Psychological-Distal">Psychological-Distal</option>
+                    <option value="Psychological-Intermediate">Psychological-Intermediate</option>
+                    <option value="Psychological-Micro">Psychological-Micro</option>
+                    <option value="Psychological-Proximal">Psychological-Proximal</option>
+                    <option value="Social-Distal">Social-Distal</option>
+                    <option value="Social-Intermediate">Social-Intermediate</option>
+                    <option value="Social-Micro">Social-Micro</option>
+                    <option value="Social-Proximal">Social-Proximal</option>
+                </select>
+            </div>
+            <div style="display: flex; flex-direction: column; margin-top: 10px;">
+                <label for="sortBy">sortBy:</label>
+                <select id="sortBy" style="padding: 10px; border: 2px solid #ccc; border-radius: 5px; outline: none;">
+                    <option value="title">Title</option>
+                    <option value="author">Author</option>
+                </select>
+            </div>
+            <div style="display: flex; flex-direction: column; margin-top: 10px;">
+                <label for="searchBy">searchBy:</label>
+                <select id="searchBy" style="padding: 10px; border: 2px solid #ccc; border-radius: 5px; outline: none;">
+                    <option value="title">Title</option>
+                    <option value="author">Author</option>
+                </select>
+            </div>
+            <div style="display: flex; flex-direction: column; margin-top: 10px;">
+                <label for="searchText">Search:</label>
+                <input type="text" id='searchText' placeholder="Search..." style="padding: 10px; border: 2px solid #ccc; border-radius: 5px; outline: none;">
+            </div>
         </div>
         <div id="output" style="margin-top: 20px; text-align: center;"></div>
     </p>

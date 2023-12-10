@@ -7,24 +7,6 @@ import { DownloadXMLRDF } from "./downloadDocumentFunctions.js";
 import { addNewDocument, loadJSONDocument } from "./addDocumentFunctions.js";
 import { startSearch } from "./searchDocumentFunctions.js";
 
-import { initializeApp } from "firebase/app";
-import { getFirestore } from "firebase/firestore";
-
-const firebaseConfig = {
-    apiKey: "AIzaSyAiI2TJwXB8Zyg9GWKspaqpVlFPtFpShu8",
-    authDomain: "climat3.firebaseapp.com",
-    databaseURL: "https://climat3-default-rtdb.firebaseio.com",
-    projectId: "climat3",
-    storageBucket: "climat3.appspot.com",
-    messagingSenderId: "80202285914",
-    appId: "1:80202285914:web:b3f8446bbd1a88dafea963",
-    measurementId: "G-XXWF74D2S0"
-  };
-  
-  // Initialize Firebase
-  const app = initializeApp(firebaseConfig);
-  const db = getFirestore(app);
-
 console.log('Hello Firebase!'); //just to show it's working in console (fn f12 i think?)
 
 //add listeners to the buttons needed
@@ -42,5 +24,14 @@ document.getElementById("myBtn").addEventListener("click", addNewDocument);
 document.getElementById("openDocTest").addEventListener("click", DownloadXMLRDF);
 
 //the search button, will look through the settings currently selected and perform the correct query, then outputs the data
-document.getElementById("searchBtn").addEventListener("click", startSearch);
+//current set to update the search every time any of the <select> tags change and when the search bar changes, but this would lead to
+//performance issues down the road, so should likely look into just having a submit button for everything
+document.getElementById('searchText').addEventListener('input', startSearch);
+document.getElementById('resultsPerPage').addEventListener('change', startSearch);
+document.getElementById('searchBy').addEventListener('change', startSearch);
+document.getElementById('sortBy').addEventListener('change', startSearch);
+document.getElementById('climateTag').addEventListener('change', startSearch);
+
+//make sure the page starts with displaying some data based off the defaults picked when booted up
+startSearch();
 
