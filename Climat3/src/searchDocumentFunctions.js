@@ -20,14 +20,14 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
 export async function startSearch() {
-    const q = query(collection(db, "delete"), orderBy('title'), 
-      startAt(document.getElementById('searchText').value), endAt(document.getElementById('searchText').value+'\uf8ff')); 
+    const q = query(collection(db, "delete"), orderBy('title')); 
     const querySnapshot = await getDocs(q);
     const outputDiv = document.getElementById("output");
     outputDiv.innerHTML = '';
     console.log('tried');
     
     querySnapshot.forEach((doc) => {
+      if (doc.data().title.includes(document.getElementById('searchText').value)) {
       const cardDiv = document.createElement("div");
       cardDiv.classList.add("card");
 
@@ -54,6 +54,6 @@ export async function startSearch() {
       outputDiv.appendChild(cardDiv);
       outputDiv.appendChild(document.createElement("p"));
 
-      console.log(doc.id, " => ", doc.data());
+      console.log(doc.id, " => ", doc.data()); }
     });
 }
