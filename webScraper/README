@@ -1,0 +1,11 @@
+Last updated 12/7/23
+
+This folder is the work of Rafi and Vincent
+The base of the web scraper code was set up by the previous group and modified for our own use.
+Much of it now is our own fixes to the code, resolving many bugs and issues it origionally had.
+
+-Main.py: This is the web scraper, Many of the instructions are included at the top of the code.
+        -pip install beautifulsoup4
+        -pip install requests
+
+-Articles: This folder is where the articles.json file will be stored once the web scraper is ran. Before the web scraper can be ran the Articles.json must be deleted/emptied.
