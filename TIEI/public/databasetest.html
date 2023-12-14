@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Add Page</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+
+<body>
+    <p id="cn"> TEST PAGE
+    <form action="index.html">
+        <button type="submit" >Home</button>
+    </form> </p>
+    <p> While testing, run 'npm run build' to rebuild the src/index.js file</p>
+    <p> Move main.js from /dist to /public/js, overwriting the previous one</p>
+    <p> Then cd into the public folder and run 'http-server -c-1' to see changes on local host</p>
+    <p> To push to the main website, from the base folder run 'firebase deploy'</p>
+    <p><hr></p>
+    <p> To add a blank collection with a name and another static element</p>
+    <p> Enter a collection name to input it into and a customer name to set that attribute</p>
+    <p> And click Input</p>
+    <p><hr></p>
+    <p> To enter a json document of form [{data}, {data}], enter a collection name and upload the document</p>
+    <p> And click upload</p>
+    <p><hr></p>
+    <p>Author ID: <input type="text" id="docName" name="documentName"/></p>
+    <p>Bio: <input type="text" id="bio" name="bio"/></p>
+    <p>Email: <input type="text" id="email" name="email"/></p>
+    <p>First: <input type="text" id="first" name="first"/></p>
+    <p>Last: <input type="text" id="last" name="last"/></p>
+    <button id="myBtn" >Upload</button>
+
+
+
+    
+
+    <ul id="dataList"></ul>
+
+
+
+    <script src="bundle.js"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>

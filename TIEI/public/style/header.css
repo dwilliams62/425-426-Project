@@ -1,0 +1,63 @@
+nav {
+    background-color:#681D43;
+    padding:0 !important;
+   
+}
+
+.color {
+    background-color:#ED913C;
+}
+
+
+#parent {
+    text-align:center;
+    padding-right:1%;
+}
+.svg {
+    margin:auto 0 auto auto;
+    padding-right:1%;
+}
+
+.dro {
+    margin:auto 0 auto auto;
+    padding-right:1%;
+}
+
+.h3, h3 {
+    background-color:#681D43;
+    margin-bottom:0 !important;
+}
+
+.h5, h5 {
+    color:#681D43;
+    text-decoration-color:#681D43;
+}
+
+.text-large {
+    font-size: 2rem;
+    font-weight: lighter;
+}
+
+main {
+    background-color: #F8F8F8;
+    height: 100vh;
+}
+
+#white.container {
+    padding: 2%;
+    background-color: white;
+    border: 1px solid black;
+    min-height: 100%;
+}
+
+#search {
+    background-color: white;
+    border: 1px solid black;
+}
+
+#mainsearch.row {
+    background-color: #EFEEEA;
+    border: 1px solid #E2DED7;
+    padding:1%;
+    
+}
