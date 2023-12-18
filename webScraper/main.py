@@ -29,6 +29,7 @@ class Root(Tk):
         super(Root, self).__init__()
         self.title("Biome-Z GUI")
         self.geometry("1150x500")
+        
         tabControl = ttk.Notebook(self)
         self.tab2 = ttk.Frame(tabControl)
         tabControl.add(self.tab2, text="Mannual")
@@ -82,7 +83,7 @@ Tab WEB-Scrape:
      '''
     
         #Create a Text widget for displaying a message in a tab.
-        Mannual_box = Text(self.tab2, height=29, width=145, bg="lightgray" )
+        Mannual_box = Text(self.tab2, height=29, width=145, bg="lightgreen" )
         Mannual_box.insert('end', message)
         Mannual_box.pack(expand=True)
         Mannual_box.config(state='disabled')
@@ -92,10 +93,15 @@ Tab WEB-Scrape:
        # wedsite_linkButton = StringVar()
         wedsite_linkButton2 = StringVar()
 
+        style = ttk.Style(self)
+        style.configure("Custom.TLabelframe", background="white")
+        style.configure("TextColor.TLabel",foreground="yellow")
+
         #Create a labeled frame for website selection.
         labelFrame4 = ttk.LabelFrame(
-            self.tab3, text="Website:", width=400, height=50)
+            self.tab3, text="Website:", width=400, height=50, style="Custom.TLabelframe")
         labelFrame4.pack(side=LEFT, anchor="n")
+        
 
         #Create buttons for different websites and set their properties.
        # NatureButton = Button(labelFrame4, textvariable=wedsite_linkButton,
@@ -105,24 +111,26 @@ Tab WEB-Scrape:
         #wedsite_linkButton.set("Nature")
         #NatureButton.place(y=0, x=0)
         PUBMButton = Button(labelFrame4, textvariable=wedsite_linkButton2, command=lambda: article_search_PUBMED(), font=(
-            "TkHeadingFont", 12), width=10)
+            "TkHeadingFont", 12), width=10, bg="#f7b82f")
         #Set the button text for Nature
         wedsite_linkButton2.set("PubMed")
         PUBMButton.place(y=0, x=0)
         wedsite_linkButton3 = StringVar()
         SpringerButton = Button(labelFrame4, textvariable=wedsite_linkButton3, command=lambda: article_search_Springer(),font=(
-            "TkHeadingFont", 12), width=10)
+            "TkHeadingFont", 12), width=10, bg="#f7b82f")
         wedsite_linkButton3.set("Springer")
         SpringerButton.place(y=0, x=295)
 
+        
+
         # Define a labeled frame for article search and related elements.
         labelFrame6 = ttk.LabelFrame(
-            self.tab3, text="Article Search:", width=670, height=475)
+            self.tab3, text="Article Search:", width=670, height=475, style="Custom.TLabelframe")
         labelFrame6.place(x=470)
 
         # Create labels, input fields, and a listbox for article search.
         Art_label = Label(labelFrame6, text="Choose article: ",
-                          font=("TkHeadingFont", 12))
+                          font=("TkHeadingFont", 12),bg="white",fg="#f7b82f")
         Art_label.place(y=6)
         Article_input = Entry(labelFrame6, font=(
             "TkHeadingFont", 12), width=73)
@@ -138,11 +146,11 @@ Tab WEB-Scrape:
         def article_search_natural():
             # Create a labeled frame for the search term input and buttons
             labelFrame5 = ttk.LabelFrame(
-            self.tab3, text="Search Term for Nature:", width=400, height=190)
+            self.tab3, text="Search Term for Nature:", width=400, height=190,style="TextColor.TLabel")
             labelFrame5.place(y=80)
             # Create input fields and buttons for searching articles by term on 'Nature'.
             search_term = Label(
-                labelFrame5, text="Input term:", font=("TkHeadingFont", 12))
+                labelFrame5, text="Input term:", font=("TkHeadingFont", 12),bg="white")
             search_term.place(y=25)
             # Entry field for the search term
             Term_searchbox = Entry(labelFrame5, font=("TkHeadingFont", 12), width=27)
@@ -253,8 +261,8 @@ Tab WEB-Scrape:
                     precent_label.place(y=55, x=186)
                     progress_label.place(y=55, x=160)
                     #Create a button to upload articles to the Mongo DB database.
-                    DataButton = Button(labelFrame7, text="Upload to Mongo DB-database",  font=("TkHeadingFont", 12), command=lambda: Upload_articles(), width=26)
-                    DataButton.place(y=85, x=76)
+                   # DataButton = Button(labelFrame7, text="Upload to Mongo DB-database",  font=("TkHeadingFont", 12), command=lambda: Upload_articles(), width=26)
+                   # DataButton.place(y=85, x=76)
                     #Calculate the progress per article
                     numOfarticle = len(Article_list)
                     progess = 100/numOfarticle
@@ -569,23 +577,23 @@ Tab WEB-Scrape:
             labelFrame5.place(y=80)
             # Create input fields and buttons for searching articles by term on PubMed
             search_term = Label(
-                labelFrame5, text='Input term:', font=("TkHeadingFont", 12))
+                labelFrame5, text='Input term:', font=("TkHeadingFont", 12),fg="#f7b82f")
             search_term.place(y=25)
             Term_searchbox = Entry(labelFrame5, font=(
                 "TkHeadingFont", 12), width=27)
             Term_searchbox.place(y=25, x=90)
             search_pages = Button(labelFrame5, text="Enter", command=lambda:  page_num(
-            ), font=("TkHeadingFont", 10), width=5)
+            ), font=("TkHeadingFont", 10), width=5,bg="#f7b82f")
             search_pages.place(y=22, x=345)
 
             # Function to handle page number selection for PubMed web scraping
             def page_num():
                 # Create buttons for generating and scraping articles based on user input
                 Gen_articles = Button(labelFrame5, text="Generate articles", command=lambda:  threading.Thread(
-                    target=generate_articles_PUBMED).start(), font=("TkHeadingFont", 12), width=14)
+                    target=generate_articles_PUBMED).start(), font=("TkHeadingFont", 12), width=14,bg="#f7b82f")
                 Gen_articles.place(y=135)
                 Webscrape_byterm = Button(labelFrame5, text="Scrape by term", command=lambda: threading.Thread(
-                    target=ScrapeArticle_bytermPUBMED).start(), font=("TkHeadingFont", 12), width=14)
+                    target=ScrapeArticle_bytermPUBMED).start(), font=("TkHeadingFont", 12), width=14,bg="#f7b82f")
                 Webscrape_byterm.place(x=260, y=135)
                 term = Term_searchbox.get()
                 url = "https://pubmed.ncbi.nlm.nih.gov/?term={}&page=1".format(term)
@@ -840,19 +848,25 @@ Tab WEB-Scrape:
                                             ISSN_text = ISSN_text.split(")")[0]
                                         except IndexError: 
                                             print("Error on ISSN")
-
-                                        try:
-                                            ISSN_text.split("(")[1]
-                                        except IndexError:
-                                            ISSN_text = ISSN_text.split(":")[0]
+                                            articles_dicts["issn"] = ""
                                         else:
-                                            ISSN_text = ISSN_text.split("(")[1]
-                                articles_dicts["issn"] = ISSN_text
+
+
+                                            try:
+                                                ISSN_text.split("(")[1]
+                                            except IndexError:
+                                                ISSN_text = ISSN_text.split(":")[0]
+                                                articles_dicts["issn"] = ISSN_text
+                                            else:
+                                                ISSN_text = ISSN_text.split("(")[1]
+                                                articles_dicts["issn"] = ISSN_text
                                 # Set the library catalog to "PubMed" for the article.
                                 articles_dicts["libCatalog"] = "PubMed"
                                 # Set manual and auto tags to empty strings (not extracted in this script).
                                 articles_dicts["manualTags"] = ""
                                 articles_dicts["autoTags"] = ""
+                                articles_dicts["ourtags"] = ""
+
                                 # Load existing data from 'Articles.json', append the article information, and write it back.
                                 data = json.load(open('Articles.json'))
                                 if type(data) is dict:
@@ -873,24 +887,24 @@ Tab WEB-Scrape:
             self.tab3, text="Search Term for Springer:", width=400, height=190)
             labelFrame5.place(y=80)
             # Create a label for displaying instructions.
-            search_term = Label(labelFrame5, text='Input term:', font=("TkHeadingFont", 12))
+            search_term = Label(labelFrame5, text='Input term:', font=("TkHeadingFont", 12),foreground="#f7b82f")
             search_term.place(y=25)
             # Create an entry box for the user to input the search term.
             Term_searchbox = Entry(labelFrame5, font=("TkHeadingFont", 12), width=27)
             Term_searchbox.place(y=25, x=90)
             # Create a button to trigger the search based on the entered term.
             # The button is bound to a function that will handle the search.
-            search_pages = Button(labelFrame5, text="Enter", command=lambda:  page_num(), font=("TkHeadingFont", 10), width=5)
+            search_pages = Button(labelFrame5, text="Enter", command=lambda:  page_num(), font=("TkHeadingFont", 10), width=5,bg="#f7b82f")
             search_pages.place(y=22, x=345)
 
             # Function to handle page number selection for Springer web scraping
             def page_num():
                 # Create buttons to generate articles or scrape by term.
                 Gen_articles = Button(labelFrame5, text="Generate articles", command=lambda:  threading.Thread(
-                    target=generate_articles_Springer).start(), font=("TkHeadingFont", 12), width=14)
+                    target=generate_articles_Springer).start(), font=("TkHeadingFont", 12), width=14,bg="#f7b82f")
                 Gen_articles.place(y=135)
                 Webscrape_byterm = Button(labelFrame5, text="Scrape by term", command=lambda: threading.Thread(
-                    target=ScrapeArticle_bytermSpringer).start(), font=("TkHeadingFont", 12), width=14)
+                    target=ScrapeArticle_bytermSpringer).start(), font=("TkHeadingFont", 12), width=14,bg="#f7b82f")
                 Webscrape_byterm.place(x=260, y=135)
                 # Get the search term entered by the user.
                 term = Term_searchbox.get()
@@ -1092,6 +1106,7 @@ Tab WEB-Scrape:
                                 articles_dicts["libCatalog"] = "Springer"
                                 articles_dicts["manualTags"] = ""
                                 articles_dicts["autoTags"] = ""
+                                articles_dicts["ourTags"] = ""
                                 # Store the extracted article information.
                                 data = json.load(open('Articles.json'))
                                 if type(data) is dict:
