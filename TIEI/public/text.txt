@@ -1,0 +1,30 @@
+    <p>Biography:<input type="text" id="bio" name="bio"/></p>
+    <p>Phase: <input type="text" id="phase" name="phase"/></p>
+    <p>Domain: <input type="text" id="domain" name="domain"/></p>
+    <p>Scale: <input type="text" id="scale" name="scale"/></p>
+    <p>Scope: <input type="text" id="scope" name="scope"/></p>
+    <p>Email: <input type="text" id="email" name="email"/></p>
+    <p>First Name: <input type="text" id="first" name="first"/></p>
+    <p>Last Name: <input type="text" id="last" name="last"/></p>
+    <button id="myBtn" >Upload Small Data</button>
+    <script type = "module">
+        function add() {
+            //this will insert an author into the database
+            //the first value is the database it inserts into, the second is the collection name (will create a new collection if the one of the specified
+            //name does not exist), and the third is the name of the document. the fourth is then all of the data you will insert, seperated by : as follows
+            setDoc(doc(db, "Authors", "1"), {
+                bio: document.getElementById('bio').value,
+                phase: document.getElementById('phase').value,
+                domain: document.getElementById('domain').value,
+                scale: document.getElementById('scale').value,
+                scope: document.getElementById('scope').value,
+                email: document.getElementById('email').value,
+                first: document.getElementById('first').value,
+                last: document.getElementById('last').value,
+            
+            });
+            console.log("Added!");
+        }
+
+        document.getElementById("myBtn").addEventListener("click", add);
+    </script>   
