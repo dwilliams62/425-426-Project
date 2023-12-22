@@ -11,28 +11,16 @@ import webbrowser  # allow to open a website
 # allow the program to use findall word in a string ignoring spaces and puting it in a list.
 import json  # Json libary allow the text file to covert to a json file
 running = True  # Global flag
-# To connect to the Mongo DB database run these line of code  within the multiple ### line also import yaml, certifi, from pymongo import MongoClient
-#######################################################################
-# config = yaml.safe_load(open('db.yaml'))
-
-#try:
-   #  client = MongoClient(config['uri'], tlsCAFile = certifi.where())
-     #print("\nSuccessful connection.\n")
-#except:
-    # print("\nUnsuccessful connection.\n")
-
-#db = client['biomez']
-#collection = db.raw_records
 
 class Root(Tk):
     def __init__(self):
         super(Root, self).__init__()
-        self.title("Biome-Z GUI")
+        self.title("CLIMAT3 Web Scraper")
         self.geometry("1150x500")
         
         tabControl = ttk.Notebook(self)
         self.tab2 = ttk.Frame(tabControl)
-        tabControl.add(self.tab2, text="Mannual")
+        tabControl.add(self.tab2, text="Manual")
         self.tab3 = ttk.Frame(tabControl)
         tabControl.add(self.tab3, text="WEB-Scrape")
         tabControl.pack(expand=1, fill="both")
@@ -41,6 +29,11 @@ class Root(Tk):
 
     def addingWidgets(self):
         articles_list = []
+        if os.path.exists("Articles.json"):
+            # If the file exists, delete it
+            os.remove("Articles.json")
+            print(f"File 'Articles.json' existed and has been deleted.")
+
         file = open("Articles.json", "x", encoding="utf-8")
         file.write(json.dumps(articles_list))
 
@@ -55,10 +48,11 @@ class Root(Tk):
             Article_input.delete(0, END)
             # add clicked list item to entry box
             Article_input.insert(0, List_box.get(ANCHOR))
+
         message = '''
 User Mannual Webscraper: 
 Tab WEB-Scrape:
-    websites: Nature, PubMed, Springer (These are the website that can be chosen for articles information to be scrape on to a Json file)
+    Websites: Nature, PubMed, Springer (These are the website that can be chosen for articles information to be scrape on to a Json file)
 
     After a website is chosen, input a search term (for example use the term Microbiome) in to the search bar then click the enter button.
     
@@ -75,11 +69,6 @@ Tab WEB-Scrape:
         by clicking the Scrape-by-term button, all the article related to the search term and scrape the information 
         (titles, author name, publication, date, doi, etc) of that articles and place it in a Json file.
         A progess bar will appear to show to progress of all the article having their info scrape into a Json file 
-        
-    Upload to Mongo DB-database button:
-        After all the article information have been scrape and place into the Json file called Articles.json. 
-        Clicking Upload to Mongo DB-database button will upload the json file with the article info to the raw_records 
-        database hosted by MongoDB.
      '''
     
         #Create a Text widget for displaying a message in a tab.
@@ -90,7 +79,7 @@ Tab WEB-Scrape:
 
         #Define variables for website links.
         wedsite_linkButton3 = StringVar()
-       # wedsite_linkButton = StringVar()
+        #wedsite_linkButton = StringVar()
         wedsite_linkButton2 = StringVar()
 
         style = ttk.Style(self)
@@ -104,12 +93,13 @@ Tab WEB-Scrape:
         
 
         #Create buttons for different websites and set their properties.
-       # NatureButton = Button(labelFrame4, textvariable=wedsite_linkButton,
-       #                       command=lambda: article_search_natural(), font=("TkHeadingFont", 12), width=10)
+        # NatureButton = Button(labelFrame4, textvariable=wedsite_linkButton,
+        #                       command=lambda: article_search_natural(), font=("TkHeadingFont", 12), width=10)
 
         #Set the button text for Nature
         #wedsite_linkButton.set("Nature")
         #NatureButton.place(y=0, x=0)
+            
         PUBMButton = Button(labelFrame4, textvariable=wedsite_linkButton2, command=lambda: article_search_PUBMED(), font=(
             "TkHeadingFont", 12), width=10, bg="#f7b82f")
         #Set the button text for Nature
@@ -184,8 +174,8 @@ Tab WEB-Scrape:
                 Pages = Label(labelFrame5, text='# of pages:',
                               font=("TkHeadingFont", 12))
                 Pages.place(y=90)
-
-                #Define a function for generating articles based on the search term
+        
+                 #Define a function for generating articles based on the search term
                 def generate_articles_natural():
                     dicts = {}# Dictionary to store article titles and links
                     Article_list = []# List to store article titles
@@ -205,25 +195,25 @@ Tab WEB-Scrape:
                                 articles_text = articles.get_text()
                                 articles_links = articles.get('href')
                                 dicts[articles_text] = articles_links
-
-                    # Iterate through the keys in the dictionary and append article titles to the Article_list            
+        
+                     # Iterate through the keys in the dictionary and append article titles to the Article_list            
                     for key in dicts.keys():
                         Article_list.append(key)
-
-                    # Update the view with the list of articles    
+        
+                     # Update the view with the list of articles    
                     update(Article_list)
-
-                    # Create a button to view an article
+        
+                     # Create a button to view an article
                     View_Art = Button(labelFrame6, text="View Article", font=(
                         "TkHeadingFont", 11), command=lambda: view_article(), width=13)
                     View_Art.place(y=0, x=535)
-
-                    #Defined function to view articles from nature.com
+        
+                     #Defined function to view articles from nature.com
                     def view_article():
                         article = Article_input.get()#gets the selected article
                         webbrowser.open("https://www.nature.com{0}".format(dicts[article]))#This opens the corresponding article
-
-                #Define a function for scraping articles by term "Nature".
+        
+                 #Define a function for scraping articles by term "Nature".
                 def ScrapeArticle_bytermNatural():
                     dicts = {}
                     Article_list = []
@@ -296,7 +286,7 @@ Tab WEB-Scrape:
                                     # Find the publication year of the magazine article
                                     text = soup.find(
                                         'ul', class_="c-article-identifiers", attrs={"data-test": "article-identifier"})
-
+        
                                     if text == []:
                                         print("No publication year for: ", articles)
                                         article_dicts["pubYear"] = None
@@ -569,6 +559,7 @@ Tab WEB-Scrape:
                             self.update_idletasks()
                             progress_label.config(
                                 text=math.trunc(articles_progress["value"]))
+        
         # Function for searching articles on PubMed
         def article_search_PUBMED():
             # Create a labeled frame for PubMed search
