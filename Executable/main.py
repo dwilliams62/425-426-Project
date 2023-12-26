@@ -117,14 +117,22 @@ def scrape_website_process(scale_widget, scrape_term):
         progress = ttk.Progressbar(root, orient="horizontal", length=200, mode="determinate")
         progress.pack(padx=20, pady=5)
 
+        root.update()
+
         global processed_data #reference global variable to change it
 
         #depending on the website chosen, call correct scraping function
         if website_chosen == 'pubmed':
-            processed_data = scrape_pubmed(progress, value, scrape_term)
+            processed_data = scrape_pubmed(progress, value, scrape_term, pages_label, root)
         if website_chosen == 'springer':
-            processed_data = scrape_springer(progress, value, scrape_term)
+            processed_data = scrape_springer(progress, value, scrape_term, pages_label, root)
         
+        #temporary measure, prints the data that was passed by web scraper
+        for dictionary in processed_data:
+            print("\nDictionary:")
+            for key, value in dictionary.items():
+                print(f"Key: {key}, Value: {value}")
+
         #start the categorizing of the data
         categorize_data_initialize()
         
