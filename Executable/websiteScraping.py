@@ -12,7 +12,7 @@ def scrape_pubmed(progress_bar, page_count, scrape_term, pages_label, root):
     pages_label.config(text="Opening...")
 
     #loop through the pages that need be scraped on pubmeds website
-    for numbers in range(0, page_count):
+    for numbers in range(0, page_count+1):
         #configure the url for each page
         url = "https://pubmed.ncbi.nlm.nih.gov/?term={}&page={}".format(scrape_term, numbers)
 
@@ -32,11 +32,11 @@ def scrape_pubmed(progress_bar, page_count, scrape_term, pages_label, root):
                 url = "https://pubmed.ncbi.nlm.nih.gov{0}".format(articles_links)
                 #add a dicitonary for each article found, starting each with the correct url and title, and empty for each other info
                 array_of_articles.append({"url":url, "title":articles_text, "itempType":"", "pubTitle":"", 
-                    "pubYear":"", "author":"", "doi":"", "abstract":"", "date":"", "volume":"", "issue":"", "issn":"", 
+                    "pubYear":"", "author":"", "doi":"", "abstract":"None", "date":"", "volume":"", "issue":"", "issn":"", 
                     "libCatalog":"", "manualTags":"", "autoTags":"", "ourTags":""})
                 
         #update the progress bar to show how many pages have been checked
-        progress_bar['value'] = (numbers/page_count) * 100
+        progress_bar['value'] = (numbers/(page_count+1)) * 100
         root.update()
     
     #check how many articles are being scraped and update the label and progress bar accordingly
@@ -203,13 +203,166 @@ def scrape_pubmed(progress_bar, page_count, scrape_term, pages_label, root):
         root.update()
      
     #create a copy and loop through, and if the article doesn't have an abstract, remove it from the array
-    array_copy = array_of_articles
-    for article in array_copy:
-        if article['abstract'] == "":
-            array_of_articles.remove(article)
+    filtered_articles = [article for article in array_of_articles if article.get('abstract') is not "None"]
 
-    return array_of_articles
+    return filtered_articles
+
+
+
+
 
 
 def scrape_springer(progress_bar, page_count, scrape_term, pages_label, root):
-    progress_bar['value'] = page_count
+    #start the array as empty, starts the label at what it needs to be
+    array_of_articles = []
+    pages_label.config(text="Opening...")
+
+    #loop through the pages that need be scraped on pubmeds website
+    for numbers in range(0, page_count):
+        #configure the url for each page
+        url = "https://link.springer.com/search/page/{}?query={}&facet-content-type=%22Article%22".format(numbers,scrape_term)
+
+        #open the url and make sure it was successful
+        response = requests.get(url)
+        if response.status_code == 200:
+            #parse the data obtained with beautiful soup
+            soup = BeautifulSoup(response.text, 'html.parser')
+            texts = soup.find_all('a', class_ = "title")
+            # Iterate through each article on the page and extract relevant information.
+            for articles in texts:
+                articles_text = articles.get_text()
+                articles_links = articles.get('href')
+                url = "https://link.springer.com{}".format(articles_links)
+                #add a dicitonary for each article found, starting each with the correct url and title, and empty for each other info
+                array_of_articles.append({"url":url, "title":articles_text, "itempType":"", "pubTitle":"", 
+                    "pubYear":"", "author":"", "doi":"", "abstract":"None", "date":"", "volume":"", "issue":"", "issn":"", 
+                    "libCatalog":"", "manualTags":"", "autoTags":"", "ourTags":""})
+                
+        #update the progress bar to show how many pages have been checked
+        progress_bar['value'] = (numbers/page_count) * 100
+        root.update()
+    
+    #check how many articles are being scraped and update the label and progress bar accordingly
+    numOfarticle = len(array_of_articles)
+    progress = 100/numOfarticle
+    progress_bar['value'] = 0
+    pages_label.config(text="Scraping...")
+    root.update()
+
+    #loop through all the dictionaries in the array and update it with the information we scrape
+    for article in array_of_articles:
+        response = requests.get(article['url'])
+        if response.status_code == 200:
+            print("Successfully opened the web page \n")
+            # accessing the hmtl of the the website
+            soup = BeautifulSoup(response.text, 'html.parser')
+            # Extract article details.
+            abstract = soup.find('div', class_="main-content")
+            # Check if an abstract is available.
+            if abstract == None:
+                print("This article does not an abstract:", article['title'])
+            else:
+                # Extract article information and format accordingly.
+                article["itemType"] = "journalArticle"
+                article_name = article['title'].encode("ascii", 'ignore')
+                article_name = article_name.decode()
+                article["title"] = article_name
+                # Extract other article information similarly.
+                Pubtitles = soup.find('i', attrs = {'data-test': 'journal-title'})
+                if Pubtitles == None:
+                    print("No Publication Title for", articles)
+                    article['pubTitle'] = ""
+                else:
+                    article['pubTitle'] = Pubtitles.get_text()
+                # Extract authors names
+                authors = soup.find_all('a', attrs = {'data-test' : 'author-name'})
+                if authors == None:
+                    print("No Author for", articles)
+                    article['author'] = ""
+                else:
+                    authors_name = ''
+                    keylist = []
+                    for authors in authors:
+                        author_names = authors.get_text()
+                        author_names = author_names.encode("ascii", 'ignore')
+                        author_names = author_names.decode()
+                        author_names = author_names.replace( "\n", '')
+                        author_names = re.sub(r'(^[ \t]+|[ \t]+(?=:))', '', author_names, flags=re.M)
+                        keylist.append(author_names)
+                    authors_name = authors_name + ", ".join(keylist)
+                    article['author'] = authors_name
+                # Extract publication year
+                PUBYear = soup.find('span', class_  = 'c-bibliographic-information__value')
+                if PUBYear == None:
+                    print("No publication year for: ", articles)
+                    article["pubYear"] = ""
+                else:
+                    try:
+                        public_year = PUBYear.get_text()
+                        public_year = public_year.split(" ")[2]
+                        article["pubYear"] = public_year
+                    except IndexError:
+                        print("error with pub year")
+                # Extract DOI
+                DOI = soup.find('li', class_="c-bibliographic-information__list-item c-bibliographic-information__list-item--doi")
+                if DOI == None:
+                    print("No DOI for: ", articles)
+                    article["doi"] = ""
+                else:
+                    for doi in DOI.find('span', class_ = 'c-bibliographic-information__value'):
+                        doi_text = doi.get_text()
+                        doi_text = re.sub(r'(^[ \t]+|[ \t]+(?=:))', '', doi_text, flags=re.M)
+                        doi_text = doi_text.replace('\n', "")
+                    article["doi"] = doi_text
+                # Extract URL
+                article["url"] = url
+                # Extract abstract
+                abstract = soup.find('div', class_="main-content")
+                if abstract == None:
+                    print("No Abstract for: ", articles)
+                    article["abstract"] = ""
+                else:
+                    abs = " "
+                    for springer_abstract in abstract.find_all('p'):
+                        abs += springer_abstract.get_text()
+                        abs = abs.replace("\n", "")
+                        abs = re.sub(r'(^[ \t]+|[ \t]+(?=:))', '', abs, flags=re.M)
+                        abs = abs.encode("ascii", 'ignore')
+                        abs = abs.decode()
+                    article["abstract"] = abs
+                # Extract date, volume, and other information
+                date = soup.find('span', class_='c-bibliographic-information__value')
+                if date == None:
+                    print("No Date for: ", articles)
+                    article['date'] = ""
+                else:
+                    date_text = date.get_text()
+                    article['date'] = date_text
+                volume = soup.find('p', class_='c-bibliographic-information__citation')
+                if volume == None:
+                    print("No Volume for: ", articles)
+                    article['volume'] = ""
+                else:
+                    try: 
+                        for vol in volume.find('b'):
+                            vol_text = vol.get_text()
+                        
+                    except TypeError:
+                        print("Error on volume")
+                article["volume"] = vol_text
+                # Initialize other fields with empty values
+                article["issue"] = ""
+                article['issn'] = ""
+                article["libCatalog"] = "Springer"
+                article["manualTags"] = ""
+                article["autoTags"] = ""
+                article["ourTags"] = ""
+
+        #update the progress bar
+        progress_bar['value'] += progress
+        root.update()
+     
+    #create a copy and loop through, and if the article doesn't have an abstract, remove it from the array
+    filtered_articles = [article for article in array_of_articles if article.get('abstract') is not "None"]
+
+    return filtered_articles

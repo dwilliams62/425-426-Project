@@ -110,7 +110,7 @@ def scrape_website_process(scale_widget, scrape_term):
             widget.pack_forget()
 
         #add a label
-        pages_label = tk.Label(root, text="Scraping....")
+        pages_label = tk.Label(root, text="Opening....")
         pages_label.pack()
 
         # Create a progress bar
