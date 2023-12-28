@@ -203,15 +203,13 @@ def scrape_pubmed(progress_bar, page_count, scrape_term, pages_label, root):
         root.update()
      
     #create a copy and loop through, and if the article doesn't have an abstract, remove it from the array
-    filtered_articles = [article for article in array_of_articles if article.get('abstract') is not "None"]
+    filtered_articles = [article for article in array_of_articles if article.get('abstract') != "None"]
 
     return filtered_articles
 
 
 
-
-
-
+#the basics of springer scraping is the same as the pubmed scraping
 def scrape_springer(progress_bar, page_count, scrape_term, pages_label, root):
     #start the array as empty, starts the label at what it needs to be
     array_of_articles = []
@@ -363,6 +361,6 @@ def scrape_springer(progress_bar, page_count, scrape_term, pages_label, root):
         root.update()
      
     #create a copy and loop through, and if the article doesn't have an abstract, remove it from the array
-    filtered_articles = [article for article in array_of_articles if article.get('abstract') is not "None"]
+    filtered_articles = [article for article in array_of_articles if article.get('abstract') != "None"]
 
     return filtered_articles
