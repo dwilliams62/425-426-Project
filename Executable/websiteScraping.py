@@ -56,7 +56,7 @@ def scrape_pubmed(progress_bar, page_count, scrape_term, pages_label, root):
                 print("This article does not an abstract:", article['title'])
             else:
                 article["itemType"] = "journalArticle"
-                article["title"] = article
+                article["title"] = article['title']
 
                 # Find the publication title for the article.
                 # If no publication title is found, print a message and set the publication title to an empty string.
