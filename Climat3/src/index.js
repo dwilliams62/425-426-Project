@@ -3,7 +3,7 @@ DYLAN WILLIAMS FALL 2023
 */
 
 //import from other files for readability and organization
-import { DownloadXMLRDF } from "./downloadDocumentFunctions.js";
+import { UpdateSelectedArray, DownloadXMLRDF } from "./downloadDocumentFunctions.js";
 import { addNewDocument, loadJSONDocument } from "./addDocumentFunctions.js";
 import { startSearch } from "./searchDocumentFunctions.js";
 
@@ -22,6 +22,9 @@ document.getElementById("myBtn").addEventListener("click", addNewDocument);
 //this button will go into the database with predetermined collection name and document names, retrieve the data for each of those
 //documents, and format it into a Zotero RDF file that can then be uplaoded to Zotero
 document.getElementById("openDocTest").addEventListener("click", DownloadXMLRDF);
+
+//Curently testing a function to happen on a checkbox change
+document.getElementById('checkbox1').addEventListener('change', UpdateSelectedArray);
 
 //the search button, will look through the settings currently selected and perform the correct query, then outputs the data
 //current set to update the search every time any of the <select> tags change and when the search bar changes, but this would lead to

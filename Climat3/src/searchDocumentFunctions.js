@@ -1,6 +1,7 @@
 
 import { initializeApp } from "firebase/app";
 import { getFirestore, collection, query, where, getDocs, orderBy, startAt, endAt } from "firebase/firestore";
+import { UpdateSelectedArray } from "./downloadDocumentFunctions.js";
 
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
@@ -23,10 +24,10 @@ export async function startSearch() {
   //first start by setting up the query based on the preference of what the user selected to search by. current default is title
   var q;
   if (document.getElementById('sortBy').value == 'title') {
-    q = query(collection(db, "delete"), orderBy('title')); 
+    q = query(collection(db, "Documents"), orderBy('Title')); 
   }
   else if (document.getElementById('sortBy').value == 'author') {
-    q = query(collection(db, "delete"), orderBy('author')); 
+    q = query(collection(db, "Documents"), orderBy('Authors')); 
   }
 
   //run the query, currently grabs all documents in the database
@@ -64,7 +65,7 @@ function searchBy(doc) {
   if (document.getElementById('searchBy').value == 'title') {
     //if the document's title contains the string that the user has searched, add it to the outputDiv in card form, 
     //and return true that something was added
-    if (doc.data().title.toLowerCase().includes(document.getElementById('searchText').value.toLowerCase())) {
+    if (doc.data().Title.toLowerCase().includes(document.getElementById('searchText').value.toLowerCase())) {
       createCard(doc);
       return true;
     }
@@ -72,7 +73,7 @@ function searchBy(doc) {
 
   //same thing but if the user picked author it checks author
   if (document.getElementById('searchBy').value == 'author') {
-    if (doc.data().author.toLowerCase().includes(document.getElementById('searchText').value.toLowerCase())) {
+    if (doc.data().Authors.toLowerCase().includes(document.getElementById('searchText').value.toLowerCase())) {
       createCard(doc);
       return true;
     }
@@ -88,23 +89,27 @@ function createCard(doc) {
   const cardDiv = document.createElement("div");
   cardDiv.classList.add("card");
 
-  //create the header of the card with the title
+  //create the header of the card with the title and a checkbox
   const cardHeaderDiv = document.createElement("div");
   cardHeaderDiv.classList.add("card-header");
-  cardHeaderDiv.textContent = doc.data().title;
+  cardHeaderDiv.textContent = doc.data().Title;
+  const checkbox = document.createElement("input");
+  checkbox.type = "checkbox";
+  checkbox.addEventListener('change', UpdateSelectedArray);
+  cardHeaderDiv.appendChild(checkbox);
 
   //create a body of the card holding the author
   const cardBodyDiv = document.createElement("div");
   cardBodyDiv.classList.add("card-body");
-  cardBodyDiv.textContent = doc.data().author;
+  cardBodyDiv.textContent = doc.data().Authors;
 
   //create another body to hold the <a> tag that has the link provided for that document
   const cardBodyDiv2 = document.createElement("div");
   cardBodyDiv2.classList.add("card-body");
   const button = document.createElement("a");
-  button.href = doc.data().url;
+  button.href = doc.data().URL;
   button.classList.add("btn", "btn-primary");
-  button.textContent = doc.data().url;
+  button.textContent = doc.data().URL;
   cardBodyDiv2.appendChild(button);
 
   //append all the headers and bodys to the card, append the card to the ouptut div, then add a <p> tag for a little space between cards

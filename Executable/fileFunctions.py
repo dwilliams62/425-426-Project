@@ -11,7 +11,7 @@ def process_rdf_file(file_path):
     g = Graph()
     g.parse(file_path, format='xml')
     
-        # SPARQL query to find all unique ISSNs and associated data
+    # SPARQL query to find all unique ISSNs and associated data
     sparql_query = """
         PREFIX dc: <http://purl.org/dc/elements/1.1/>
         SELECT ?s ?p ?o
@@ -60,7 +60,7 @@ def upload_to_website(data):
 
     #for every article passed to it, creates a new document in the Documents collection with the document ID as the title
     for article in data:
-        document_id = article['title']
+        document_id = article['title'].replace(" ", "")
         doc_ref = db.collection("Documents").document(document_id)
         doc_ref.set({"Title": article['title'], "URL": article['url'], "PubTitle": article['pubTitle'], "PubYear": article['pubYear'], 
             "Authors": article['author'], "Date":article['date'], "DOI":article['doi'], "Volume":article['volume'], "ISSN":article['issn'],
