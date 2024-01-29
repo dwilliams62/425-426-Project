@@ -23,9 +23,6 @@ document.getElementById("myBtn").addEventListener("click", addNewDocument);
 //documents, and format it into a Zotero RDF file that can then be uplaoded to Zotero
 document.getElementById("openDocTest").addEventListener("click", DownloadXMLRDF);
 
-//Curently testing a function to happen on a checkbox change
-document.getElementById('checkbox1').addEventListener('change', UpdateSelectedArray);
-
 //the search button, will look through the settings currently selected and perform the correct query, then outputs the data
 //current set to update the search every time any of the <select> tags change and when the search bar changes, but this would lead to
 //performance issues down the road, so should likely look into just having a submit button for everything

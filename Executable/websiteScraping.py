@@ -31,7 +31,9 @@ def scrape_pubmed(progress_bar, page_count, scrape_term, pages_label, root):
                 articles_links = articles.get('href')
                 url = "https://pubmed.ncbi.nlm.nih.gov{0}".format(articles_links)
                 #add a dicitonary for each article found, starting each with the correct url and title, and empty for each other info
-                array_of_articles.append({"url":url, "title":articles_text, "abstract":"None"})
+                array_of_articles.append({"url":url, "title":articles_text, "itempType":"", "pubTitle":"", 
+                    "pubYear":"", "author":"", "doi":"", "abstract":"None", "date":"", "volume":"", "issue":"", "issn":"", 
+                    "libCatalog":"", "manualTags":"", "autoTags":"", "ourTags":""})
                 
         #update the progress bar to show how many pages have been checked
         progress_bar['value'] = (numbers/(page_count+1)) * 100

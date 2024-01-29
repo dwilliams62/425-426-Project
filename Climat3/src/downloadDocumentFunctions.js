@@ -22,25 +22,30 @@ const db = getFirestore(app);
 // Initialize the currently selected articles array
 var selectedArticles = [];
 
+//Add an article to be downloaded
 function addArticleToArray(item) {
   if (!selectedArticles.includes(item)) {
     selectedArticles.push(item);
   }
 }
 
+//Remove an article to be downloaded
 function removeArticleFromArray(item) {
   if (selectedArticles.includes(item)) {
     selectedArticles = selectedArticles.filter(selected => selected !== item);
   }
 }
 
+//Handles the function of a check box being checked or unchecked
 export function UpdateSelectedArray(event) {
+  //get the text of the selected card
   var ArticleTitle = this.parentNode.textContent.trim();
 
+  //add article if it is checked, and remove it if it is unchecked
   if (event.target.checked) {
-    addArticleToArray(ArticleTitle); // Add the Article if checkbox is checked
+    addArticleToArray(ArticleTitle);
   } else {
-    removeArticleFromArray(ArticleTitle); // Remove the item if checkbox is unchecked
+    removeArticleFromArray(ArticleTitle);
   }
 
   console.log(selectedArticles); // Display the updated array
@@ -58,12 +63,15 @@ export async function DownloadXMLRDF() {
 }
 
 async function CreateSelectedArticlesRDF() {
-  var articleRDFString = addHeadingRDFFile();
+  var articleRDFString = addHeadingRDFFile(); //start the rdf file
 
+  //loop through all the selected article titles, add them to the xml
   for (let i = 0; i < selectedArticles.length; i++) {
-    var tempStr = selectedArticles[i].replace(/\s/g, "");
+    var tempStr = selectedArticles[i].replace(/\s/g, ""); //get rid of spaces for the document ID bc spaces break it
     var docRef = doc(db, 'Documents', tempStr);
     var docSnap = await getDoc(docRef);
+
+    //if the document exists, add it to xml, otherwise continue on
     if (docSnap.exists()) {
       console.log("Document data:", docSnap.data());
       articleRDFString += addArticleRDFFile(docSnap);
