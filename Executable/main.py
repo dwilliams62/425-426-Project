@@ -21,12 +21,14 @@ def create_startup_buttons(root):
     # Create buttons
     upload_button = tk.Button(root, text="Upload my own RDF", command=upload_own_rdf)
     scrape_button = tk.Button(root, text="Scrape from website", command=scrape_website_initialize)
+    machine_learning_test_button = tk.Button(root, text="Test Machine Learning", command=machine_learning_test_initialize)
 
     # Pack the labels and buttons into the main window
     title_label.pack(pady=10)
     instruction_label.pack(pady=5)
     upload_button.pack(pady=10)
     scrape_button.pack(pady=10)
+    machine_learning_test_button.pack(pady=10)
 
 
 
@@ -138,6 +140,16 @@ def scrape_website_process(scale_widget, scrape_term):
         
 
 
+#a function to initialize preset data into the processed data for testing purposes
+def machine_learning_test_initialize():
+    global processed_data
+    processed_data = [
+        {"key1": "value1", "key2": "value2"},
+        {"key3": "value3", "key4": "value4"},
+        {"key5": "value5", "key6": "value6"}
+    ]
+    categorize_data_initialize()
+
 #at this point data will have been uploaded somehow, and the program will then use the machine learning algorithm to
 #to classify each article given into the correct category
 def categorize_data_initialize():
@@ -152,6 +164,8 @@ def categorize_data_initialize():
     # Create a progress bar
     progress = ttk.Progressbar(root, orient="horizontal", length=200, mode="determinate")
     progress.pack(padx=20, pady=5)
+
+    root.update()
 
     global processed_data #reference global variable to change it
 
