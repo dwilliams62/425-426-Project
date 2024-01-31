@@ -17,8 +17,6 @@ def customTokenizer(text):
     return allGrams
 
 def add_category(progress_bar, data):
-    progress_bar['value'] = 87
-
     csvName = "allData.csv"
     allData = pd.read_csv(csvName, encoding="utf-8")  # Reading the data from allData.csv
 
@@ -38,7 +36,10 @@ def add_category(progress_bar, data):
     svm = SVC(C=1.0, kernel='linear', random_state=42)  # Initializing SVM
     svm.fit(vectors, labels) 
 
-    for dictionary in data:
+    #for the percentage bar, calculate how many dictionaries in the array
+    total_dicts = len(data)
+
+    for index, dictionary in enumerate(data):
         articleAbstract = dictionary["abstract"]
         articleTitle = dictionary["title"]
         dataCombined = " ".join(articleAbstract, articleTitle) # Combining abstract and title to be analyzed
@@ -46,5 +47,9 @@ def add_category(progress_bar, data):
 
         prediction = svm.predict(newVector)
         dictionary["ourTags"] = prediction
+
+        #update the percentage bar as it classifies
+        percentage_complete = (index + 1) / total_dicts * 100
+        progress_bar['value'] = percentage_complete
 
     return data
