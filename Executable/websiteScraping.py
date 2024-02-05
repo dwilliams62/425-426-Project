@@ -33,7 +33,7 @@ def scrape_pubmed(progress_bar, page_count, scrape_term, pages_label, root):
                 #add a dicitonary for each article found, starting each with the correct url and title, and empty for each other info
                 array_of_articles.append({"url":url, "title":articles_text, "itempType":"", "pubTitle":"", 
                     "pubYear":"", "author":"", "doi":"", "abstract":"None", "date":"", "volume":"", "issue":"", "issn":"", 
-                    "libCatalog":"", "manualTags":"", "autoTags":"", "ourTags":""})
+                    "affiliation":"","libCatalog":"", "manualTags":"", "autoTags":"", "ourTags":""})
                 
         #update the progress bar to show how many pages have been checked
         progress_bar['value'] = (numbers/(page_count+1)) * 100
@@ -153,47 +153,80 @@ def scrape_pubmed(progress_bar, page_count, scrape_term, pages_label, root):
 
                 # Find the ISSN of the article.
                 # If no ISSN is found, print a message and set the ISSN to an empty string.
-                issn = soup.find('span', class_='cit')
-                if issn == None:
-                    print("No ISSN for: ", article['title'])
-                    article['issn'] = ""
+                issue = soup.find('span', class_='cit')
+                if issue == None:
+                    print("No issue for: ", article['title'])
+                    article['issue'] = ""
                 else:
                     try: 
-                        ISSN_text = issn.get_text()
-                        ISSN_text = ISSN_text.split(":")[0]
-                        ISSN_text = ISSN_text.split(";")[1]
-                        ISSN_text = ISSN_text.split(")")[0]
+                        ISSUE_text = issue.get_text()
+                        ISSUE_text = ISSUE_text.split(":")[0]
+                        ISSUE_text = ISSUE_text.split(";")[1]
+                        ISSUE_text = ISSUE_text.split(")")[0]
                         try:
-                            ISSN_text.split("(")[1]
+                            ISSUE_text.split("(")[1]
                         except IndexError:
-                            ISSN_text = ISSN_text.split(":")[0]
+                            ISSUE_text = ISSUE_text.split(":")[0]
                         else:
-                            ISSN_text = ISSN_text.split("(")[1]
-                        article["issn"] = ISSN_text
+                            ISSUE_text = ISSUE_text.split("(")[1]
+                        article["issue"] = ISSUE_text
                     except IndexError:
                         try:
-                            ISSN_text = issn.get_text()
-                            ISSN_text = ISSN_text.split(":")[0]
-                            ISSN_text = ISSN_text.split(":")[1]
-                            ISSN_text = ISSN_text.split(")")[0]
+                            ISSUE_text = issue.get_text()
+                            ISSUE_text = ISSUE_text.split(":")[0]
+                            ISSUE_text = ISSUE_text.split(":")[1]
+                            ISSUE_text = ISSUE_text.split(")")[0]
                         except IndexError: 
-                            print("Error on ISSN")
-                            article["issn"] = ""
+                            print("Error on ISSUE")
+                            article["issue"] = ""
                         else:
                             try:
-                                ISSN_text.split("(")[1]
+                                ISSUE_text.split("(")[1]
                             except IndexError:
-                                ISSN_text = ISSN_text.split(":")[0]
-                                article["issn"] = ISSN_text
+                                ISSUE_text = ISSUE_text.split(":")[0]
+                                article["issue"] = ISSUE_text
                             else:
-                                ISSN_text = ISSN_text.split("(")[1]
-                                article["issn"] = ISSN_text
+                                ISSUE_text = ISSUE_text.split("(")[1]
+                                article["issue"] = ISSUE_text
+                
+                #Parse for ISSN 
+                issn = soup.find('span', class_='cit')
+                if issn == None:
+                    print("No issn for: ", article['title'])
+                    article['issn'] = ""
+                else: 
+                    try: 
+                        ISSN_text = issn.get_text()
+                        ISSN_text = ISSN_text.split(":")[1]
+                        ISSN_text = ISSN_text.split(".")[0]
+                    except IndexError: 
+                        print("error on ISSN for: ",article['title'])
+                        article["issn"] = ""
+                    else: 
+                        article["issn"] = ISSN_text
+                
+            #Adding the affiliations as a list to the array of dictionaries
+                aff_list = []
+
+                affiliations = soup.find("div", class_="affiliations")
+                aff_elements = affiliations.find_all("li")
+
+                for aff_element in aff_elements: 
+                    aff =  aff_element.text
+                    aff_list.append(aff)
+                
+                article["affiliations"] = aff_list
+
+
+
+
+
 
                 # Set the library catalog to "PubMed" for the article.
                 article["libCatalog"] = "PubMed"
 
                 # Set these things to empty
-                article["issue"] = ""
+                #article["issn"] = ""
                 article["manualTags"] = ""
                 article["autoTags"] = ""
                 article["ourTags"] = ""
