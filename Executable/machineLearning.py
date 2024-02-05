@@ -42,7 +42,8 @@ def add_category(progress_bar, data):
     for index, dictionary in enumerate(data):
         articleAbstract = dictionary["abstract"]
         articleTitle = dictionary["title"]
-        dataCombined = " ".join(articleAbstract, articleTitle) # Combining abstract and title to be analyzed
+        dataCombined = articleAbstract + " " + articleTitle # Combining abstract and title to be analyzed
+        dataCombined = [dataCombined]
         newVector = tfidf_vectorizer.transform(dataCombined)
 
         prediction = svm.predict(newVector)
