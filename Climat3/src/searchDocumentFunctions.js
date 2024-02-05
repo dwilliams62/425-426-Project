@@ -20,6 +20,9 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
+var querySnapshot;
+var pageNumber = 1;
+
 export async function startSearch() {
   //first start by setting up the query based on the preference of what the user selected to search by. current default is title
   var q;
@@ -31,20 +34,41 @@ export async function startSearch() {
   }
 
   //run the query, currently grabs all documents in the database
-  const querySnapshot = await getDocs(q);
+  querySnapshot = await getDocs(q);
 
+  //initalize the amount of docs being displayed based off what the user picked. default is max of 20
+  var maxPerPage = document.getElementById('resultsPerPage').value;
+  showSearchResults(((maxPerPage * pageNumber) - maxPerPage), (maxPerPage * pageNumber));
+}
+
+export function pageUp() {
+  pageNumber++;
+  var maxPerPage = document.getElementById('resultsPerPage').value;
+  showSearchResults(((maxPerPage * pageNumber) - maxPerPage), (maxPerPage * pageNumber))
+}
+
+export function pageDown() {
+  if (pageNumber <= 1) {
+    return;
+  }
+  pageNumber--;
+  var maxPerPage = document.getElementById('resultsPerPage').value;
+  showSearchResults(((maxPerPage * pageNumber) - maxPerPage), (maxPerPage * pageNumber))
+}
+
+function showSearchResults(minCountDocs, maxCountDocs) {
   //make sure the search has no card in it from a previous search
   const outputDiv = document.getElementById("output");
   outputDiv.innerHTML = '';
-
-  //initalize the amount of docs being displayed based off what the user picked. default is max of 20
   var currentCountDocs = 0;
-  var maxCountDocs = document.getElementById('resultsPerPage').value;
-
   //loop through all the documents in the query
   for (var i in querySnapshot.docs) {
     //if there is still more room for documents, proccess the documents
     if (currentCountDocs < maxCountDocs) {
+      if (currentCountDocs < minCountDocs) {
+        currentCountDocs++;
+        continue;
+      }
       const doc = querySnapshot.docs[i];
 
       //if the climate tag is specified, it will see if that document adheres to the tag, otherwise will go through all docs
@@ -55,6 +79,8 @@ export async function startSearch() {
           currentCountDocs++;
         }
       }
+    } else {
+      break;
     }
   }
 }

@@ -5,7 +5,7 @@ DYLAN WILLIAMS FALL 2023
 //import from other files for readability and organization
 import { UpdateSelectedArray, DownloadXMLRDF } from "./downloadDocumentFunctions.js";
 import { addNewDocument, loadJSONDocument } from "./addDocumentFunctions.js";
-import { startSearch } from "./searchDocumentFunctions.js";
+import { startSearch, pageUp, pageDown } from "./searchDocumentFunctions.js";
 
 console.log('Hello Firebase!'); //just to show it's working in console (fn f12 i think?)
 
@@ -31,6 +31,9 @@ document.getElementById('resultsPerPage').addEventListener('change', startSearch
 document.getElementById('searchBy').addEventListener('change', startSearch);
 document.getElementById('sortBy').addEventListener('change', startSearch);
 document.getElementById('climateTag').addEventListener('change', startSearch);
+
+document.getElementById('pageUp').addEventListener('click', pageUp);
+document.getElementById('pageDown').addEventListener('click', pageDown);
 
 //make sure the page starts with displaying some data based off the defaults picked when booted up
 startSearch();
