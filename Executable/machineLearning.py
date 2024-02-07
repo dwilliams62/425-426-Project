@@ -8,6 +8,11 @@ import spacy
 
 nlp = spacy.load("en_core_web_sm") # Loading Spacy's English module
 
+def np_to_fs(og_dict):
+    for k, v in og_dict.items():
+        if type(v).__module__ == 'numpy':
+            og_dict[k] = v.item() # Converts numpy variables to regular python variables
+
 def customTokenizer(text):
     doc = nlp(text)
     tokens = [token.lemma_ for token in doc if token.is_alpha and not token.is_stop] # Extracts lemmatized tokens
@@ -42,11 +47,13 @@ def add_category(progress_bar, data, root):
     for index, dictionary in enumerate(data):
         articleAbstract = dictionary["abstract"]
         articleTitle = dictionary["title"]
-        dataCombined = " ".join(articleAbstract, articleTitle) # Combining abstract and title to be analyzed
+        dataCombined = articleAbstract + " " + articleTitle # Combining abstract and title to be analyzed
+        dataCombined = [dataCombined]
         newVector = tfidf_vectorizer.transform(dataCombined)
 
         prediction = svm.predict(newVector)
         dictionary["ourTags"] = prediction
+        np_to_fs(dictionary)
 
         #update the percentage bar as it classifies
         percentage_complete = (index + 1) / total_dicts * 100

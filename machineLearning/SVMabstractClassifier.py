@@ -1,5 +1,5 @@
 from sklearn.feature_extraction.text import TfidfVectorizer
-from sklearn.svm import SVC  # Import the Support Vector Machine classifier
+from sklearn.ensemble import RandomForestClassifier  # Import the Support Vector Machine classifier
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import classification_report
 from sklearn.preprocessing import MaxAbsScaler
@@ -38,10 +38,10 @@ tfidf_vectorizer = TfidfVectorizer(tokenizer=customTokenizer, lowercase=True)
 vectors = tfidf_vectorizer.fit_transform(combinedFeatures) # Vectorizing and tokenizing the contents of the abstracts, titles, and tags
 vectorsScaled = scaler.fit_transform(vectors) # Normalizing the vectors
 
-svm = SVC(C=1.0, kernel='linear', random_state=42)  # Initializing SVM
+rf = RandomForestClassifier(n_estimators=100,criterion='gini',max_depth=None)  # Initializing Random Forest
 
-X_train, X_test, y_train, y_test = train_test_split(vectorsScaled, labels, test_size=0.5, random_state=42) # Splitting training and testing data
+X_train, X_test, y_train, y_test = train_test_split(vectorsScaled, labels, test_size=0.3, random_state=42) # Splitting training and testing data
 
-svm.fit(X_train, y_train)  # Fitting the training data to the SVM
-y_pred = svm.predict(X_test)
+rf.fit(X_train, y_train)  # Fitting the training data to the SVM
+y_pred = rf.predict(X_test)
 print(classification_report(y_test, y_pred))
