@@ -65,7 +65,7 @@ def upload_to_website(data):
         doc_ref.set({"Title": article['title'], "URL": article['url'], "PubTitle": article['pubTitle'], "PubYear": article['pubYear'], 
             "Authors": article['author'], "Date":article['date'], "DOI":article['doi'], "Volume":article['volume'], "ISSN":article['issn'],
             "Abstract":article['abstract'], "Item Type":article['itemType'], "LibCatalog":article['libCatalog'], 
-            "Classification":article['ourTags']})
+            "Classification":article['ourTags'],"Affiliations":article['affiliation']})
 
 def download_as_rdf(data):
     print("download")
