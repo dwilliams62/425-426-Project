@@ -16,7 +16,7 @@ def customTokenizer(text):
 
     return allGrams
 
-def add_category(progress_bar, data):
+def add_category(progress_bar, data, root):
     csvName = "allData.csv"
     allData = pd.read_csv(csvName, encoding="utf-8")  # Reading the data from allData.csv
 
@@ -51,5 +51,6 @@ def add_category(progress_bar, data):
         #update the percentage bar as it classifies
         percentage_complete = (index + 1) / total_dicts * 100
         progress_bar['value'] = percentage_complete
+        root.update()
 
     return data

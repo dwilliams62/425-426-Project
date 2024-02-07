@@ -170,7 +170,7 @@ def categorize_data_initialize():
     global processed_data #reference global variable to change it
 
     #using the current data, add the correct category to each article in processed_data
-    processed_data = add_category(progress, processed_data)
+    processed_data = add_category(progress, processed_data, root)
 
     #send the user to the final screen
     use_data_initialize()
