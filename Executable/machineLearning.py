@@ -24,6 +24,8 @@ def customTokenizer(text):
 def add_category(progress_bar, data, root):
     csvName = "allData.csv"
     allData = pd.read_csv(csvName, encoding="utf-8")  # Reading the data from allData.csv
+    progress_bar['value'] = 30
+    root.update()
 
     abstracts = allData["Abstract"].tolist()  # Extracting abstracts from the CSV
     titles = allData["Title"].tolist()  # Extracting titles from the CSV
@@ -34,17 +36,30 @@ def add_category(progress_bar, data, root):
     for title, abstract, tag in zip(titles, abstracts, tags):
         if title and abstract and tag:
             combinedFeatures.append(f"{title} {abstract} {tag}") # Combining features of articles
+    progress_bar['value'] = 60
+    root.update()        
 
     tfidf_vectorizer = TfidfVectorizer(tokenizer=customTokenizer, lowercase=True)
-    vectors = tfidf_vectorizer.fit_transform(combinedFeatures) # Vectorizing and tokenizing the contents of the abstracts, titles, and tags   
+    vectors = tfidf_vectorizer.fit_transform(combinedFeatures) # Vectorizing and tokenizing the contents of the abstracts, titles, and tags 
+    progress_bar['value'] = 90
+    root.update()  
 
     svm = SVC(C=1.0, kernel='linear', random_state=42)  # Initializing SVM
     svm.fit(vectors, labels) 
+    progress_bar['value'] = 100
+    root.update()
 
     #for the percentage bar, calculate how many dictionaries in the array
     total_dicts = len(data)
 
+    progress_bar['value'] = 0
+    root.update()
+
     for index, dictionary in enumerate(data):
+        #update the percentage bar as it classifies
+        percentage_complete = (index + 1) / total_dicts * 100
+        progress_bar['value'] = percentage_complete
+
         articleAbstract = dictionary["abstract"]
         articleTitle = dictionary["title"]
         dataCombined = articleAbstract + " " + articleTitle # Combining abstract and title to be analyzed
@@ -55,9 +70,6 @@ def add_category(progress_bar, data, root):
         dictionary["ourTags"] = prediction
         np_to_fs(dictionary)
 
-        #update the percentage bar as it classifies
-        percentage_complete = (index + 1) / total_dicts * 100
-        progress_bar['value'] = percentage_complete
         root.update()
 
     return data
