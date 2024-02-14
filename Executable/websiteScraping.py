@@ -1,6 +1,7 @@
 import re
 from bs4 import BeautifulSoup  # pip install BeautifulSoup in terminal
 import requests  # pip install requests in terminal
+from itertools import zip_longest
 
 #scrapes pubmed, starts by going through the pages of articles, gets the url and title of each. then goes through each
 #and scrapes the data needed and sets the array of dictionaries. the 5 things passed are the progress bar to update how
@@ -69,25 +70,69 @@ def scrape_pubmed(progress_bar, page_count, scrape_term, pages_label, root):
 
                 # Find the authors for the article.
                 # If no authors are found, print a message and set the authors to an empty string.
-                authors_PMED = soup.find('div', class_="authors-list")
-                if authors_PMED == None:
+                auth = soup.find('div', class_="authors-list")
+                if auth == None:
                     print("No Author for", article['title'])
                     article['author'] = ""
                 else:
-                    authors_name = ''
-                    keylist = []
-                    for authors in authors_PMED.find_all('a', class_="full-name"):
-                        author_names = authors.get_text()
-                        author_names = author_names.encode(
-                            "ascii", 'ignore')
-                        author_names = author_names.decode()
-                        author_names = author_names.replace(
-                            "\n", '')
-                        author_names = re.sub(
-                            r'(^[ \t]+|[ \t]+(?=:))', '', author_names, flags=re.M)
-                        keylist.append(author_names)
-                    authors_name = authors_name + ", ".join(keylist)
-                    article['author'] = authors_name
+                    # authors_name = ''
+                    # keylist = []
+                    # for authors in authors_PMED.find_all('a', class_="full-name"):
+                    #     author_names = authors.get_text()
+                    #     author_names = author_names.encode(
+                    #         "ascii", 'ignore')
+                    #     author_names = author_names.decode()
+                    #     author_names = author_names.replace(
+                    #         "\n", '')
+                    #     author_names = re.sub(
+                    #         r'(^[ \t]+|[ \t]+(?=:))', '', author_names, flags=re.M)
+                    #     keylist.append(author_names)
+                    # authors_name = authors_name + ", ".join(keylist)
+                    # article['author'] = authors_name
+                    auth_elements = auth.find_all("a",class_="full-name")
+                    link_elements = auth.find_all("a",class_="affiliation-link")
+                    
+
+                    affiliations = soup.find("div", class_="affiliations")
+                    try:
+                        aff_elements = affiliations.find_all("li")
+                        keys =affiliations.find_all("sup",class_="key")
+                    except AttributeError: 
+                        print("No Affiliations")
+                        num = 1
+                    
+                        for auth_element in auth_elements:
+                            
+                            a_elements = auth_element.text
+                            name = f'author_{num}'
+                            article[name] = a_elements
+                            num += 1
+                        
+
+                    
+                    num = 1
+                    
+                    for auth_element,link_element in zip(auth_elements,link_elements): 
+                        a_elements = auth_element.text
+                        
+                        l_elements = link_element.text
+                        l_elements = int(l_elements)
+    
+                        name = f'author_{num}'
+                        aff_name = f'affiliation_{num}'
+                        article[name] = a_elements
+
+                        if aff_elements != None:
+                            for aff_element, key in zip(aff_elements,keys): 
+                                aff = aff_element.text
+                                aff_key = key.text
+                                aff_key = int(aff_key)
+
+                                if aff_key == l_elements:
+                                    article[aff_name] = aff
+            
+                        num += 1
+
 
                 # Find the publication year for the article.
                 # If no publication year is found, print a message and set the publication year to an empty string.
@@ -181,7 +226,7 @@ def scrape_pubmed(progress_bar, page_count, scrape_term, pages_label, root):
                             article["issue"] = ""
                         else:
                             try:
-                                ISSUE_text.split("(")[1]
+                                ISSUE_text.split(")")[1]
                             except IndexError:
                                 ISSUE_text = ISSUE_text.split(":")[0]
                                 article["issue"] = ISSUE_text
@@ -206,16 +251,7 @@ def scrape_pubmed(progress_bar, page_count, scrape_term, pages_label, root):
                         article["issn"] = ISSN_text
                 
             #Adding the affiliations as a list to the array of dictionaries
-                aff_list = []
-
-                affiliations = soup.find("div", class_="affiliations")
-                aff_elements = affiliations.find_all("li")
-
-                for aff_element in aff_elements: 
-                    aff =  aff_element.text
-                    aff_list.append(aff)
                 
-                article["affiliations"] = aff_list
 
 
 
