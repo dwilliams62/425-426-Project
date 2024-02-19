@@ -1,0 +1,60 @@
+html,
+body {
+    height: 100%;
+    font-size: 1rem;
+    font-family: 'Mulish', sans-serif;
+}
+
+.gradient{
+    background: rgb(13,144,12);
+    background: linear-gradient(
+    90deg,
+     rgba(13,144,12,1) 41%,
+      rgba(183,255,0,1) 100%);
+}
+
+.page-header {
+    margin-top: 4rem;
+    font-size: 1.25rem;
+    color: #fff;
+}
+
+.feature {
+    color: #fff;
+}
+
+.feature ul{
+    padding-left: 2rem;
+    list-style-type: none;
+}
+
+.icon {
+    color: #fff;
+    height: 5rem;
+    width: 5rem;
+    font-size: 1.75rem;
+    border-radius: 100%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+}
+
+.aboutus{
+    margin-top: 4rem;
+    font-size: 1.25rem;
+    color: #fff;
+
+}
+
+footer{
+    color:#fff;
+    font-size: 1rem;
+    margin: 0;
+    padding: 1rem;
+}
+
+a{
+    color:#fff
+    text-decoration: none;
+}
