@@ -33,8 +33,8 @@ def scrape_pubmed(progress_bar, page_count, scrape_term, pages_label, root):
                 url = "https://pubmed.ncbi.nlm.nih.gov{0}".format(articles_links)
                 #add a dicitonary for each article found, starting each with the correct url and title, and empty for each other info
                 array_of_articles.append({"url":url, "title":articles_text, "itempType":"", "pubTitle":"", 
-                    "pubYear":"", "author":"", "doi":"", "abstract":"None", "date":"", "volume":"", "issue":"", "issn":"", 
-                    "affiliation":"","libCatalog":"", "manualTags":"", "autoTags":"", "ourTags":""})
+                    "pubYear":"",  "doi":"", "abstract":"None", "date":"", "volume":"", "issue":"", "issn":"", 
+                    "libCatalog":"", "manualTags":"", "autoTags":"", "ourTags":""})
                 
         #update the progress bar to show how many pages have been checked
         progress_bar['value'] = (numbers/(page_count+1)) * 100
@@ -68,37 +68,26 @@ def scrape_pubmed(progress_bar, page_count, scrape_term, pages_label, root):
                 else:
                     article['pubTitle'] = Pubtitles.get_text()
 
-                # Find the authors for the article.
+                # Find the authors for the article and their affiliated affilaiation.
                 # If no authors are found, print a message and set the authors to an empty string.
+                # If no affiliation is found prints no affiliation and only add author names to dictionary
                 auth = soup.find('div', class_="authors-list")
                 if auth == None:
                     print("No Author for", article['title'])
                     article['author'] = ""
-                else:
-                    # authors_name = ''
-                    # keylist = []
-                    # for authors in authors_PMED.find_all('a', class_="full-name"):
-                    #     author_names = authors.get_text()
-                    #     author_names = author_names.encode(
-                    #         "ascii", 'ignore')
-                    #     author_names = author_names.decode()
-                    #     author_names = author_names.replace(
-                    #         "\n", '')
-                    #     author_names = re.sub(
-                    #         r'(^[ \t]+|[ \t]+(?=:))', '', author_names, flags=re.M)
-                    #     keylist.append(author_names)
-                    # authors_name = authors_name + ", ".join(keylist)
-                    # article['author'] = authors_name
+                else:                    
                     auth_elements = auth.find_all("a",class_="full-name")
                     link_elements = auth.find_all("a",class_="affiliation-link")
                     
 
                     affiliations = soup.find("div", class_="affiliations")
+                    # this checks if the article has author affiliations
                     try:
                         aff_elements = affiliations.find_all("li")
                         keys =affiliations.find_all("sup",class_="key")
                     except AttributeError: 
-                        print("No Affiliations")
+                        # If there are no affiliations add the author names only
+                        print("No Affiliations for: ", article['title'])
                         num = 1
                     
                         for auth_element in auth_elements:
@@ -107,11 +96,10 @@ def scrape_pubmed(progress_bar, page_count, scrape_term, pages_label, root):
                             name = f'author_{num}'
                             article[name] = a_elements
                             num += 1
-                        
-
-                    
+                                            
                     num = 1
-                    
+                    # goes through the website to find every author and their affiliation link and finds their corresponding
+                    # affiliation by matching to the affiliation key
                     for auth_element,link_element in zip(auth_elements,link_elements): 
                         a_elements = auth_element.text
                         
