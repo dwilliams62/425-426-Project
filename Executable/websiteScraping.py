@@ -34,7 +34,7 @@ def scrape_pubmed(progress_bar, page_count, scrape_term, pages_label, root):
                 #add a dicitonary for each article found, starting each with the correct url and title, and empty for each other info
                 array_of_articles.append({"url":url, "title":articles_text, "itempType":"", "pubTitle":"", 
                     "pubYear":"",  "doi":"", "abstract":"None", "date":"", "volume":"", "issue":"", "issn":"", 
-                    "libCatalog":"", "manualTags":"", "autoTags":"", "ourTags":""})
+                    "libCatalog":"", "manualTags":"", "autoTags":"", "ourTags":"","keywords":""})
                 
         #update the progress bar to show how many pages have been checked
         progress_bar['value'] = (numbers/(page_count+1)) * 100
@@ -238,11 +238,22 @@ def scrape_pubmed(progress_bar, page_count, scrape_term, pages_label, root):
                     else: 
                         article["issn"] = ISSN_text
                 
-            #Adding the affiliations as a list to the array of dictionaries
-                
+            #Adding key terms if they exist 
+                keys = soup.find("div",class_="abstract")
+                keywords =keys.find_all("p")
 
-
-
+                if keywords == None:
+                    article["keywords"] = " "
+                    print("Error on keywords for: ",article['title'])
+                else: 
+                    for keyword in keywords:
+                        keywords_text = keyword.get_text()
+                        if 'Keywords:' in keywords_text:
+                            
+                            keywords_text = keywords_text.split(":")[1]
+                            keywords_text = keywords_text.strip()
+                            article["keywords"] = keywords_text
+                            print(article["keywords"])
 
 
 
