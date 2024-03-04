@@ -19,6 +19,9 @@
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 
+    <!-- D3.js -->
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+
     <style>
         body {
             font-family: 'Mulish', sans-serif;
@@ -45,11 +48,14 @@
             color: #343a40;
         }
         .footer {
-          width: 100%;
-    background-color: #343a40;
-    color: #fff;
-    text-align: center;
-    padding: 10px 0;
+            width: 100%;
+            background-color: #343a40;
+            color: #fff;
+            text-align: center;
+            padding: 10px 0;
+        }
+        #venn-diagram-container svg {
+            margin: auto; /* Centers the SVG in the container */
         }
     </style>
 </head>
@@ -65,8 +71,7 @@
           </a>
         </div>
         <div class="col-md-9">
-          <nav class="nav justify-content-end">
-            
+          <nav class="nav justify-content-end">            
             <a class="nav-link active" href="#">About</a>
             <a class="nav-link" href="https://www.zotero.org/groups/5185450/climate_climate_literature_index_for_multidisciplinary_author_teams_-_training_database/library">Read</a>
             <a class="nav-link" href="#">Download Scraper</a>
@@ -87,6 +92,9 @@
           <p class="lead">CLIMAT3 is a platform dedicated to classifying information and health research literature through machine learning. Our goal is to provide access to a variety of literature categorized by the Bio-Psycho-Social framework, spreading knowledge about ways to improve overall human health.</p>
           <p>Through our state-of-the-art web scraper, we collect and categorize articles from select websites. Our machine learning algorithm helps in sorting and organizing the articles based on the Bio-Psycho-Social framework, making it easier for users to navigate and access relevant information.</p>
           <p>We believe that by providing access to categorized literature, we contribute to the dissemination of knowledge that can ultimately lead to advancements in human health and well-being.</p>
+
+          <!-- Venn Diagram Container -->
+          <div id="venn-diagram-container" class="text-center my-5"></div>
         </div>
       </div>
     </div>
@@ -103,5 +111,43 @@
 
   <!-- Bootstrap JS -->
   <script src="js/bootstrap.bundle.min.js"></script>
+
+  <!-- Venn Diagram Script -->
+  <script>
+    // Set up the SVG container
+    const svg = d3.select("#venn-diagram-container")
+      .append("svg")
+      .attr("width", 400)
+      .attr("height", 400);
+
+    // Draw circles for the Venn diagram
+    const circleData = [
+      { cx: 150, cy: 150, r: 120, fill: "rgba(255, 0, 0, 0.5)" }, 
+      { cx: 250, cy: 150, r: 120, fill: "rgba(0, 0, 255, 0.5)" },
+      { cx: 200, cy: 250, r: 120, fill: "rgba(0, 128, 0, 0.5)" }
+    ];
+
+    const circles = svg.selectAll("circle")
+      .data(circleData)
+      .enter()
+      .append("circle")
+      .attr("cx", d => d.cx)
+      .attr("cy", d => d.cy)
+      .attr("r", d => d.r)
+      .style("fill", d => d.fill);
+
+    // Add labels for the circles
+    svg.selectAll("text")
+      .data(["Bio", "Psycho", "Social"])
+      .enter()
+      .append("text")
+      .attr("x", (d, i) => [100, 300, 200][i])
+      .attr("y", (d, i) => [130, 130, 230][i])
+      .attr("text-anchor", "middle")
+      .text(d => d)
+      .style("fill", "black")
+      .style("font-size", "20px")
+      .style("font-weight", "bold");
+  </script>
 </body>
 </html>
