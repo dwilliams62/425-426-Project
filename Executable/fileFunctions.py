@@ -4,6 +4,11 @@ from firebase_admin import firestore
 
 from rdflib import Graph
 
+
+cred = credentials.Certificate("FirebaseInfo.json")
+firebase_admin.initialize_app(cred)
+db = firestore.client()
+
 def process_rdf_file(file_path):
     # Add your processing logic here to handle the RDF file
     # Perform operations and return the processed data
@@ -54,9 +59,7 @@ def process_rdf_file(file_path):
 
 def upload_to_website(data):
     #connect to cloud firestore database. atm requires a FirebaseInfo.json that for security purposes will not be uploaded to the github
-    cred = credentials.Certificate("FirebaseInfo.json")
-    firebase_admin.initialize_app(cred)
-    db = firestore.client()
+
 
     #for every article passed to it, creates a new document in the Documents collection with the document ID as the title
     for article in data:

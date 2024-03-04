@@ -286,7 +286,7 @@ def scrape_springer(progress_bar, page_count, scrape_term, pages_label, root):
     #loop through the pages that need be scraped on pubmeds website
     for numbers in range(0, page_count):
         #configure the url for each page
-        url = "https://link.springer.com/search/page/{}?query={}&facet-content-type=%22Article%22".format(numbers,scrape_term)
+        url = "https://link.springer.com/search/page/{}?query={}&facet-content-type=%22Article%22&showAll=false".format(numbers,scrape_term)
 
         #open the url and make sure it was successful
         response = requests.get(url)
@@ -325,7 +325,8 @@ def scrape_springer(progress_bar, page_count, scrape_term, pages_label, root):
             # Extract article details.
             abstract = soup.find('div', class_="main-content")
             # Check if an abstract is available.
-            if abstract == None:
+            if abstract == None or abstract.text == '':
+                abstract == None
                 print("This article does not an abstract:", article['title'])
             else:
                 # Extract article information and format accordingly.
@@ -336,31 +337,72 @@ def scrape_springer(progress_bar, page_count, scrape_term, pages_label, root):
                 # Extract other article information similarly.
                 Pubtitles = soup.find('i', attrs = {'data-test': 'journal-title'})
                 if Pubtitles == None:
-                    print("No Publication Title for", articles)
+                    print("No Publication Title for", article['title'])
                     article['pubTitle'] = ""
                 else:
                     article['pubTitle'] = Pubtitles.get_text()
-                # Extract authors names
-                authors = soup.find_all('a', attrs = {'data-test' : 'author-name'})
-                if authors == None:
-                    print("No Author for", articles)
+                # Extract authors names and the author affiliations
+                auth = soup.find("div",class_="c-article-header")
+               
+
+                auth_elems = auth.find_all('a', attrs = {'data-test' : 'author-name'})
+                if auth_elems == None:
+                    print("No Author for", article['title'])
                     article['author'] = ""
                 else:
-                    authors_name = ''
-                    keylist = []
-                    for authors in authors:
-                        author_names = authors.get_text()
-                        author_names = author_names.encode("ascii", 'ignore')
-                        author_names = author_names.decode()
-                        author_names = author_names.replace( "\n", '')
-                        author_names = re.sub(r'(^[ \t]+|[ \t]+(?=:))', '', author_names, flags=re.M)
-                        keylist.append(author_names)
-                    authors_name = authors_name + ", ".join(keylist)
-                    article['author'] = authors_name
+                    # authors_name = ''
+                    # keylist = []
+                    # for authors in authors:
+                    #     author_names = authors.get_text()
+                    #     author_names = author_names.encode("ascii", 'ignore')
+                    #     author_names = author_names.decode()
+                    #     author_names = author_names.replace( "\n", '')
+                    #     author_names = re.sub(r'(^[ \t]+|[ \t]+(?=:))', '', author_names, flags=re.M)
+                    #     keylist.append(author_names)
+                    # authors_name = authors_name + ", ".join(keylist)
+                    # article['author'] = authors_name
+                    
+                    aff = soup.find("ol",class_="c-article-author-affiliation__list")
+
+                    if aff == None : 
+                        print("NO affiliations for ", article['title'])
+                        num = 1
+                        for auth_elem in auth_elems: 
+                            a_elems = auth_elem.text.strip()
+
+                            author = re.sub(r'[0-9,]','',a_elems)
+                            
+                            name = f'author_{num}'
+                            aff_name = f'affiliation_{num}'                            
+                            article[name] = author
+                            article[aff_name] = ''
+                        num += 1
+                    else:
+                        aff_elems = aff.find_all("p",class_="c-article-author-affiliation__address")
+                        link_elems = aff.find_all("p",class_="c-article-author-affiliation__authors-list")
+
+                        num = 1
+                        for auth_elem in auth_elems: 
+                            a_elems = auth_elem.text.strip()
+
+                            author = re.sub(r'[0-9,]','',a_elems)
+                            
+                            name = f'author_{num}'
+                            aff_name = f'affiliation_{num}'
+                            
+                            article[name] = author
+                            article[aff_name] = ''
+
+                            for aff_elem, link_elem in zip(aff_elems, link_elems): 
+                                affiliations = aff_elem.text.strip()
+                                links = link_elem.text.strip()
+                                if author in links: 
+                                    article[aff_name] += affiliations
+                            num += 1
                 # Extract publication year
                 PUBYear = soup.find('span', class_  = 'c-bibliographic-information__value')
                 if PUBYear == None:
-                    print("No publication year for: ", articles)
+                    print("No publication year for: ", article['title'])
                     article["pubYear"] = ""
                 else:
                     try:
@@ -372,7 +414,7 @@ def scrape_springer(progress_bar, page_count, scrape_term, pages_label, root):
                 # Extract DOI
                 DOI = soup.find('li', class_="c-bibliographic-information__list-item c-bibliographic-information__list-item--doi")
                 if DOI == None:
-                    print("No DOI for: ", articles)
+                    print("No DOI for: ", article['title'])
                     article["doi"] = ""
                 else:
                     for doi in DOI.find('span', class_ = 'c-bibliographic-information__value'):
@@ -384,8 +426,8 @@ def scrape_springer(progress_bar, page_count, scrape_term, pages_label, root):
                 article["url"] = url
                 # Extract abstract
                 abstract = soup.find('div', class_="main-content")
-                if abstract == None:
-                    print("No Abstract for: ", articles)
+                if abstract == None :
+                    print("No Abstract for: ", article['title'])
                     article["abstract"] = ""
                 else:
                     abs = " "
@@ -399,14 +441,14 @@ def scrape_springer(progress_bar, page_count, scrape_term, pages_label, root):
                 # Extract date, volume, and other information
                 date = soup.find('span', class_='c-bibliographic-information__value')
                 if date == None:
-                    print("No Date for: ", articles)
+                    print("No Date for: ", article['title'])
                     article['date'] = ""
                 else:
                     date_text = date.get_text()
                     article['date'] = date_text
                 volume = soup.find('p', class_='c-bibliographic-information__citation')
                 if volume == None:
-                    print("No Volume for: ", articles)
+                    print("No Volume for: ", article['title'])
                     article['volume'] = ""
                 else:
                     try: 

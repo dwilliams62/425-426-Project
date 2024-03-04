@@ -187,12 +187,40 @@ def use_data_initialize():
     label.pack(pady=10)
 
     # Button - Upload to website
-    upload_button = tk.Button(root, text="Upload to website", command=lambda: upload_to_website(processed_data))
+    upload_button = tk.Button(root, text="Upload to website", command=lambda: [upload_to_website(processed_data),show_results_initialize()])
     upload_button.pack(pady=5)
 
     # Button - Download as Zotero RDF file
     download_button = tk.Button(root, text="Download as Zotero RDF file", command=lambda: download_as_rdf(processed_data))
     download_button.pack(pady=5)
+
+def exit_gui(): 
+    root.destroy()
+
+def scrape_again_initialize():
+    for widget in root.winfo_children():
+        widget.pack_forget()
+   
+    global processed_data
+    processed_data = None
+    create_startup_buttons(root)
+
+def show_results_initialize(): 
+    for widget in root.winfo_children():
+        widget.pack_forget()
+    
+    #label to show succesful processing of data
+    label = tk.Label(root, text="Congrats you have successfully Uploaded the data!")
+    label.pack(pady=15)
+
+    exit_button = tk.Button(root, text= "Exit",command = exit_gui)
+    exit_button.pack(pady=5)
+
+    scrape_again_button = tk.Button(root, text="Back to Title", command=scrape_again_initialize)
+    scrape_again_button.pack(pady=5)
+
+
+
 
 
 
@@ -201,6 +229,5 @@ root = tk.Tk()
 root.title("CLIMAT3 Scraper and Classifier")
 
 create_startup_buttons(root)
-
 # Run the Tkinter event loop
 root.mainloop()
