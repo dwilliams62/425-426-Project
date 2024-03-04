@@ -1,43 +1,43 @@
 from sklearn.feature_extraction.text import TfidfVectorizer
-from sklearn.ensemble import RandomForestClassifier  # Import the Support Vector Machine classifier
+from sklearn.svm import SVC
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import classification_report
 import pandas as pd
-import csv
-import os
-import re
 import spacy
+import os
 
 csvName = "allData.csv"
-allData = pd.read_csv(csvName, encoding="utf-8")  # Reading the data from allData.csv
+allData = pd.read_csv(csvName, encoding="utf-8")
 
-nlp = spacy.load("en_core_web_sm") # Loading Spacy's English module
+os.environ["OMP_NUM_THREADS"] = "2"
 
-abstracts = allData["Abstract"].tolist()  # Extracting abstracts from the CSV
-titles = allData["Title"].tolist()  # Extracting titles from the CSV
-tags = allData["Tags"].tolist() # Extracting tags from the CSV
-labels = allData["Category"].tolist()  # Extracting labels from the CSV
+nlp = spacy.load("en_core_web_sm", disable=["parser", "ner"])
+
+abstracts = allData["Abstract"].tolist()
+titles = allData["Title"].tolist()
+tags = allData["Tags"].tolist()
+labels = allData["Category"].tolist()
 
 def customTokenizer(text):
     doc = nlp(text)
-    tokens = [token.lemma_ for token in doc if token.is_alpha and not token.is_stop] # Extracts lemmatized tokens
-    bigrams = [" ".join(tokens[i:i+2]) for i in range(len(tokens) - 1)] # Creating bigrams to give more context to algorithm
-    allGrams = tokens + bigrams # Joining bigrams and tokens
-
+    tokens = [token.lemma_ for token in doc if token.is_alpha and not token.is_stop]
+    bigrams = [" ".join(tokens[i:i+2]) for i in range(len(tokens) - 1)]
+    allGrams = tokens + bigrams
     return allGrams
 
-combinedFeatures = []
-for title, abstract, tag in zip(titles, abstracts, tags):
-    if title and abstract and tag:
-        combinedFeatures.append(f"{title} {abstract} {tag}") # Combining titles, abstracts, and tags together
+# Combine text data before vectorization
+combinedFeatures = [f"{title} {abstract} {tag}" for title, abstract, tag in zip(titles, abstracts, tags) if title and abstract]
 
-tfidf_vectorizer = TfidfVectorizer(tokenizer=customTokenizer, lowercase=True)
-vectors = tfidf_vectorizer.fit_transform(combinedFeatures) # Vectorizing and tokenizing the contents of the abstracts, titles, and tags
+# Convert sparse matrix to dense array
+tfidf_vectorizer = TfidfVectorizer(tokenizer=customTokenizer, lowercase=True, token_pattern=None)
+vectors = tfidf_vectorizer.fit_transform(combinedFeatures)
 
-rf = RandomForestClassifier(n_estimators=100,criterion='gini',max_depth=None, class_weight='balanced')  # Initializing Random Forest
+# Splitting the data
+X_train, X_test, y_train, y_test = train_test_split(vectors, labels, test_size=0.4, random_state=42)
 
-X_train, X_test, y_train, y_test = train_test_split(vectors, labels, test_size=0.3, random_state=42) # Splitting training and testing data
+# Creating SVM classifier
+clf = SVC(C=1, gamma="scale", kernel="linear")
+clf.fit(X_train, y_train)
 
-rf.fit(X_train, y_train)  # Fitting the training data to the SVM
-y_pred = rf.predict(X_test)
+y_pred = clf.predict(X_test)
 print(classification_report(y_test, y_pred))
