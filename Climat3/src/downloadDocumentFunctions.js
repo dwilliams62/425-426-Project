@@ -102,35 +102,35 @@ function addHeadingRDFFile() {
 //for each article we go through and add this one by one. there will be more functions in here for each piece. 
 //takes a reference to a document gathered from the database as a parameter
 function addArticleRDFFile(document) {
-    var articleRDFString = '<bib:Article rdf:about="' + document.data().URL + '">\n';
+    var articleRDFString = '<bib:Article rdf:about="' + document.data().url + '">\n';
     articleRDFString += '<z:itemType>journalArticle</z:itemType>\n';
-    articleRDFString += '<dcterms:isPartOf rdf:resource="urn:issn:' + document.data().ISSN + '"/>\n';
+    articleRDFString += '<dcterms:isPartOf rdf:resource="urn:issn:' + document.data().issn + '"/>\n';
     articleRDFString += '<bib:authors>\n';
     articleRDFString += '<rdf:Seq>\n';
     articleRDFString += '<rdf:li>\n';
     articleRDFString += '<foaf:Person>\n';
-    articleRDFString += '<foaf:surname>' + document.data().Authors + '</foaf:surname>\n';
+    articleRDFString += '<foaf:surname>' + document.data().author_1 + '</foaf:surname>\n';
     articleRDFString += '<foaf:givenName>' + 'Author First Name' + '</foaf:givenName>\n';
     articleRDFString += '</foaf:Person>\n';
     articleRDFString += '</rdf:li>\n';
     articleRDFString += '</rdf:Seq>\n';
     articleRDFString += '</bib:authors>\n';
     articleRDFString += '<dc:subject>' + 'document.data().manualTags' + '</dc:subject>\n';
-    articleRDFString += '<dc:title>' + document.data().Title + '</dc:title>\n';
-    articleRDFString += '<dcterms:abstract>' + document.data().Abstract + '</dcterms:abstract>\n';
-    articleRDFString += '<dc:date>' + document.data().Date + '</dc:date>\n';
+    articleRDFString += '<dc:title>' + document.data().title + '</dc:title>\n';
+    articleRDFString += '<dcterms:abstract>' + document.data().abstract + '</dcterms:abstract>\n';
+    articleRDFString += '<dc:date>' + document.data().date + '</dc:date>\n';
     articleRDFString += '<z:language>' + 'English' + '</z:language>\n';
     articleRDFString += '<dc:identifier>\n';
-    articleRDFString += '<dcterms:URI><rdf:value>' + document.data().URL + '</rdf:value></dcterms:URI>\n';
+    articleRDFString += '<dcterms:URI><rdf:value>' + document.data().url + '</rdf:value></dcterms:URI>\n';
     articleRDFString += '</dc:identifier>\n';
     articleRDFString += '<dcterms:dateSubmitted>' + '2023-11-18' + '</dcterms:dateSubmitted>\n';
     articleRDFString += '</bib:Article>\n'
-    articleRDFString += '<bib:Journal rdf:about="urn:issn:' + document.data().ISSN + '">\n';
-    articleRDFString += '<prism:volume>' + document.data().Volume + '</prism:volume>\n';
-    articleRDFString += '<dc:title>' + document.data().PubTitle + '</dc:title>\n';
-    articleRDFString += '<dc:identifier>' + document.data().DOI + '</dc:identifier>\n';
-    articleRDFString += '<prism:number>' + document.data().Issue + '</prism:number>\n';
-    articleRDFString += '<dc:identifier>' + document.data().ISSN + '</dc:identifier>\n';
+    articleRDFString += '<bib:Journal rdf:about="urn:issn:' + document.data().issn + '">\n';
+    articleRDFString += '<prism:volume>' + document.data().volume + '</prism:volume>\n';
+    articleRDFString += '<dc:title>' + document.data().pubTitle + '</dc:title>\n';
+    articleRDFString += '<dc:identifier>' + document.data().doi + '</dc:identifier>\n';
+    articleRDFString += '<prism:number>' + document.data().issue + '</prism:number>\n';
+    articleRDFString += '<dc:identifier>' + document.data().issn + '</dc:identifier>\n';
     articleRDFString += '</bib:Journal>\n';
     return articleRDFString;
 }

@@ -62,10 +62,7 @@ def upload_to_website(data):
     for article in data:
         document_id = article['title'].replace(" ", "")
         doc_ref = db.collection("Documents").document(document_id)
-        doc_ref.set({"Title": article['title'], "URL": article['url'], "PubTitle": article['pubTitle'], "PubYear": article['pubYear'], 
-            "Authors": article['author'], "Date":article['date'], "DOI":article['doi'], "Volume":article['volume'], "ISSN":article['issn'],
-            "Abstract":article['abstract'], "Item Type":article['itemType'], "LibCatalog":article['libCatalog'], 
-            "Classification":article['ourTags'],"Affiliations":article['affiliation']})
+        doc_ref.set(article)
 
 def download_as_rdf(data):
     print("download")
