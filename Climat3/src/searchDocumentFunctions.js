@@ -27,12 +27,7 @@ var authorAll;
 export async function startSearch() {
   //first start by setting up the query based on the preference of what the user selected to search by. current default is title
   var q;
-  if (document.getElementById('sortBy').value == 'title') {
-    q = query(collection(db, "Documents"), orderBy('title')); 
-  }
-  else if (document.getElementById('sortBy').value == 'author') {
-    q = query(collection(db, "Documents"), orderBy('Authors')); 
-  }
+  q = query(collection(db, "Documents"), orderBy('title'));
 
   //run the query, currently grabs all documents in the database
   querySnapshot = await getDocs(q);
@@ -106,22 +101,11 @@ function searchBy(doc) {
       }
   });
 
-  //if the user selected title (which is the current default), process the data
-  if (document.getElementById('searchBy').value == 'title') {
-    //if the document's title contains the string that the user has searched, add it to the outputDiv in card form, 
-    //and return true that something was added
-    if (doc.data().title.toLowerCase().includes(document.getElementById('searchText').value.toLowerCase())) {
-      createCard(doc);
-      return true;
-    }
-  }
-
-  //same thing but if the user picked author it checks author
-  if (document.getElementById('searchBy').value == 'author') {
-    if (authorAll.toLowerCase().includes(document.getElementById('searchText').value.toLowerCase())) {
-      createCard(doc);
-      return true;
-    }
+  //searches the title and authors of each document, and if what the user searched is inluded, create a card for it
+  if (doc.data().title.toLowerCase().includes(document.getElementById('searchText').value.toLowerCase()) ||
+      authorAll.toLowerCase().includes(document.getElementById('searchText').value.toLowerCase())) {
+    createCard(doc);
+    return true;
   }
 }
 
@@ -137,10 +121,10 @@ function createCard(doc) {
   //create the header of the card with the title and a checkbox
   const cardHeaderDiv = document.createElement("div");
   cardHeaderDiv.classList.add("card-header");
-  cardHeaderDiv.textContent = doc.data().title;
   const checkbox = document.createElement("input");
   checkbox.type = "checkbox";
   checkbox.addEventListener('change', UpdateSelectedArray);
+  cardHeaderDiv.textContent = doc.data().title;
   cardHeaderDiv.appendChild(checkbox);
 
   //create a body of the card holding the author
