@@ -11,7 +11,7 @@ allData = pd.read_csv(csvName, encoding="utf-8")
 
 os.environ["OMP_NUM_THREADS"] = "2"
 
-nlp = spacy.load("en_core_web_sm", disable=["parser", "ner"])
+nlp = spacy.load("en_core_web_sm")
 
 abstracts = allData["Abstract"].tolist()
 titles = allData["Title"].tolist()
@@ -21,15 +21,15 @@ labels = allData["Category"].tolist()
 def customTokenizer(text):
     doc = nlp(text)
     tokens = [token.lemma_ for token in doc if token.is_alpha and not token.is_stop]
-    bigrams = [" ".join(tokens[i:i+2]) for i in range(len(tokens) - 1)]
+    bigrams = [" ".join(tokens[i:i+2]) for i in range(len(tokens) - 1)] 
     allGrams = tokens + bigrams
-    return allGrams
+    return " ".join(allGrams)
 
 # Combine text data before vectorization
-combinedFeatures = [f"{title} {abstract} {tag}" for title, abstract, tag in zip(titles, abstracts, tags) if title and abstract]
+combinedFeatures = [customTokenizer(f"{title} {abstract} {tag}") for title, abstract, tag in zip(titles, abstracts, tags) if title and abstract]
 
-# Convert sparse matrix to dense array
-tfidf_vectorizer = TfidfVectorizer(tokenizer=customTokenizer, lowercase=True, token_pattern=None)
+# Use TfidfVectorizer
+tfidf_vectorizer = TfidfVectorizer(lowercase=True)
 vectors = tfidf_vectorizer.fit_transform(combinedFeatures)
 
 # Splitting the data
