@@ -11,6 +11,7 @@ from machineLearning import add_category
 # global variables that can be used for any function, stores the data we're working with and which website we're scraping
 processed_data = None
 website_chosen = None
+percentage = 0.0
 
 # Create all the buttons and labels shown on starting the application
 def create_startup_buttons(root):
@@ -122,12 +123,14 @@ def scrape_website_process(scale_widget, scrape_term):
         root.update()
 
         global processed_data #reference global variable to change it
+        global percentage 
+
 
         #depending on the website chosen, call correct scraping function
         if website_chosen == 'pubmed':
-            processed_data = scrape_pubmed(progress, value, scrape_term, pages_label, root)
+            processed_data, percentage = scrape_pubmed(progress, value, scrape_term, pages_label, root)
         if website_chosen == 'springer':
-            processed_data = scrape_springer(progress, value, scrape_term, pages_label, root)
+            processed_data, percentage = scrape_springer(progress, value, scrape_term, pages_label, root)
         
         #temporary measure, prints the data that was passed by web scraper
         for dictionary in processed_data:
@@ -186,6 +189,9 @@ def use_data_initialize():
     label = tk.Label(root, text="What would you like to do with the data?")
     label.pack(pady=10)
 
+    label2 = tk.Label(root, text="(The percentage of data that is missing is {:.2f}%)".format(percentage))
+    label2.pack(pady=10)
+
     # Button - Upload to website
     upload_button = tk.Button(root, text="Upload to website", command=lambda: [upload_to_website(processed_data),show_results_initialize()])
     upload_button.pack(pady=5)
@@ -193,6 +199,9 @@ def use_data_initialize():
     # Button - Download as Zotero RDF file
     download_button = tk.Button(root, text="Download as Zotero RDF file", command=lambda: download_as_rdf(processed_data))
     download_button.pack(pady=5)
+
+    scrape_again_button = tk.Button(root, text="Discard and Scrape again", command=scrape_again_initialize)
+    scrape_again_button.pack(pady=5)
 
 def exit_gui(): 
     root.destroy()
