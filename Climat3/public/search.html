@@ -4,19 +4,33 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CLIMAT3 - Database Information</title>
+
     <link rel="stylesheet" href="css/bootstrap.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Mulish:wght@300&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    
     <style>
+        .navbar {
+            background-color: #343a40;
+        }
+        .nav-link {
+            color: #ffffff !important;
+        }
         body {
             font-family: 'Mulish', sans-serif;
             background-color: #f8f9fa;
             color: #343a40;
         }
+        .page-header {
+            padding: 100px 0;
+            position: relative;
+            text-align: center;
+            color: #ffffff;
+        }
         .container {
             max-width: 800px;
-            margin: 0 auto;
-            padding: 20px;
+           /* margin: 0 auto;
+            padding: 20px;*/
         }
         .card {
             margin-bottom: 20px; /* Increase space between cards */
@@ -47,10 +61,11 @@
         }
     </style>
 </head>
+
 <body>
     <!-- Navbar -->
     <header class="bg-dark py-3">
-        <div class="container">
+        <div class="body nav-link">
             <div class="row align-items-center justify-content-between">
                 <div class="col-md-3">
                     <a href="index.html" class="text-decoration-none text-white">
@@ -59,10 +74,11 @@
                 </div>
                 <div class="col-md-9">
                     <nav class="nav justify-content-end">
-                        <a class="nav-link active" href="about.html">About</a>
-                        <a class="nav-link active" href="https://www.zotero.org/groups/5185450/climate_climate_literature_index_for_multidisciplinary_author_teams_-_training_database/library">Read</a>
-                        <a class="nav-link active" href="#">Download Scraper</a>
-                        <a class="nav-link active" href="upload.html">Upload</a>
+                            <a class="nav-link active" href="search.html">Search</a>
+                            <a class="nav-link active" href="about.html">About</a>
+                            <a class="nav-link active" href="https://www.zotero.org/groups/5185450/climate_climate_literature_index_for_multidisciplinary_author_teams_-_training_database/library">Read</a>
+                            <a class="nav-link active" href="databasetest.html">Test</a>
+                            <a class="nav-link active" href="upload.html">Upload</a>
                     </nav>
                 </div>
             </div>
@@ -106,14 +122,6 @@
                     <option value="Social-Intermediate">Social-Intermediate</option>
                     <option value="Social-Micro">Social-Micro</option>
                     <option value="Social-Proximal">Social-Proximal</option>
-                </select>
-                <select id="sortBy">
-                    <option value="title">Title</option>
-                    <option value="author">Author</option>
-                </select>
-                <select id="searchBy" style="padding: 10px; border: 2px solid #ccc; border-radius: 5px; outline: none;">
-                    <option value="title">Title</option>
-                    <option value="author">Author</option>
                 </select>
             </div>
         </div>
