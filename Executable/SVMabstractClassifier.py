@@ -43,4 +43,4 @@ clf = SVC(C=1, gamma="scale", kernel="linear")
 clf.fit(X_train, y_train)
 
 with open('svm_classifier.pkl', 'wb') as file:
-    pickle.dump((clf, tfidf_vectorizer, customTokenizer), file, protocol=2)
+    pickle.dump((clf, tfidf_vectorizer, customTokenizer), file)

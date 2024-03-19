@@ -1,20 +1,22 @@
 from sklearn.feature_extraction.text import TfidfVectorizer
-from sklearn.svm import SVC  # Import the Support Vector Machine classifier
+from sklearn.svm import SVC
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import classification_report
 import pandas as pd
-import csv
-import os
-import re
 import spacy
+import os
+import random
 import pickle
 
 nlp = spacy.load("en_core_web_sm") # Loading Spacy's English module
 
-def customTokenizer(text):
-    doc = nlp(text)
-    tokens = [token.lemma_ for token in doc if token.is_alpha and not token.is_stop]
-    bigrams = [" ".join(tokens[i:i+2]) for i in range(len(tokens) - 1)]
-    allGrams = tokens + bigrams
-    return allGrams
+class CustomUnpickler(pickle.Unpickler):
+
+    def find_class(self, module, name):
+        if name == 'customTokenizer':
+            from SVMabstractClassifier import customTokenizer
+            return customTokenizer
+        return super().find_class(module, name)
 
 def np_to_fs(og_dict):
     for k, v in og_dict.items():
@@ -27,7 +29,8 @@ def add_category(progress_bar, data, root):
     total_dicts = len(data)
 
     with open('svm_classifier.pkl', 'rb') as file:
-        clf = pickle.load(file)
+        unpickler = CustomUnpickler(file)
+        clf, tfidf_vectorizer, customTokenizer = unpickler.load()
 
     for index, dictionary in enumerate(data):
         #update the percentage bar as it classifies
@@ -38,7 +41,6 @@ def add_category(progress_bar, data, root):
         articleTitle = dictionary["title"]
         dataCombined = articleAbstract + " " + articleTitle # Combining abstract and title to be analyzed
         dataCombined = [dataCombined]
-        tfidf_vectorizer = TfidfVectorizer(tokenizer=customTokenizer, lowercase=True, token_pattern=None)
         newVector = tfidf_vectorizer.transform(dataCombined)
 
         prediction = clf.predict(newVector)
