@@ -5,55 +5,29 @@ import csv
 import os
 import re
 import spacy
+import pickle
 
 nlp = spacy.load("en_core_web_sm") # Loading Spacy's English module
+
+def customTokenizer(text):
+    doc = nlp(text)
+    tokens = [token.lemma_ for token in doc if token.is_alpha and not token.is_stop]
+    bigrams = [" ".join(tokens[i:i+2]) for i in range(len(tokens) - 1)]
+    allGrams = tokens + bigrams
+    return allGrams
 
 def np_to_fs(og_dict):
     for k, v in og_dict.items():
         if type(v).__module__ == 'numpy':
             og_dict[k] = v.item() # Converts numpy variables to regular python variables
 
-def customTokenizer(text):
-    doc = nlp(text)
-    tokens = [token.lemma_ for token in doc if token.is_alpha and not token.is_stop] # Extracts lemmatized tokens
-    bigrams = [" ".join(tokens[i:i+2]) for i in range(len(tokens) - 1)] # Creating bigrams to give more context to algorithm
-    allGrams = tokens + bigrams # Joining bigrams and tokens
-
-    return allGrams
-
 def add_category(progress_bar, data, root):
-    csvName = "allData.csv"
-    allData = pd.read_csv(csvName, encoding="utf-8")  # Reading the data from allData.csv
-    progress_bar['value'] = 30
-    root.update()
-
-    abstracts = allData["Abstract"].tolist()  # Extracting abstracts from the CSV
-    titles = allData["Title"].tolist()  # Extracting titles from the CSV
-    tags = allData["Tags"].tolist() # Extracting tags from the CSV
-    labels = allData["Category"].tolist()  # Extracting labels from the CSV
-
-    combinedFeatures = []
-    for title, abstract, tag in zip(titles, abstracts, tags):
-        if title and abstract and tag:
-            combinedFeatures.append(f"{title} {abstract} {tag}") # Combining features of articles
-    progress_bar['value'] = 60
-    root.update()        
-
-    tfidf_vectorizer = TfidfVectorizer(tokenizer=customTokenizer, lowercase=True)
-    vectors = tfidf_vectorizer.fit_transform(combinedFeatures) # Vectorizing and tokenizing the contents of the abstracts, titles, and tags 
-    progress_bar['value'] = 90
-    root.update()  
-
-    svm = SVC(C=1.0, kernel='linear', random_state=42)  # Initializing SVM
-    svm.fit(vectors, labels) 
-    progress_bar['value'] = 100
-    root.update()
-
-    #for the percentage bar, calculate how many dictionaries in the array
-    total_dicts = len(data)
-
     progress_bar['value'] = 0
     root.update()
+    total_dicts = len(data)
+
+    with open('svm_classifier.pkl', 'rb') as file:
+        clf = pickle.load(file)
 
     for index, dictionary in enumerate(data):
         #update the percentage bar as it classifies
@@ -64,9 +38,10 @@ def add_category(progress_bar, data, root):
         articleTitle = dictionary["title"]
         dataCombined = articleAbstract + " " + articleTitle # Combining abstract and title to be analyzed
         dataCombined = [dataCombined]
+        tfidf_vectorizer = TfidfVectorizer(tokenizer=customTokenizer, lowercase=True, token_pattern=None)
         newVector = tfidf_vectorizer.transform(dataCombined)
 
-        prediction = svm.predict(newVector)
+        prediction = clf.predict(newVector)
         dictionary["ourTags"] = prediction
         np_to_fs(dictionary)
 
