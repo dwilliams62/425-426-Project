@@ -8,8 +8,10 @@ import os
 import random
 import pickle
 
-nlp = spacy.load("en_core_web_sm") # Loading Spacy's English module
+#Loads spacy's English module
+nlp = spacy.load("en_core_web_sm")
 
+#Custom unpickler fixes issues with tokenizer not being found
 class CustomUnpickler(pickle.Unpickler):
 
     def find_class(self, module, name):
@@ -18,32 +20,34 @@ class CustomUnpickler(pickle.Unpickler):
             return customTokenizer
         return super().find_class(module, name)
 
+#Fixes issues related to numpy objects with the machine learning
 def np_to_fs(og_dict):
     for k, v in og_dict.items():
         if type(v).__module__ == 'numpy':
-            og_dict[k] = v.item() # Converts numpy variables to regular python variables
+            og_dict[k] = v.item() #Converts numpy variables to regular python variables
 
 def add_category(progress_bar, data, root):
     progress_bar['value'] = 0
     root.update()
     total_dicts = len(data)
 
+    #Unpickling the classifier, vectorizer, and tokenizer
     with open('svm_classifier.pkl', 'rb') as file:
         unpickler = CustomUnpickler(file)
         clf, tfidf_vectorizer, customTokenizer = unpickler.load()
 
     for index, dictionary in enumerate(data):
-        #update the percentage bar as it classifies
+        #Update the percentage bar as it classifies
         percentage_complete = (index + 1) / total_dicts * 100
         progress_bar['value'] = percentage_complete
 
         articleAbstract = dictionary["abstract"]
         articleTitle = dictionary["title"]
-        dataCombined = articleAbstract + " " + articleTitle # Combining abstract and title to be analyzed
+        dataCombined = articleAbstract + " " + articleTitle #Combining abstract and title to be analyzed
         dataCombined = [dataCombined]
         newVector = tfidf_vectorizer.transform(dataCombined)
 
-        prediction = clf.predict(newVector)
+        prediction = clf.predict(newVector) #Making prediction for new article
         dictionary["ourTags"] = prediction
         np_to_fs(dictionary)
 
