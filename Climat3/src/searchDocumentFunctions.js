@@ -68,7 +68,7 @@ function showSearchResults(minCountDocs, maxCountDocs) {
       const doc = querySnapshot.docs[i];
 
       //if the climate tag is specified, it will see if that document adheres to the tag, otherwise will go through all docs
-      if (document.getElementById('climateTag').value == 'All' || doc.data().ourTag == document.getElementById('climateTag').value) {
+      if (document.getElementById('sort-by-tag').value == 'All' || doc.data().ourTag == document.getElementById('sort-by-tag').value) {
         //checks if the document's title or author has the phrase the user is currently searching, and if so adds it to the page
         if (searchBy(doc)) {
           //if successful, increase the amount of docs currently on the page
