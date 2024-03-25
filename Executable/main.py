@@ -4,7 +4,7 @@ from tkinter import Scale
 from tkinter import ttk
 
 # import functions from files that we define
-from fileFunctions import process_rdf_file, download_as_rdf, upload_to_website
+from fileFunctions import process_file, download_data, upload_to_website
 from websiteScraping import scrape_pubmed, scrape_springer
 from machineLearning import add_category
 
@@ -21,7 +21,7 @@ def create_startup_buttons(root):
     instruction_label = tk.Label(root, text="How would you like to upload the data?", font=("Arial", 12))
 
     # Create buttons
-    upload_button = tk.Button(root, text="Upload my own RDF", command=upload_own_rdf)
+    upload_button = tk.Button(root, text="Upload my own data", command=upload_own_data)
     scrape_button = tk.Button(root, text="Scrape from website", command=scrape_website_initialize)
     machine_learning_test_button = tk.Button(root, text="Test Machine Learning", command=machine_learning_test_initialize)
 
@@ -36,15 +36,15 @@ def create_startup_buttons(root):
 
 # When the user chooses to upload their own RDF, this is where the data will be processed,
 # And then the user will be sent to the categorizer
-def upload_own_rdf():
+def upload_own_data():
     global processed_data #reference the global variable to be able to update it
 
     #prompts the user to pick a file on their computer to upload that ends in .rdf
-    file_path = filedialog.askopenfilename(filetypes=[("RDF Files", "*.rdf")]) 
+    file_path = filedialog.askopenfilename() 
 
     #if the user picks an rdf file, processes it and then goes to the categorizer. otherwise does nothing
     if file_path:
-        processed_data = process_rdf_file(file_path)
+        processed_data = process_file(file_path)
         categorize_data_initialize()
 
 
@@ -228,11 +228,35 @@ def use_data_initialize():
     upload_button.pack(pady=5)
 
     # Button - Download as Zotero RDF file
-    download_button = tk.Button(root, text="Download as Zotero RDF file", command=lambda: download_as_rdf(processed_data))
+    download_button = tk.Button(root, text="Download as CSL JSON file", command=download_data_initialize)
     download_button.pack(pady=5)
 
     scrape_again_button = tk.Button(root, text="Discard and Scrape again", command=scrape_again_initialize)
     scrape_again_button.pack(pady=5)
+
+def download_data_initialize():
+    for widget in root.winfo_children():
+        widget.pack_forget()
+
+    #create a label
+    label = tk.Label(root, text="Enter directory path")
+    label.pack(pady=10)
+
+    #create a bar the user can type in a search term to search by
+    entry = tk.Entry(root)
+    entry.pack()
+
+    #create a label
+    label1 = tk.Label(root, text="Enter filename")
+    label1.pack(pady=10)
+
+    #create a bar the user can type in a search term to search by
+    entry1 = tk.Entry(root)
+    entry1.pack()
+
+    download_button = tk.Button(root, text="Download", 
+                                    command=lambda: [download_data(processed_data, entry.get(), entry1.get()),show_results_initialize()])
+    download_button.pack(pady=5)
 
 def exit_gui(): 
     root.destroy()
@@ -242,7 +266,9 @@ def scrape_again_initialize():
         widget.pack_forget()
    
     global processed_data
+    global percentage
     processed_data = None
+    percentage = 0.0
     create_startup_buttons(root)
 
 def show_results_initialize(): 
