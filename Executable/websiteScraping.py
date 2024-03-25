@@ -7,13 +7,19 @@ from itertools import zip_longest
 #and scrapes the data needed and sets the array of dictionaries. the 5 things passed are the progress bar to update how
 #how far it is, the amount of pages that should be scraped, the term to search by, the label that displays over the
 #progress bar, and the root of the tkinter for forcing it to update 
-def scrape_pubmed(progress_bar, page_count, scrape_term, pages_label, root):
+def scrape_pubmed(progress_bar, page_start, page_end, scrape_term, pages_label, root):
     #start the array as empty, starts the label at what it needs to be
     array_of_articles = []
     pages_label.config(text="Opening...")
+    page_start = int(page_start)
+    page_end = int(page_end)
+    if page_start == 1: 
+        page_start = 0
+        #if page_end == 1: 
+            #page_end = 0
 
     #loop through the pages that need be scraped on pubmeds website
-    for numbers in range(0, page_count+1):
+    for numbers in range(page_start, page_end+1):
         #configure the url for each page
         url = "https://pubmed.ncbi.nlm.nih.gov/?term={}&page={}".format(scrape_term, numbers)
 
@@ -37,13 +43,22 @@ def scrape_pubmed(progress_bar, page_count, scrape_term, pages_label, root):
                     "libCatalog":"", "manualTags":"", "autoTags":"", "ourTags":"","keywords":""})
                 
         #update the progress bar to show how many pages have been checked
+        page_count = 0; 
+        if page_start == page_end: 
+            page_count = 1
+        else: 
+            page_count = (page_end - page_start)+1
         progress_bar['value'] = (numbers/(page_count+1)) * 100
         root.update()
     
     #check how many articles are being scraped and update the label and progress bar accordingly
-    numOfarticle = len(array_of_articles)
-    progress = 100/numOfarticle
-    progress_bar['value'] = 0
+    try: 
+        numOfarticle = len(array_of_articles)
+        progress = 100/numOfarticle
+        progress_bar['value'] = 0
+    except ZeroDivisionError as e :
+        return None,None,str(e)
+    
     pages_label.config(text="Scraping...")
     root.update()
 
@@ -321,18 +336,23 @@ def scrape_pubmed(progress_bar, page_count, scrape_term, pages_label, root):
     #create a copy and loop through, and if the article doesn't have an abstract, remove it from the array
     filtered_articles = [article for article in array_of_articles if article.get('abstract') != "None"]
 
-    return filtered_articles,rounded_calc
+    return filtered_articles,rounded_calc, None
 
 
 
 #the basics of springer scraping is the same as the pubmed scraping
-def scrape_springer(progress_bar, page_count, scrape_term, pages_label, root):
+def scrape_springer(progress_bar,page_start,page_end, scrape_term, pages_label, root):
     #start the array as empty, starts the label at what it needs to be
     array_of_articles = []
     pages_label.config(text="Opening...")
+    page_start = int(page_start)
+    page_end = int(page_end)
+
+    if page_start == 1:
+        page_start = 0
 
     #loop through the pages that need be scraped on pubmeds website
-    for numbers in range(0, page_count):
+    for numbers in range(page_start, page_end+1):
         #configure the url for each page
         url = "https://link.springer.com/search/page/{}?query={}&facet-content-type=%22Article%22&showAll=false".format(numbers,scrape_term)
 
@@ -353,12 +373,21 @@ def scrape_springer(progress_bar, page_count, scrape_term, pages_label, root):
                     "libCatalog":"", "manualTags":"", "autoTags":"", "ourTags":""})
                 
         #update the progress bar to show how many pages have been checked
+        page_count = 0; 
+        if page_start == page_end: 
+            page_count = 1
+        else: 
+            page_count = (page_end - page_start)+1
+        
         progress_bar['value'] = (numbers/page_count) * 100
         root.update()
     
     #check how many articles are being scraped and update the label and progress bar accordingly
-    numOfarticle = len(array_of_articles)
-    progress = 100/numOfarticle
+    try:
+        numOfarticle = len(array_of_articles)
+        progress = 100/numOfarticle
+    except ZeroDivisionError as e :
+        return None,None,str(e)
     progress_bar['value'] = 0
     pages_label.config(text="Scraping...")
     root.update()
@@ -549,4 +578,4 @@ def scrape_springer(progress_bar, page_count, scrape_term, pages_label, root):
     #create a copy and loop through, and if the article doesn't have an abstract, remove it from the array
     filtered_articles = [article for article in array_of_articles if article.get('abstract') != "None"]
 
-    return filtered_articles,rounded_calc
+    return filtered_articles,rounded_calc, None
