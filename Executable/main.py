@@ -12,6 +12,7 @@ from machineLearning import add_category
 processed_data = None
 website_chosen = None
 percentage = 0.0
+error = None
 
 # Create all the buttons and labels shown on starting the application
 def create_startup_buttons(root):
@@ -82,13 +83,26 @@ def scrape_website_initialize():
     # Create another label
     pages_label = tk.Label(root, text="How many pages of articles would you like to scrape?")
     pages_label.pack(pady=10)
-
+    # We are gonna ask the user for 2 entries that selects the range of pages 
     # Adds a scale bar to select number of pages from 1 to 10
-    pages_scale = Scale(root, from_=1, to=10, orient=tk.HORIZONTAL, length=200)
-    pages_scale.pack()
+    #Create the frame to select the pages
+    #pages_scale = Scale(root, from_=1, to=10, orient=tk.HORIZONTAL, length=200)
+    #pages_scale.pack()
+
+    pages_frame = tk.Frame(root)
+    pages_frame.pack()
+
+    start_page = tk.Label(pages_frame, text="Select Your Page range ")
+    start_page.pack(side=tk.LEFT, pady=5)
+
+    start_entry =tk.Entry(pages_frame, width=5)
+    start_entry.pack(side=tk.LEFT, pady=5)
+
+    end_entry = tk.Entry(pages_frame, width=5)
+    end_entry.pack(side=tk.LEFT, pady=5)
 
     # Create the final submit button to start scraping
-    scrape_button = tk.Button(root, text="Scrape!", command=lambda: scrape_website_process(pages_scale, entry.get()))
+    scrape_button = tk.Button(root, text="Scrape!", command=lambda: scrape_website_process(start_entry.get(), end_entry.get(), entry.get()))
     scrape_button.pack(pady=10)
 
 #if the springer button is pressed, use springer
@@ -102,11 +116,11 @@ def set_website_pubmed():
     website_chosen = 'pubmed'
 
 #actually scrapes the websites then sends it to the categorizers
-def scrape_website_process(scale_widget, scrape_term):
+def scrape_website_process(start,end, scrape_term):
     #if no website is chosen, button does nothing
     if website_chosen:
         #grabs the value of the scale
-        value = scale_widget.get()
+        
 
         #removes all widgets on the gui currently
         for widget in root.winfo_children():
@@ -124,26 +138,43 @@ def scrape_website_process(scale_widget, scrape_term):
 
         global processed_data #reference global variable to change it
         global percentage 
+        global error
 
 
         #depending on the website chosen, call correct scraping function
         if website_chosen == 'pubmed':
-            processed_data, percentage = scrape_pubmed(progress, value, scrape_term, pages_label, root)
+            processed_data, percentage, error = scrape_pubmed(progress, start,end,scrape_term, pages_label, root)
         if website_chosen == 'springer':
-            processed_data, percentage = scrape_springer(progress, value, scrape_term, pages_label, root)
-        
+            processed_data, percentage, error = scrape_springer(progress, start, end,scrape_term, pages_label, root)
+        print(error)
         #temporary measure, prints the data that was passed by web scraper
-        for dictionary in processed_data:
-            print("\nDictionary:")
-            for key, value in dictionary.items():
-                print(f"Key: {key}, Value: {value}")
+        if error:
+            show_err() 
 
-        #start the categorizing of the data
-        categorize_data_initialize()
+        else:
+            for dictionary in processed_data:
+                print("\nDictionary:")
+                for key, value in dictionary.items():
+                    print(f"Key: {key}, Value: {value}")
+
+            #start the categorizing of the data
+            categorize_data_initialize()
         
+#a function to show and error if the user entered the wrong page range :
+def show_err():
+    #remove all widgets currently inside
+    for widget in root.winfo_children():
+        widget.pack_forget()
+    
+    label = tk.Label(text="You entered the wrong range for the page Number")
+    label.pack(pady=10)
 
+    scrape_again_button = tk.Button(root, text="Back to Title", command=scrape_again_initialize)
+    scrape_again_button.pack(pady=5)
+    
 
 #a function to initialize preset data into the processed data for testing purposes
+
 def machine_learning_test_initialize():
     global processed_data
     processed_data = [
