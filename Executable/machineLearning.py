@@ -1,72 +1,53 @@
 from sklearn.feature_extraction.text import TfidfVectorizer
-from sklearn.svm import SVC  # Import the Support Vector Machine classifier
+from sklearn.svm import SVC
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import classification_report
 import pandas as pd
-import csv
-import os
-import re
 import spacy
+import os
+import random
+import pickle
 
-nlp = spacy.load("en_core_web_sm") # Loading Spacy's English module
+#Loads spacy's English module
+nlp = spacy.load("en_core_web_sm")
 
+#Custom unpickler fixes issues with tokenizer not being found
+class CustomUnpickler(pickle.Unpickler):
+
+    def find_class(self, module, name):
+        if name == 'customTokenizer':
+            from SVMabstractClassifier import customTokenizer
+            return customTokenizer
+        return super().find_class(module, name)
+
+#Fixes issues related to numpy objects with the machine learning
 def np_to_fs(og_dict):
     for k, v in og_dict.items():
         if type(v).__module__ == 'numpy':
-            og_dict[k] = v.item() # Converts numpy variables to regular python variables
-
-def customTokenizer(text):
-    doc = nlp(text)
-    tokens = [token.lemma_ for token in doc if token.is_alpha and not token.is_stop] # Extracts lemmatized tokens
-    bigrams = [" ".join(tokens[i:i+2]) for i in range(len(tokens) - 1)] # Creating bigrams to give more context to algorithm
-    allGrams = tokens + bigrams # Joining bigrams and tokens
-
-    return allGrams
+            og_dict[k] = v.item() #Converts numpy variables to regular python variables
 
 def add_category(progress_bar, data, root):
-    csvName = "allData.csv"
-    allData = pd.read_csv(csvName, encoding="utf-8")  # Reading the data from allData.csv
-    progress_bar['value'] = 30
-    root.update()
-
-    abstracts = allData["Abstract"].tolist()  # Extracting abstracts from the CSV
-    titles = allData["Title"].tolist()  # Extracting titles from the CSV
-    tags = allData["Tags"].tolist() # Extracting tags from the CSV
-    labels = allData["Category"].tolist()  # Extracting labels from the CSV
-
-    combinedFeatures = []
-    for title, abstract, tag in zip(titles, abstracts, tags):
-        if title and abstract and tag:
-            combinedFeatures.append(f"{title} {abstract} {tag}") # Combining features of articles
-    progress_bar['value'] = 60
-    root.update()        
-
-    tfidf_vectorizer = TfidfVectorizer(tokenizer=customTokenizer, lowercase=True)
-    vectors = tfidf_vectorizer.fit_transform(combinedFeatures) # Vectorizing and tokenizing the contents of the abstracts, titles, and tags 
-    progress_bar['value'] = 90
-    root.update()  
-
-    svm = SVC(C=1.0, kernel='linear', random_state=42)  # Initializing SVM
-    svm.fit(vectors, labels) 
-    progress_bar['value'] = 100
-    root.update()
-
-    #for the percentage bar, calculate how many dictionaries in the array
-    total_dicts = len(data)
-
     progress_bar['value'] = 0
     root.update()
+    total_dicts = len(data)
+
+    #Unpickling the classifier, vectorizer, and tokenizer
+    with open('svm_classifier.pkl', 'rb') as file:
+        unpickler = CustomUnpickler(file)
+        clf, tfidf_vectorizer, customTokenizer = unpickler.load()
 
     for index, dictionary in enumerate(data):
-        #update the percentage bar as it classifies
+        #Update the percentage bar as it classifies
         percentage_complete = (index + 1) / total_dicts * 100
         progress_bar['value'] = percentage_complete
 
         articleAbstract = dictionary["abstract"]
         articleTitle = dictionary["title"]
-        dataCombined = articleAbstract + " " + articleTitle # Combining abstract and title to be analyzed
+        dataCombined = articleAbstract + " " + articleTitle #Combining abstract and title to be analyzed
         dataCombined = [dataCombined]
         newVector = tfidf_vectorizer.transform(dataCombined)
 
-        prediction = svm.predict(newVector)
+        prediction = clf.predict(newVector) #Making prediction for new article
         dictionary["ourTags"] = prediction
         np_to_fs(dictionary)
 

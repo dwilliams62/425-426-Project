@@ -4,13 +4,15 @@ from tkinter import Scale
 from tkinter import ttk
 
 # import functions from files that we define
-from fileFunctions import process_rdf_file, download_as_rdf, upload_to_website
+from fileFunctions import process_file, download_data, upload_to_website
 from websiteScraping import scrape_pubmed, scrape_springer
 from machineLearning import add_category
 
 # global variables that can be used for any function, stores the data we're working with and which website we're scraping
 processed_data = None
 website_chosen = None
+percentage = 0.0
+error = None
 
 # Create all the buttons and labels shown on starting the application
 def create_startup_buttons(root):
@@ -19,7 +21,7 @@ def create_startup_buttons(root):
     instruction_label = tk.Label(root, text="How would you like to upload the data?", font=("Arial", 12))
 
     # Create buttons
-    upload_button = tk.Button(root, text="Upload my own RDF", command=upload_own_rdf)
+    upload_button = tk.Button(root, text="Upload my own data", command=upload_own_data)
     scrape_button = tk.Button(root, text="Scrape from website", command=scrape_website_initialize)
     machine_learning_test_button = tk.Button(root, text="Test Machine Learning", command=machine_learning_test_initialize)
 
@@ -34,15 +36,15 @@ def create_startup_buttons(root):
 
 # When the user chooses to upload their own RDF, this is where the data will be processed,
 # And then the user will be sent to the categorizer
-def upload_own_rdf():
+def upload_own_data():
     global processed_data #reference the global variable to be able to update it
 
     #prompts the user to pick a file on their computer to upload that ends in .rdf
-    file_path = filedialog.askopenfilename(filetypes=[("RDF Files", "*.rdf")]) 
+    file_path = filedialog.askopenfilename() 
 
     #if the user picks an rdf file, processes it and then goes to the categorizer. otherwise does nothing
     if file_path:
-        processed_data = process_rdf_file(file_path)
+        processed_data = process_file(file_path)
         categorize_data_initialize()
 
 
@@ -81,13 +83,26 @@ def scrape_website_initialize():
     # Create another label
     pages_label = tk.Label(root, text="How many pages of articles would you like to scrape?")
     pages_label.pack(pady=10)
-
+    # We are gonna ask the user for 2 entries that selects the range of pages 
     # Adds a scale bar to select number of pages from 1 to 10
-    pages_scale = Scale(root, from_=1, to=10, orient=tk.HORIZONTAL, length=200)
-    pages_scale.pack()
+    #Create the frame to select the pages
+    #pages_scale = Scale(root, from_=1, to=10, orient=tk.HORIZONTAL, length=200)
+    #pages_scale.pack()
+
+    pages_frame = tk.Frame(root)
+    pages_frame.pack()
+
+    start_page = tk.Label(pages_frame, text="Select Your Page range ")
+    start_page.pack(side=tk.LEFT, pady=5)
+
+    start_entry =tk.Entry(pages_frame, width=5)
+    start_entry.pack(side=tk.LEFT, pady=5)
+
+    end_entry = tk.Entry(pages_frame, width=5)
+    end_entry.pack(side=tk.LEFT, pady=5)
 
     # Create the final submit button to start scraping
-    scrape_button = tk.Button(root, text="Scrape!", command=lambda: scrape_website_process(pages_scale, entry.get()))
+    scrape_button = tk.Button(root, text="Scrape!", command=lambda: scrape_website_process(start_entry.get(), end_entry.get(), entry.get()))
     scrape_button.pack(pady=10)
 
 #if the springer button is pressed, use springer
@@ -101,11 +116,11 @@ def set_website_pubmed():
     website_chosen = 'pubmed'
 
 #actually scrapes the websites then sends it to the categorizers
-def scrape_website_process(scale_widget, scrape_term):
+def scrape_website_process(start,end, scrape_term):
     #if no website is chosen, button does nothing
     if website_chosen:
         #grabs the value of the scale
-        value = scale_widget.get()
+        
 
         #removes all widgets on the gui currently
         for widget in root.winfo_children():
@@ -122,25 +137,44 @@ def scrape_website_process(scale_widget, scrape_term):
         root.update()
 
         global processed_data #reference global variable to change it
+        global percentage 
+        global error
+
 
         #depending on the website chosen, call correct scraping function
         if website_chosen == 'pubmed':
-            processed_data = scrape_pubmed(progress, value, scrape_term, pages_label, root)
+            processed_data, percentage, error = scrape_pubmed(progress, start,end,scrape_term, pages_label, root)
         if website_chosen == 'springer':
-            processed_data = scrape_springer(progress, value, scrape_term, pages_label, root)
-        
+            processed_data, percentage, error = scrape_springer(progress, start, end,scrape_term, pages_label, root)
+        print(error)
         #temporary measure, prints the data that was passed by web scraper
-        for dictionary in processed_data:
-            print("\nDictionary:")
-            for key, value in dictionary.items():
-                print(f"Key: {key}, Value: {value}")
+        if error:
+            show_err() 
 
-        #start the categorizing of the data
-        categorize_data_initialize()
+        else:
+            for dictionary in processed_data:
+                print("\nDictionary:")
+                for key, value in dictionary.items():
+                    print(f"Key: {key}, Value: {value}")
+
+            #start the categorizing of the data
+            categorize_data_initialize()
         
+#a function to show and error if the user entered the wrong page range :
+def show_err():
+    #remove all widgets currently inside
+    for widget in root.winfo_children():
+        widget.pack_forget()
+    
+    label = tk.Label(text="You entered the wrong range for the page Number")
+    label.pack(pady=10)
 
+    scrape_again_button = tk.Button(root, text="Back to Title", command=scrape_again_initialize)
+    scrape_again_button.pack(pady=5)
+    
 
 #a function to initialize preset data into the processed data for testing purposes
+
 def machine_learning_test_initialize():
     global processed_data
     processed_data = [
@@ -186,12 +220,42 @@ def use_data_initialize():
     label = tk.Label(root, text="What would you like to do with the data?")
     label.pack(pady=10)
 
+    label2 = tk.Label(root, text="(The percentage of data that is missing is {:.2f}%)".format(percentage))
+    label2.pack(pady=10)
+
     # Button - Upload to website
     upload_button = tk.Button(root, text="Upload to website", command=lambda: [upload_to_website(processed_data),show_results_initialize()])
     upload_button.pack(pady=5)
 
     # Button - Download as Zotero RDF file
-    download_button = tk.Button(root, text="Download as Zotero RDF file", command=lambda: download_as_rdf(processed_data))
+    download_button = tk.Button(root, text="Download as CSL JSON file", command=download_data_initialize)
+    download_button.pack(pady=5)
+
+    scrape_again_button = tk.Button(root, text="Discard and Scrape again", command=scrape_again_initialize)
+    scrape_again_button.pack(pady=5)
+
+def download_data_initialize():
+    for widget in root.winfo_children():
+        widget.pack_forget()
+
+    #create a label
+    label = tk.Label(root, text="Enter directory path")
+    label.pack(pady=10)
+
+    #create a bar the user can type in a search term to search by
+    entry = tk.Entry(root)
+    entry.pack()
+
+    #create a label
+    label1 = tk.Label(root, text="Enter filename")
+    label1.pack(pady=10)
+
+    #create a bar the user can type in a search term to search by
+    entry1 = tk.Entry(root)
+    entry1.pack()
+
+    download_button = tk.Button(root, text="Download", 
+                                    command=lambda: [download_data(processed_data, entry.get(), entry1.get()),show_results_initialize()])
     download_button.pack(pady=5)
 
 def exit_gui(): 
@@ -202,7 +266,9 @@ def scrape_again_initialize():
         widget.pack_forget()
    
     global processed_data
+    global percentage
     processed_data = None
+    percentage = 0.0
     create_startup_buttons(root)
 
 def show_results_initialize(): 

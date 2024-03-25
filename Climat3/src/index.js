@@ -29,7 +29,7 @@ console.log('Hello Firebase!'); //just to show it's working in console (fn f12 i
 document.getElementById('searchText').addEventListener('input', startSearch);
 document.getElementById('resultsPerPage').addEventListener('change', startSearch);
 //document.getElementById('searchBy').addEventListener('change', startSearch);
-document.getElementById('sortBy').addEventListener('change', startSearch);
+document.getElementById('sort-by-tag').addEventListener('change', startSearch);
 //document.getElementById('climateTag').addEventListener('change', startSearch);
 
 //document.getElementById('pageUp').addEventListener('click', pageUp);

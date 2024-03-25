@@ -84,7 +84,40 @@
             <a class="nav-link active" href="https://www.zotero.org/groups/5185450/climate_climate_literature_index_for_multidisciplinary_author_teams_-_training_database/library">Zotero</a>
           </nav>
         </div>
-      </div>
+        <!-- End Search Bar -->
+
+        <!-- Filters -->
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <label for="results-per-page">Results Per Page:</label>
+                <select class="form-control" id="resultsPerPage">
+                    <option value="20">20</option>
+                    <option value="50">50</option>
+                    <option value="100">100</option>
+                </select>
+            </div>
+            <div class="col-md-6">
+                <label for="sort-by-tag" id="sort-by-tag">Sort By Tag:</label>
+                <select class="form-control" id="climateTag">
+                    <option value="All">All</option>
+                    <option value="Biopyhsical-Distal">Biopyhsical-Distal</option>
+                    <option value="Biophysical-Intermediate">Biophysical-Intermediate</option>
+                    <option value="Biophysical-Micro">Biophysical-Micro</option>
+                    <option value="Biophysical-Proximal">Biophysical-Proximal</option>
+                    <option value="Psychological-Distal">Psychological-Distal</option>
+                    <option value="Psychological-Intermediate">Psychological-Intermediate</option>
+                    <option value="Psychological-Micro">Psychological-Micro</option>
+                    <option value="Psychological-Proximal">Psychological-Proximal</option>
+                    <option value="Social-Distal">Social-Distal</option>
+                    <option value="Social-Intermediate">Social-Intermediate</option>
+                    <option value="Social-Micro">Social-Micro</option>
+                    <option value="Social-Proximal">Social-Proximal</option>
+                </select>
+            </div>
+        </div>
+        <!-- End Filters -->
+
+        <div id="output" style="margin-top: 20px; text-align: center;"></div>
     </div>
   </header>
   <!-- End Navbar -->
