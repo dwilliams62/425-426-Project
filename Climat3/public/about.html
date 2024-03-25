@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>About CLIMAT3</title>
+    <title>CLIMAT3 - About</title>
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="css/bootstrap.min.css">
@@ -23,44 +23,53 @@
     <script src="https://d3js.org/d3.v7.min.js"></script>
 
     <style>
-        body {
-            font-family: 'Mulish', sans-serif;
-        }
-        .navbar {
-            background-color: #343a40;
-        }
-        .nav-link {
-            color: #ffffff !important;
-        }
-        .about-section {
-            padding: 100px 0;
-            text-align: justify;
-        }
-        .about-section h1 {
-            font-size: 48px;
-            font-weight: 700;
-            margin-bottom: 30px;
-            color: #343a40;
-        }
-        .about-section p {
-            font-size: 18px;
-            line-height: 1.6;
-            color: #343a40;
-        }
-        .footer {
-            width: 100%;
-            background-color: #343a40;
-            color: #fff;
-            text-align: center;
-            padding: 10px 0;
-        }
-        #venn-diagram-container svg {
-            margin: auto; /* Centers the SVG in the container */
-        }
-    </style>
+      body {
+          font-family: 'Mulish', sans-serif;
+      }
+      .navbar {
+          background-color: #343a40;
+      }
+      .nav-link {
+          color: #ffffff !important;
+          font-size: 20px;
+      }
+      .about-section {
+          padding: 100px 0;
+          text-align: justify;
+      }
+      .about-section h1 {
+          font-size: 48px;
+          font-weight: 700;
+          margin-bottom: 30px;
+          color: #343a40;
+      }
+      .about-section p {
+          font-size: 18px;
+          line-height: 1.6;
+          color: #343a40;
+      }
+      .information {
+          padding: 100px 0;
+          text-align: center;
+          color: #343a40;
+          background-color: #f8f9fa;
+      }
+      .footer {
+          width: 100%;
+          background-color: #343a40;
+          color: #fff;
+          text-align: center;
+          padding: 10px 0;
+          max-width: 100%;
+          height: auto;
+      }
+      #venn-diagram-container svg {
+          margin: auto; /* Centers the SVG in the container */
+      }
+  </style>
 </head>
+
 <body>
-  
   <!-- Header -->
   <header class="bg-dark py-3">
     <div class="container">
@@ -74,9 +83,7 @@
           <nav class="nav justify-content-end">
               <a class="nav-link active" href="search.html">Search</a>
               <a class="nav-link active" href="about.html">About</a>
-              <a class="nav-link active" href="https://www.zotero.org/groups/5185450/climate_climate_literature_index_for_multidisciplinary_author_teams_-_training_database/library">Read</a>
-              <a class="nav-link active" href="databasetest.html">Test</a>
-              <a class="nav-link active" href="upload.html">Upload</a>
+              <a class="nav-link active" href="https://www.zotero.org/groups/5185450/climate_climate_literature_index_for_multidisciplinary_author_teams_-_training_database/library">Zotero</a>
           </nav>
         </div>
       </div>
@@ -102,6 +109,28 @@
   </section>
   <!-- End About Section -->
 
+ <!-- info Section -->
+<section class="information">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-4">
+        <h3 class="text-center">Biology</h3>
+        <img src="./biology.png" class="img-fluid mb-3" alt="Biology Image">
+      </div>
+      <div class="col-md-4">
+        <h3 class="text-center">Psychology</h3>
+        <img src="./psychology.png" class="img-fluid mb-3" alt="Psychology Image">
+      </div>
+      <div class="col-md-4">
+        <h3 class="text-center">Social</h3>
+        <img src="./social.png" class="img-fluid mb-3" alt="Social Image">
+      </div>
+    </div>
+  </div>
+</section>
+<!-- End info Section -->
+
+
   <!-- Footer -->
 <footer class="footer">
   <div class="container">
@@ -110,10 +139,11 @@
 </footer>
 <!-- End Footer -->
 
+
   <!-- Bootstrap JS -->
   <script src="js/bootstrap.bundle.min.js"></script>
 
-  <!-- Venn Diagram Script -->
+  <!-- Venn Diagram Script 
   <script>
     // Set up the SVG container
     const svg = d3.select("#venn-diagram-container")
@@ -150,5 +180,6 @@
       .style("font-size", "20px")
       .style("font-weight", "bold");
   </script>
+  -->
 </body>
 </html>
