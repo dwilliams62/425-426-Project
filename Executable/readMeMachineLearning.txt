@@ -23,3 +23,7 @@ dataset, I have decided to only use the three main categories of biophysical, so
 for classification instead of the subcategories as I feel that in its current state the subcategories
 are causing a lot of confusion for the algorithm. In the future, if the dataset gets more examples,
 it may be appropriate to add in the subcategories again instead of just the main categories.
+
+I attempted to try pickling the algorithm in order to have the slow part of vectorization be done ahead of time.
+The pickle file I used is still here if someone wishes to attempt to try to use it again, but we found it was
+taking just as long to load it as it would to just do the vectorization.
