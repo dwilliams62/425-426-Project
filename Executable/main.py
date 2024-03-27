@@ -223,13 +223,15 @@ def use_data_initialize():
     label2 = tk.Label(root, text="(The percentage of data that is missing is {:.2f}%)".format(percentage))
     label2.pack(pady=10)
 
-    # Button - Upload to website
-    upload_button = tk.Button(root, text="Upload to website", command=lambda: [upload_to_website(processed_data),show_results_initialize()])
-    upload_button.pack(pady=5)
-
-    # Button - Download as Zotero RDF file
-    download_button = tk.Button(root, text="Download as CSL JSON file", command=download_data_initialize)
-    download_button.pack(pady=5)
+    global website_chosen
+    if (website_chosen):
+        # Button - Upload to website
+        upload_button = tk.Button(root, text="Upload to website", command=lambda: [upload_to_website(processed_data),show_results_initialize()])
+        upload_button.pack(pady=5)
+    else:
+        # Button - Download as Zotero RDF file
+        download_button = tk.Button(root, text="Download as CSL JSON file", command=download_data_initialize)
+        download_button.pack(pady=5)
 
     scrape_again_button = tk.Button(root, text="Discard and Scrape again", command=scrape_again_initialize)
     scrape_again_button.pack(pady=5)
@@ -266,8 +268,10 @@ def scrape_again_initialize():
         widget.pack_forget()
    
     global processed_data
+    global website_chosen
     global percentage
     processed_data = None
+    website_chosen = None
     percentage = 0.0
     create_startup_buttons(root)
 
