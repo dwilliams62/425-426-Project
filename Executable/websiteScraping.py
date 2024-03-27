@@ -305,11 +305,10 @@ def scrape_pubmed(progress_bar, page_start, page_end, scrape_term, pages_label, 
                     if article["keywords"] == " ":
                         missing_fields +=1
                             
-                print("this is the number of missign fields : ", missing_fields)
+                #calculate the percentage
                 accuracy = missing_fields / fields_needed 
-                print("this is the accuracy: ", accuracy)
                 percentages["percentage"] += accuracy
-                print("this is the cumulative", percentages["percentage"])
+                
 
 
                 # Set the library catalog to "PubMed" for the article.
@@ -331,7 +330,7 @@ def scrape_pubmed(progress_bar, page_start, page_end, scrape_term, pages_label, 
     rounded_calc =round(calculation,2)
     
 
-    print("The percentage of missing data for this scraping is : ", rounded_calc)
+    
     
     #create a copy and loop through, and if the article doesn't have an abstract, remove it from the array
     filtered_articles = [article for article in array_of_articles if article.get('abstract') != "None"]
@@ -435,20 +434,10 @@ def scrape_springer(progress_bar,page_start,page_end, scrape_term, pages_label, 
                     article['author'] = ""
                     missing_fields += 1
                 else:
-                    # authors_name = ''
-                    # keylist = []
-                    # for authors in authors:
-                    #     author_names = authors.get_text()
-                    #     author_names = author_names.encode("ascii", 'ignore')
-                    #     author_names = author_names.decode()
-                    #     author_names = author_names.replace( "\n", '')
-                    #     author_names = re.sub(r'(^[ \t]+|[ \t]+(?=:))', '', author_names, flags=re.M)
-                    #     keylist.append(author_names)
-                    # authors_name = authors_name + ", ".join(keylist)
-                    # article['author'] = authors_name
-                    
+                  
+                    #checks to see if there are any affiliations
                     aff = soup.find("ol",class_="c-article-author-affiliation__list")
-
+                    #if there ar eno affiliations only adds the author names to the dictionary
                     if aff == None : 
                         print("NO affiliations for ", article['title'])
                         num = 1
@@ -463,6 +452,7 @@ def scrape_springer(progress_bar,page_start,page_end, scrape_term, pages_label, 
                             article[name] = author
                             article[aff_name] = ''
                         num += 1
+                    # add both affiliations and author names
                     else:
                         aff_elems = aff.find_all("p",class_="c-article-author-affiliation__address")
                         link_elems = aff.find_all("p",class_="c-article-author-affiliation__authors-list")
@@ -553,9 +543,9 @@ def scrape_springer(progress_bar,page_start,page_end, scrape_term, pages_label, 
                 article["volume"] = vol_text
 
                 accuracy = missing_fields / fields_needed 
-                print("this is the accuracy: ", accuracy)
+                
                 percentages["percentage"] += accuracy
-                print("this is the cumulative", percentages["percentage"])
+                
                 
                 # Initialize other fields with empty values
                 article["issue"] = ""
@@ -573,7 +563,7 @@ def scrape_springer(progress_bar,page_start,page_end, scrape_term, pages_label, 
     rounded_calc =round(calculation,2)
     
 
-    print("The percentage of missing data for this scraping is : ", rounded_calc)
+   
      
     #create a copy and loop through, and if the article doesn't have an abstract, remove it from the array
     filtered_articles = [article for article in array_of_articles if article.get('abstract') != "None"]
