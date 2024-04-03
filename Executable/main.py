@@ -13,7 +13,14 @@ processed_data = None
 website_chosen = None
 percentage = 0.0
 error = None
+#Create a function to adjust the size of the screen
+def resize(window): 
+    new_width = window.width
+    new_height = window.height
 
+    window.geometry(f"{new_width}X{new_height}")
+
+    
 # Create all the buttons and labels shown on starting the application
 def create_startup_buttons(root):
     # Create labels
@@ -297,6 +304,8 @@ def show_results_initialize():
 # Create the main window
 root = tk.Tk()
 root.title("CLIMAT3 Scraper and Classifier")
+
+resize(root)
 
 create_startup_buttons(root)
 # Run the Tkinter event loop
