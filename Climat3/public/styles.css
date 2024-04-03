@@ -13,7 +13,6 @@
             padding: 100px 0;
             position: relative;
             text-align: center;
-            color: #ffffff;
         }
         .information {
             padding: 100px 0;
@@ -63,31 +62,12 @@
             color: #fff;
             text-align: center;
             padding: 10px 0;
-            position: fixed;
-            bottom: 0;
         }
-        .about-section {
-            padding: 100px 0;
-            text-align: justify;
-        }
-        .about-section h1 {
-            font-size: 48px;
-            font-weight: 700;
-            margin-bottom: 30px;
-            color: #343a40;
-        }
-        .about-section p {
-            font-size: 18px;
-            line-height: 1.6;
-            color: #343a40;
-        }
-        #venn-diagram-container svg {
-            margin: auto; /* Centers the SVG in the container */
-        }
+        
         .card {
             margin-bottom: 20px; /* Increase space between cards */
             /* Make cards longer */
-            max-width: 1150px;
+            max-width: auto;
             padding: 20px; /* Add more padding inside cards if needed */
         }
         .card-header {
@@ -102,4 +82,11 @@
         }
         .card-text {
             margin-bottom: 10px;
+        }
+        .page-navigation-buttons {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 20vh; /* This makes the div take up the full height of the viewport */
+            gap: 10px; /* Adds some space between your buttons */
         }

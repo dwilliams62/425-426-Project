@@ -32,8 +32,8 @@ document.getElementById('resultsPerPage').addEventListener('change', startSearch
 document.getElementById('sort-by-tag').addEventListener('change', startSearch);
 //document.getElementById('climateTag').addEventListener('change', startSearch);
 
-//document.getElementById('pageUp').addEventListener('click', pageUp);
-//document.getElementById('pageDown').addEventListener('click', pageDown);
+document.getElementById('pageUp').addEventListener('click', pageUp);
+document.getElementById('pageDown').addEventListener('click', pageDown);
 
 //make sure the page starts with displaying some data based off the defaults picked when booted up
 startSearch();

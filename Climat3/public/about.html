@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="css/bootstrap.min.css">
     
     <!-- Custom styles -->
-    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="styles.css">
 
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -22,54 +22,9 @@
     <!-- D3.js -->
     <script src="https://d3js.org/d3.v7.min.js"></script>
 
-    <style>
-      body {
-          font-family: 'Mulish', sans-serif;
-      }
-      .navbar {
-          background-color: #343a40;
-      }
-      .nav-link {
-          color: #ffffff !important;
-          font-size: 20px;
-      }
-      .about-section {
-          padding: 100px 0;
-          text-align: justify;
-      }
-      .about-section h1 {
-          font-size: 48px;
-          font-weight: 700;
-          margin-bottom: 30px;
-          color: #343a40;
-      }
-      .about-section p {
-          font-size: 18px;
-          line-height: 1.6;
-          color: #343a40;
-      }
-      .information {
-          padding: 100px 0;
-          text-align: center;
-          color: #343a40;
-          background-color: #f8f9fa;
-      }
-      .footer {
-          width: 100%;
-          background-color: #343a40;
-          color: #fff;
-          text-align: center;
-          padding: 10px 0;
-          max-width: 100%;
-          height: auto;
-      }
-      #venn-diagram-container svg {
-          margin: auto; /* Centers the SVG in the container */
-      }
-  </style>
 </head>
-
 <body>
+
   <!-- Header -->
   <header class="bg-dark py-3">
     <div class="container">
@@ -92,7 +47,7 @@
   <!-- End Header -->
 
   <!-- About Section -->
-  <section class="about-section">
+  <section class="page-header">
     <div class="container">
       <div class="row">
         <div class="col-md-12">
@@ -100,9 +55,6 @@
           <p class="lead">CLIMAT3 is a platform dedicated to classifying information and health research literature through machine learning. Our goal is to provide access to a variety of literature categorized by the Bio-Psycho-Social framework, spreading knowledge about ways to improve overall human health.</p>
           <p>Through our state-of-the-art web scraper, we collect and categorize articles from select websites. Our machine learning algorithm helps in sorting and organizing the articles based on the Bio-Psycho-Social framework, making it easier for users to navigate and access relevant information.</p>
           <p>We believe that by providing access to categorized literature, we contribute to the dissemination of knowledge that can ultimately lead to advancements in human health and well-being.</p>
-
-          <!-- Venn Diagram Container -->
-          <div id="venn-diagram-container" class="text-center my-5"></div>
         </div>
       </div>
     </div>
@@ -130,7 +82,6 @@
 </section>
 <!-- End info Section -->
 
-
   <!-- Footer -->
 <footer class="footer">
   <div class="container">
@@ -143,43 +94,5 @@
   <!-- Bootstrap JS -->
   <script src="js/bootstrap.bundle.min.js"></script>
 
-  <!-- Venn Diagram Script 
-  <script>
-    // Set up the SVG container
-    const svg = d3.select("#venn-diagram-container")
-      .append("svg")
-      .attr("width", 400)
-      .attr("height", 400);
-
-    // Draw circles for the Venn diagram
-    const circleData = [
-      { cx: 150, cy: 150, r: 120, fill: "rgba(255, 0, 0, 0.5)" }, 
-      { cx: 250, cy: 150, r: 120, fill: "rgba(0, 0, 255, 0.5)" },
-      { cx: 200, cy: 250, r: 120, fill: "rgba(0, 128, 0, 0.5)" }
-    ];
-
-    const circles = svg.selectAll("circle")
-      .data(circleData)
-      .enter()
-      .append("circle")
-      .attr("cx", d => d.cx)
-      .attr("cy", d => d.cy)
-      .attr("r", d => d.r)
-      .style("fill", d => d.fill);
-
-    // Add labels for the circles
-    svg.selectAll("text")
-      .data(["Bio", "Psycho", "Social"])
-      .enter()
-      .append("text")
-      .attr("x", (d, i) => [100, 300, 200][i])
-      .attr("y", (d, i) => [130, 130, 230][i])
-      .attr("text-anchor", "middle")
-      .text(d => d)
-      .style("fill", "black")
-      .style("font-size", "20px")
-      .style("font-weight", "bold");
-  </script>
-  -->
 </body>
 </html>
