@@ -45,7 +45,7 @@
 
   <!-- Main Content -->
   <div class="container mt-5">
-    <h2 class="text-center mb-4">Database Information</h2>
+    <h2 class="text-center mb-4">CLIMAT3 Articles</h2>
     
    <!-- Search Bar -->
 <div class="input-group mb-3">
@@ -88,14 +88,19 @@
     </div>
     <!-- End Filters -->
 
+    <div class="page-navigation-buttons">
+        <button class="btn btn-yellow mr-2" id="downloadArticles">Download Selected Articles</button>
+    </div>
+    
+
     <div id="output" style="margin-top: 20px; text-align: center;"></div>
 </div>
 <!-- End Main Content -->
 
  <!-- Page Navigation Buttons -->
 <div class="page-navigation-buttons">
-    <button class="btn btn-secondary mr-2" id="pageUp">Page Up</button>
-    <button class="btn btn-secondary" id="pageDown">Page Down</button>
+    <button class="btn btn-yellow btn-secondary mr-2" id="pageUp">Page Up</button>
+    <button class="btn btn-yellow btn-secondary" id="pageDown">Page Down</button>
 </div>
 <!-- End Page Navigation Buttons -->
 
@@ -110,36 +115,6 @@
 
 <script src="js/bootstrap.bundle.min.js"></script>
 <script src="js/main.js"></script>
-
-<script>
-// Function to handle search button click
-document.getElementById("search-button").addEventListener("click", function() {
-    // Retrieve search text
-    var searchText = document.getElementById("searchText").value.trim();
-    // Retrieve search criteria (title or author)
-    var searchBy = document.querySelector('input[name="searchBy"]:checked').value;
-    // Call function to perform search with criteria
-    performSearch(searchText, searchBy);
-});
-
-// Function to perform search based on criteria
-function performSearch(searchText, searchBy) {
-    // Implement your search functionality here based on the criteria
-}
-
-// Function to handle sort criteria change
-document.getElementById("sortBy").addEventListener("change", function() {
-    // Retrieve selected sort criteria
-    var sortBy = this.value;
-    // Call function to perform sorting
-    performSort(sortBy);
-});
-
-// Function to perform sorting based on criteria
-function performSort(sortBy) {
-    // Implement your sorting functionality here based on the criteria
-}
-</script>
 
 </body>
 </html>

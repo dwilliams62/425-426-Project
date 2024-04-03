@@ -21,7 +21,7 @@ console.log('Hello Firebase!'); //just to show it's working in console (fn f12 i
 
 //this button will go into the database with predetermined collection name and document names, retrieve the data for each of those
 //documents, and format it into a Zotero RDF file that can then be uplaoded to Zotero
-//document.getElementById("openDocTest").addEventListener("click", DownloadXMLRDF);
+document.getElementById("downloadArticles").addEventListener("click", DownloadXMLRDF);
 
 //the search button, will look through the settings currently selected and perform the correct query, then outputs the data
 //current set to update the search every time any of the <select> tags change and when the search bar changes, but this would lead to
