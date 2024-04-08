@@ -85,8 +85,14 @@
         }
         .page-navigation-buttons {
             display: flex;
+            color: #ffcd39;
             justify-content: center;
             align-items: center;
-            height: 20vh; /* This makes the div take up the full height of the viewport */
+            height: 10vh; /* This makes the div take up the full height of the viewport */
             gap: 10px; /* Adds some space between your buttons */
         }
+        .btn-yellow {
+            background-color: #ffcd39;
+            border-color: #ffcd39; /* Adjust border color as needed */
+        }
+        
