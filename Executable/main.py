@@ -95,7 +95,7 @@ def scrape_website_initialize():
     label.pack()
 
     #create a bar the user can type in a search term to search by
-    entry = tk.Entry(root,width=10)
+    entry = tk.Entry(root,width=20)
     entry.pack()
 
     space_label2 = tk.Label(root, text="", height=2)
@@ -128,6 +128,9 @@ def scrape_website_initialize():
     # Create the final submit button to start scraping
     scrape_button = tk.Button(root, text="Scrape!",bg='#347aeb',fg="white",font=("Arial",14) ,command=lambda: scrape_website_process(start_entry.get(), end_entry.get(), entry.get()))
     scrape_button.pack(pady=10)
+
+    scrape_again_button = tk.Button(root, text="Back", command=scrape_again_initialize,bg="white",fg="green",font=("Verdana",8))
+    scrape_again_button.pack(pady=20)
 
 #if the springer button is pressed, use springer
 def set_website_springer():
