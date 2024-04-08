@@ -15,10 +15,10 @@ percentage = 0.0
 error = None
 #Create a function to adjust the size of the screen
 def resize(window): 
-    new_width = window.width
-    new_height = window.height
+    new_width = window.winfo_screenwidth()
+    new_height = window.winfo_screenheight()
 
-    window.geometry(f"{new_width}X{new_height}")
+    window.geometry(f"{new_width}X{new_height}+0+0")
 
     
 # Create all the buttons and labels shown on starting the application
@@ -305,8 +305,8 @@ def show_results_initialize():
 root = tk.Tk()
 root.title("CLIMAT3 Scraper and Classifier")
 
-resize(root)
-
+#resize(root)
+root.geometry("800x600")
 create_startup_buttons(root)
 # Run the Tkinter event loop
 root.mainloop()
