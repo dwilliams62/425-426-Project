@@ -1,0 +1,150 @@
+[
+    {
+        "id": "http://zotero.org/groups/5185450/items/4XC23CF2",
+        "type": "article-journal",
+        "abstract": "Purpose of review Climate change remains a major threat to the health and well-being of children globally. This article reviews the myriad health effects of climate change on children throughout their lives and discusses ways in which the general pediatrician can be an advocate for climate solutions. Recent findings Rising atmospheric temperatures, increased air pollution, and destabilized weather patterns all lead to adverse health outcomes for children and adverse obstetric outcomes. However, the impact of climate change is not evenly distributed. Children living in poverty are more likely to be adversely impacted by the changing climate. Ongoing and emerging research suggests that children are particularly vulnerable to the effects of climate change. The primary care pediatrician is encouraged to see this irrefutable evidence as a call to action for advocacy on behalf of our patients and the planet.",
+        "archive_location": "WOS:000714392700020",
+        "container-title": "CURRENT OPINION IN PEDIATRICS",
+        "DOI": "10.1097/MOP.0000000000001078",
+        "ISSN": "1040-8703",
+        "issue": "6",
+        "language": "English",
+        "page": "684-690",
+        "title": "Progress in understanding climate change's effects on children and youth",
+        "volume": "33",
+        "issued": {
+            "date-parts": [
+                [
+                    "2021",
+                    12
+                ]
+            ]
+        },
+        "author1": "N Brodie",
+        "author2": "EA Silberholz",
+        "ourTags": "Biophysical"
+    },
+    {
+        "id": "http://zotero.org/groups/5185450/items/FHY5IKKL",
+        "type": "article-journal",
+        "abstract": "The objective of this paper is to model and study the impact of high temperature on mortality in Pakistan. For this purpose, we have used mortality and climate data consisting of maximum temperature, variation in monthly temperature, average rainfall, humidity, dewpoint, as well as average air pressure in the country over the period from 2000 to 2019. We have used the Generalized Linear Model with Quasi-Poisson link function to model the number of deaths in the country and to assess the impact of maximum temperature on mortality. We have found that the maximum temperature in the country has a significant impact on mortality. The number of deaths in Pakistan increases as the maximum temperature increases. We found that, as the maximum temperature increase beyond 30 degrees C, mortality increases significantly. Our results indicate that mortality increases by 27% when the maximum temperature in the country increases from medium category to a very high level. Similarly, the number of deaths in the country increases by 11% when the temperature increases from medium temperature to high level. Furthermore, our study found that when the maximum temperature in the country decreases from a medium level to a low level, the number of deaths in the country decreases by 23%. This study does not consider the impact of other factors on mortality, such as age, medical conditions, gender, geographical location, as well as variability of temperature across the country.",
+        "archive_location": "WOS:000750880700001",
+        "container-title": "SUSTAINABILITY",
+        "DOI": "10.3390/su14010332",
+        "ISSN": "2071-1050",
+        "issue": "1",
+        "language": "English",
+        "title": "Modeling the Impact of High Temperature on Mortality in Pakistan",
+        "volume": "14",
+        "issued": {
+            "date-parts": [
+                [
+                    "2022",
+                    1
+                ]
+            ]
+        },
+        "author1": "MAK Barakzai",
+        "author2": "SMA Burney",
+        "ourTags": "Biophysical"
+    },
+    {
+        "id": "http://zotero.org/groups/5185450/items/LXJUUJTE",
+        "type": "article-journal",
+        "abstract": "Allergic diseases are a major public health problem globally and are increasing. The impacts of climate change on aeroallergens such as pollen and fungal spores and allergic respiratory diseases such as allergic asthma and allergic rhinitis have been considered since the early years of climate change and human health research, and exploration of this topic has accelerated over the past decade or so. This review examines the impacts of climate change on aeroallergens, including interactions with air pollutants, and the resulting impacts on allergic respiratory diseases. It discusses mitigation and adaptation in this context. It does this with a focus on advances over the last 2 years (2019 and 2020) to highlight research at the frontier of this field. It also explores the growing recognition of the need for a more holistic and integrated approach to environmental monitoring and exposure and presents the concept of the aeroexposome as a frame through which these impacts of climate change and responses to them could be viewed moving forward. As the evidence of impacts of climate change on aeroallergen production and atmospheric concentration, seasonality, distribution, and allergenicity mounts, crucial research demonstrating the resulting impacts on health outcomes such as aeroallergen sensitisation prevalence, asthma emergency department visits, and asthma hospitalisations is now emerging. It is vital that the momentum of the last decade continue with research to fill the many gaps that remain in our knowledge of this complex topic-refining analytical techniques, broadening the geographical coverage (to include, for example, the Southern Hemisphere), and more explicitly exploring the impacts of climate change on indoor aeroallergens.",
+        "archive_location": "WOS:000618781900001",
+        "container-title": "ENVIRONMENTAL RESEARCH LETTERS",
+        "DOI": "10.1088/1748-9326/abda6f",
+        "ISSN": "1748-9326",
+        "issue": "3",
+        "language": "English",
+        "title": "Climate change, aeroallergens, and the aeroexposome",
+        "volume": "16",
+        "issued": {
+            "date-parts": [
+                [
+                    "2021",
+                    3
+                ]
+            ]
+        },
+        "author1": "PJ Beggs",
+        "ourTags": "Biophysical"
+    },
+    {
+        "id": "http://zotero.org/groups/5185450/items/K6PRAVH7",
+        "type": "article-journal",
+        "abstract": "Background Drought has been a considerable problem for many years in northern Bangladesh. However, the health impacts of drought in this region are not well understood. Methods This study analyzed the impact of drought duration and severity on select causes of mortality in northern Bangladesh. Rainfall data from three meteorological stations (Rangpur, Dinajpur and Nilphamari) in northern Bangladesh were used to assess drought and non-drought periods, and the Standardized Precipitation Index was used to categorize mild, moderate, severe, and extreme drought. Mortality data from 2007 to 2017 for the three areas were collected from the Sample Vital Registration System, which is a survey of 1 million people. The generalized linear model with Poisson regression link was used to identify associations between mortality and the drought severity and 1-month preceding SPI. Results Only severe and extreme drought in the short-term drought periods affected mortality. Longterm drought was not associated with natural cause mortality in Rangpur and Nilphamari. In Dinajpur, mild and moderate drought was associated with circulatory and respiratory-related mortality. Conclusion The impact of drought on mortality varied by region. This study improves our understanding of how droughts affect specific causes of mortality and will help policy makers to take appropriate measures against drought impacts on selected cause of mortality. Future research will be critical to reduce drought-related risks of health.",
+        "archive_location": "WOS:000691871400007",
+        "container-title": "YONAGO ACTA MEDICA",
+        "DOI": "10.33160/yam.2021.08.007",
+        "ISSN": "0513-5710",
+        "issue": "3",
+        "language": "English",
+        "page": "292-302",
+        "title": "The Effects of Drought Severity and Its Aftereffects on Mortality in Bangladesh",
+        "volume": "64",
+        "issued": {
+            "date-parts": [
+                [
+                    "2021",
+                    8
+                ]
+            ]
+        },
+        "author1": "I Alam",
+        "author2": "S Otani",
+        "author3": "A Majbauddin",
+        "author4": "Q Qing",
+        "author5": "SF Ishizu",
+        "author6": "T Masumoto",
+        "author7": "H Amano",
+        "author8": "Y Kurozawa",
+        "ourTags": "Biophysical"
+    },
+    {
+        "id": "http://zotero.org/groups/5185450/items/CQSU9FK8",
+        "type": "article-journal",
+        "abstract": "Background: Anthropogenic climate change is a phenomenon that is becoming increasingly important in many areas such as economics and politics, but it also has great scientific relevance due to the important effects it has on people's health, the relationship between climate change and Health has caused an increase in the production of scientific knowledge about this topic and therefore the objective of this article was to provide an updated review of the open access scientific evidence, in the last five years, related to the effects of anthropogenic climate change in Public Health.\nMethods: A systematic review was conducted, in Spanish and English, in four non-subscription databases; using online thesaurus terms, the inclusion and exclusion criteria, an evaluation with the STROBE checklist were applied.\nResults: Finally, 18 publications were analyzed. These showed: the relationship between extreme events, such as heat and cold waves, with the increase in mortality from various causes, especially from heart attacks; the alteration of the rainy and drought periods as a determinant of various infectious diseases; air pollution from emissions derived from the use of fossil fuels with the reduction of 2.9 years in world life expectancy. In addition, other authors reported predictions from climate alterations in health risks; and perceptions of the population, and decision-makers about the impacts of climate change on Public Health.\nConclusion: The studies, regardless of the region or country, showing the relationships and impacts, local and global, of climatic variations on the health of populations.",
+        "archive_location": "WOS:000670745800001",
+        "container-title": "REVISTA ESPANOLA DE SALUD PUBLICA",
+        "ISSN": "1135-5727",
+        "language": "Spanish",
+        "title": "Effects of climate change on Public Health 2015-2020. A systematic review",
+        "volume": "95",
+        "issued": {
+            "date-parts": [
+                [
+                    "2021",
+                    3,
+                    17
+                ]
+            ]
+        },
+        "author1": "L Alvarez-Mino",
+        "author2": "R Taboada-Montoya",
+        "ourTags": "Biophysical"
+    },
+    {
+        "id": "http://zotero.org/groups/5185450/items/XS945M4F",
+        "type": "article-journal",
+        "abstract": "Climate change is driven primarily by humanity's use of fossil fuels and the resultant greenhouse gases from their combustion. The effects of climate change on human health are myriad and becomingly increasingly severe as the pace of climate change accelerates. One relatively underreported intersection between health and climate change is that of infections, particularly antibiotic-resistant infections. In this perspective review, the aspects of climate change that have already, will, and could possibly impact the proliferation and dissemination of antibiotic resistance are discussed.",
+        "archive_location": "WOS:000620393700001",
+        "container-title": "THERAPEUTIC ADVANCES IN INFECTIOUS DISEASE",
+        "DOI": "10.1177/2049936121991374",
+        "ISSN": "2049-9361",
+        "language": "English",
+        "title": "Climate change and antibiotic resistance: a deadly combination",
+        "volume": "8",
+        "issued": {
+            "date-parts": [
+                [
+                    "2021",
+                    2
+                ]
+            ]
+        },
+        "author1": "JP Burnham",
+        "ourTags": "Biophysical"
+    }
+]

@@ -34,6 +34,7 @@ export async function startSearch() {
 
   //initalize the amount of docs being displayed based off what the user picked. default is max of 20
   var maxPerPage = document.getElementById('resultsPerPage').value;
+  pageNumber = 1;
   showSearchResults(((maxPerPage * pageNumber) - maxPerPage), (maxPerPage * pageNumber));
 }
 
