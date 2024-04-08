@@ -13,28 +13,29 @@ processed_data = None
 website_chosen = None
 percentage = 0.0
 error = None
-#Create a function to adjust the size of the screen
-def resize(window): 
-    new_width = window.winfo_screenwidth()
-    new_height = window.winfo_screenheight()
 
-    window.geometry(f"{new_width}X{new_height}+0+0")
+
 
     
 # Create all the buttons and labels shown on starting the application
 def create_startup_buttons(root):
     # Create labels
-    title_label = tk.Label(root, text="CLIMAT3 Scraper and Classifier", font=("Arial", 16))
-    instruction_label = tk.Label(root, text="How would you like to upload the data?", font=("Arial", 12))
+    title_label = tk.Label(root, text="CLIMAT3 Scraper and Classifier", font=("Arial", 16),width=40,bg="green",fg="white")
+    space_label = tk.Label(root, text="", height=3)
+    
+    instruction_label = tk.Label(root, text="How would you like to upload the data?", font=("Arial", 12),fg= "green")
+    space_label2 = tk.Label(root, text="", height=5)
 
     # Create buttons
-    upload_button = tk.Button(root, text="Upload my own data", command=upload_own_data)
-    scrape_button = tk.Button(root, text="Scrape from website", command=scrape_website_initialize)
-    machine_learning_test_button = tk.Button(root, text="Test Machine Learning", command=machine_learning_test_initialize)
+    upload_button = tk.Button(root, text="Upload my own data", command=upload_own_data, width=20,bg='#347aeb',fg="white")
+    scrape_button = tk.Button(root, text="Scrape from website", command=scrape_website_initialize,width =20,bg='#347aeb',fg="white")
+    machine_learning_test_button = tk.Button(root, text="Test Machine Learning", command=machine_learning_test_initialize,width = 20,bg='#347aeb',fg="white")
 
     # Pack the labels and buttons into the main window
-    title_label.pack(pady=10)
+    title_label.pack(pady=(100,10))
+    space_label.pack()
     instruction_label.pack(pady=5)
+    space_label2.pack()
     upload_button.pack(pady=10)
     scrape_button.pack(pady=10)
     machine_learning_test_button.pack(pady=10)
@@ -66,29 +67,42 @@ def scrape_website_initialize():
         widget.pack_forget()
     
     # Create label
-    website_label = tk.Label(root, text="Select a website to scrape from")
+    website_label = tk.Label(root, text="Select a website to scrape from",font=("Verdana",14),fg='#1a54b0')
     website_label.pack()
 
+    
+
     # Create the buttons to pick what website
-    website_frame = tk.Frame(root)
+    website_frame = tk.Frame(root,width= 200,height=250)
     website_frame.pack()
 
-    pubmed_button = tk.Button(website_frame, text="Pubmed", command=set_website_pubmed)
+    pubmed_button = tk.Button(website_frame, text="Pubmed",bg="white",fg='#347aeb' ,command=set_website_pubmed)
     pubmed_button.pack(side=tk.LEFT, padx=5)
 
-    springer_button = tk.Button(website_frame, text="Springer", command=set_website_springer)
+    springer_button = tk.Button(website_frame, text="Springer",bg="white",fg="red", command=set_website_springer)
     springer_button.pack(side=tk.LEFT, padx=5)
 
+    space_label = tk.Label(root, text="", height=3)
+    space_label.pack()
+
+    #createa border frame
+    border_frame = tk.Frame(root, borderwidth=2, relief="ridge",bg='#347aeb')
+    border_frame.pack(padx=5, pady=5)
+
+
     #create a label
-    label = tk.Label(root, text="Enter term to search by")
-    label.pack(pady=10)
+    label = tk.Label(border_frame, text="Enter term to search by",padx=10,pady=10,bg="white",font=('Verdana',10))
+    label.pack()
 
     #create a bar the user can type in a search term to search by
-    entry = tk.Entry(root)
+    entry = tk.Entry(root,width=10)
     entry.pack()
 
+    space_label2 = tk.Label(root, text="", height=2)
+    space_label2.pack()
+
     # Create another label
-    pages_label = tk.Label(root, text="How many pages of articles would you like to scrape?")
+    pages_label = tk.Label(root, text="How many pages of articles would you like to scrape?",font=('Verdana',10))
     pages_label.pack(pady=10)
     # We are gonna ask the user for 2 entries that selects the range of pages 
     # Adds a scale bar to select number of pages from 1 to 10
@@ -108,8 +122,11 @@ def scrape_website_initialize():
     end_entry = tk.Entry(pages_frame, width=5)
     end_entry.pack(side=tk.LEFT, pady=5)
 
+    space_label3 = tk.Label(root, text="", height=2)
+    space_label3.pack()
+
     # Create the final submit button to start scraping
-    scrape_button = tk.Button(root, text="Scrape!", command=lambda: scrape_website_process(start_entry.get(), end_entry.get(), entry.get()))
+    scrape_button = tk.Button(root, text="Scrape!",bg='#347aeb',fg="white",font=("Arial",14) ,command=lambda: scrape_website_process(start_entry.get(), end_entry.get(), entry.get()))
     scrape_button.pack(pady=10)
 
 #if the springer button is pressed, use springer
@@ -134,7 +151,7 @@ def scrape_website_process(start,end, scrape_term):
             widget.pack_forget()
 
         #add a label
-        pages_label = tk.Label(root, text="Opening....")
+        pages_label = tk.Label(root, text="Opening....",font=("Verdana",12),fg="green")
         pages_label.pack()
 
         # Create a progress bar
@@ -199,7 +216,7 @@ def categorize_data_initialize():
         widget.pack_forget()
 
     #add a label to show what's happening
-    pages_label = tk.Label(root, text="Categorizing....")
+    pages_label = tk.Label(root, text="Categorizing....",font=("Verdana",12),fg="green")
     pages_label.pack()
     
     # Create a progress bar
