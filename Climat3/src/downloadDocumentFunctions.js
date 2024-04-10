@@ -23,14 +23,14 @@ const db = getFirestore(app);
 var selectedArticles = [];
 
 //Add an article to be downloaded
-function addArticleToArray(item) {
+export function addArticleToArray(item) {
   if (!selectedArticles.includes(item)) {
     selectedArticles.push(item);
   }
 }
 
 //Remove an article to be downloaded
-function removeArticleFromArray(item) {
+export function removeArticleFromArray(item) {
   if (selectedArticles.includes(item)) {
     selectedArticles = selectedArticles.filter(selected => selected !== item);
   }

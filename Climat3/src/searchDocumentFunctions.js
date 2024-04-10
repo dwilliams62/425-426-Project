@@ -1,7 +1,7 @@
 
 import { initializeApp } from "firebase/app";
 import { getFirestore, collection, query, where, getDocs, orderBy, startAt, endAt } from "firebase/firestore";
-import { UpdateSelectedArray } from "./downloadDocumentFunctions.js";
+import { UpdateSelectedArray, addArticleToArray, removeArticleFromArray } from "./downloadDocumentFunctions.js";
 
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
@@ -160,5 +160,6 @@ export function selectAllArticles() {
   // Loop through each checkbox and set its checked property to true
   checkboxes.forEach(function(checkbox) {
       checkbox.checked = true;
+      addArticleToArray(checkbox.parentElement.textContent.trim());
   });
 }
