@@ -3,9 +3,8 @@ DYLAN WILLIAMS FALL 2023
 */
 
 //import from other files for readability and organization
-import { UpdateSelectedArray, DownloadXMLRDF } from "./downloadDocumentFunctions.js";
-import { addNewDocument, loadJSONDocument } from "./addDocumentFunctions.js";
-import { startSearch, pageUp, pageDown } from "./searchDocumentFunctions.js";
+import { DownloadXMLRDF } from "./downloadDocumentFunctions.js";
+import { startSearch, pageUp, pageDown, selectAllArticles } from "./searchDocumentFunctions.js";
 
 console.log('Hello Firebase!'); //just to show it's working in console (fn f12 i think?)
 
@@ -26,14 +25,16 @@ document.getElementById("downloadArticles").addEventListener("click", DownloadXM
 //the search button, will look through the settings currently selected and perform the correct query, then outputs the data
 //current set to update the search every time any of the <select> tags change and when the search bar changes, but this would lead to
 //performance issues down the road, so should likely look into just having a submit button for everything
-document.getElementById('searchText').addEventListener('input', startSearch);
-document.getElementById('resultsPerPage').addEventListener('change', startSearch);
+document.getElementById('search-button').addEventListener('click', startSearch);
+//document.getElementById('resultsPerPage').addEventListener('change', startSearch);
 //document.getElementById('searchBy').addEventListener('change', startSearch);
-document.getElementById('sort-by-tag').addEventListener('change', startSearch);
+//document.getElementById('sort-by-tag').addEventListener('change', startSearch);
 //document.getElementById('climateTag').addEventListener('change', startSearch);
 
 document.getElementById('pageUp').addEventListener('click', pageUp);
 document.getElementById('pageDown').addEventListener('click', pageDown);
+
+document.getElementById('selectAll').addEventListener('click', selectAllArticles);
 
 //make sure the page starts with displaying some data based off the defaults picked when booted up
 startSearch();

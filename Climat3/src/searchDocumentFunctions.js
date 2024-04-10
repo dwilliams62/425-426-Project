@@ -69,7 +69,7 @@ function showSearchResults(minCountDocs, maxCountDocs) {
       const doc = querySnapshot.docs[i];
 
       //if the climate tag is specified, it will see if that document adheres to the tag, otherwise will go through all docs
-      if (document.getElementById('sort-by-tag').value == 'All' || doc.data().ourTag == document.getElementById('sort-by-tag').value) {
+      if (document.getElementById('sort-by-tag').value == 'All' || doc.data().ourTags == document.getElementById('sort-by-tag').value) {
         //checks if the document's title or author has the phrase the user is currently searching, and if so adds it to the page
         if (searchBy(doc)) {
           //if successful, increase the amount of docs currently on the page
@@ -151,4 +151,14 @@ function createCard(doc) {
 
   //used only for debuggin/testing purposes
   console.log(doc.id, " => ", doc.data());
+}
+
+export function selectAllArticles() {
+  // Get all checkboxes within the outputdiv
+  var checkboxes = document.getElementById('output').querySelectorAll('input[type="checkbox"]');
+  
+  // Loop through each checkbox and set its checked property to true
+  checkboxes.forEach(function(checkbox) {
+      checkbox.checked = true;
+  });
 }
