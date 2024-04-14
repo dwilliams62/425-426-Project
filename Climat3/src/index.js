@@ -1,5 +1,5 @@
 /*
-DYLAN WILLIAMS FALL 2023
+DYLAN WILLIAMS SPRING 2024
 */
 
 //import from other files for readability and organization
@@ -10,30 +10,18 @@ console.log('Hello Firebase!'); //just to show it's working in console (fn f12 i
 
 //add listeners to the buttons needed
 
-//this button will take the JSON file uploaded in databasetest.html, open the json, retrieve the data, and the input that data
-//into documents in the database, into a collection defined by the user in databasetest.html
-//document.getElementById('uploadBtn').addEventListener('click', loadJSONDocument);
-
-//this button is a simple test button to see how things work. it will get the collection name, document name, and the value of
-//customer that the user defines in databasetest.html, and upload a document with that information into the database
-//document.getElementById("myBtn").addEventListener("click", addNewDocument);
-
-//this button will go into the database with predetermined collection name and document names, retrieve the data for each of those
-//documents, and format it into a Zotero RDF file that can then be uplaoded to Zotero
+//goes into the output div, finds the articles that the checkbox is checked, gets the title of those articles,
+//and uses the titles to search the database for ids that equal it and download them into an XML RDF format
 document.getElementById("downloadArticles").addEventListener("click", DownloadXMLRDF);
 
-//the search button, will look through the settings currently selected and perform the correct query, then outputs the data
-//current set to update the search every time any of the <select> tags change and when the search bar changes, but this would lead to
-//performance issues down the road, so should likely look into just having a submit button for everything
+//the search button, will look through the settings currently selected and perform the correct query, then outputs the data to the output div
 document.getElementById('search-button').addEventListener('click', startSearch);
-//document.getElementById('resultsPerPage').addEventListener('change', startSearch);
-//document.getElementById('searchBy').addEventListener('change', startSearch);
-//document.getElementById('sort-by-tag').addEventListener('change', startSearch);
-//document.getElementById('climateTag').addEventListener('change', startSearch);
 
+//when the user hits page up or page down, shows more articles if there are any left to show
 document.getElementById('pageUp').addEventListener('click', pageUp);
 document.getElementById('pageDown').addEventListener('click', pageDown);
 
+//either selects or deselects all checkboxes in the output div
 document.getElementById('selectAll').addEventListener('click', selectAllArticles);
 document.getElementById('deselectAll').addEventListener('click', selectAllArticles);
 

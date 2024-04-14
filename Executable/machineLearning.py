@@ -4,9 +4,6 @@ from sklearn.model_selection import train_test_split
 from sklearn.metrics import classification_report
 import pandas as pd
 import spacy
-import os
-import random
-import pickle
 
 #Loads spacy's English module
 nlp = spacy.load("en_core_web_sm")

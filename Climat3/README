@@ -1,8 +1,7 @@
-Last Updated 12/5/23
+Last Updated 4/14/24
 
-This folder is largely the work of Dylan Williams
-Rafi set up the initial web page, and the index.html is mostly written by him, including the design of it all
-The firebase, javascript, and databaseTest.html is all written by Dylan
+All Javascript is the work of Dylan Williams, including the setup of Firestore and Firebase
+The HTML and design aspect are the work of Vincent Fealy
 
 
 
@@ -15,13 +14,14 @@ The firebase, javascript, and databaseTest.html is all written by Dylan
 - The node_modules folder is where the npm libraries are held, such as webpack. should not need to be touched
 
 - The public folder is what is deployed to the website when you run 'firebase deploy', and what is shown when you run 'http-server -c-1'
-    on your local host. there are the images needed for the website, the html for the various pages, and two folders, one for the css files
-    and one for the javascript files (though in our case that is just one file)
+    on your local host (or just start a live server, however you wish to do this). there are the images needed for the website, the html for the various pages, and all the css and js required
+
+- The src folder is the javascript that is compiled with 'npm run build'. When making changes to the user defined javascript of the application (largely those interacting with the database), this command will need to be ran. See comments on the dist folder. This folder consists of two main functioanlity, which is displaying the cards on the website with data from the database, and downloading the selected articles into a XML RDF file to import into Zotero.
 
 - Other files that are lose in the CLIMAT3 folder that shouldn't be touched include
     - database.rules.json - for use with cloud firestore database
     - firebase.json - for use with firebase
+    - .firebasesrc - same used for firebase
     - package-lock.json - for use with npm
     - package.json - also for use with npm
 
-- The other files not mentioned are simply test input for the database, including an Articles.JSON that was created by the web scraper
