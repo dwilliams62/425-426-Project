@@ -35,6 +35,7 @@ document.getElementById('pageUp').addEventListener('click', pageUp);
 document.getElementById('pageDown').addEventListener('click', pageDown);
 
 document.getElementById('selectAll').addEventListener('click', selectAllArticles);
+document.getElementById('deselectAll').addEventListener('click', selectAllArticles);
 
 //make sure the page starts with displaying some data based off the defaults picked when booted up
 startSearch();

@@ -163,3 +163,14 @@ export function selectAllArticles() {
       addArticleToArray(checkbox.parentElement.textContent.trim());
   });
 }
+
+export function deselectAllArticles() {
+  // Get all checkboxes within the outputdiv
+  var checkboxes = document.getElementById('output').querySelectorAll('input[type="checkbox"]');
+  
+  // Loop through each checkbox and set its checked property to true
+  checkboxes.forEach(function(checkbox) {
+      checkbox.checked = false;
+      removeArticleFromArray(checkbox.parentElement.textContent.trim());
+  });
+}
