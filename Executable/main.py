@@ -184,10 +184,10 @@ def show_err():
     for widget in root.winfo_children():
         widget.pack_forget()
     
-    label = tk.Label(text="You entered the wrong range for the page Number")
+    label = tk.Label(text="You entered the wrong range for the page Number",font=("Verdana",16))
     label.pack(pady=10)
 
-    scrape_again_button = tk.Button(root, text="Back to Title", command=scrape_again_initialize)
+    scrape_again_button = tk.Button(root, text="Back to Title", command=scrape_again_initialize,width=20,bg='red',fg="white")
     scrape_again_button.pack(pady=5)
     
 
@@ -225,23 +225,23 @@ def use_data_initialize():
         widget.pack_forget()
 
     # define label
-    label = tk.Label(root, text="What would you like to do with the data?")
+    label = tk.Label(root, text="What would you like to do with the data?",font=("Verdana",14),fg='green')
     label.pack(pady=10)
 
-    label2 = tk.Label(root, text="(The percentage of data that is missing is {:.2f}%)".format(percentage))
+    label2 = tk.Label(root, text="(The percentage of data that is missing is {:.2f}%)".format(percentage),font=("Verdana",10),fg="red")
     label2.pack(pady=10)
 
     global website_chosen
     if (website_chosen):
         # Button - Upload to website
-        upload_button = tk.Button(root, text="Upload to website", command=lambda: [upload_to_website(processed_data),show_results_initialize()])
+        upload_button = tk.Button(root, text="Upload to website", width=20,bg='#347aeb',fg="white", command=lambda: [upload_to_website(processed_data),show_results_initialize()])
         upload_button.pack(pady=5)
     else:
         # Button - Download as Zotero RDF file
-        download_button = tk.Button(root, text="Download as CSL JSON file", command=download_data_initialize)
+        download_button = tk.Button(root, text="Download as CSL JSON file",width=20,bg='#347aeb',fg="white" ,command=download_data_initialize)
         download_button.pack(pady=5)
 
-    scrape_again_button = tk.Button(root, text="Discard and Scrape again", command=scrape_again_initialize)
+    scrape_again_button = tk.Button(root, text="Discard and Scrape again",width=20,bg='#347aeb',fg="white" ,command=scrape_again_initialize)
     scrape_again_button.pack(pady=5)
 
 def download_data_initialize():
@@ -288,13 +288,13 @@ def show_results_initialize():
         widget.pack_forget()
     
     #label to show succesful processing of data
-    label = tk.Label(root, text="Congrats you have successfully Uploaded the data!")
+    label = tk.Label(root, text="Congrats you have successfully Uploaded the data!",font={"Verdana",14},fg="blue")
     label.pack(pady=15)
 
-    exit_button = tk.Button(root, text= "Exit",command = exit_gui)
+    exit_button = tk.Button(root, text= "Exit",command = exit_gui,width=20,bg='red',fg="white")
     exit_button.pack(pady=5)
 
-    scrape_again_button = tk.Button(root, text="Back to Title", command=scrape_again_initialize)
+    scrape_again_button = tk.Button(root, text="Back to Title", width=20,bg='red',fg="white",command=scrape_again_initialize)
     scrape_again_button.pack(pady=5)
 
 
