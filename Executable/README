@@ -1,0 +1,49 @@
+Last updated 4/14/24
+
+Developed by Dylan Williams, Rafiedul Islam, Olivia Brague, Vincent Fealy
+
+This executable is the bread and butter of the project, allowing the user to either scrape data off the web or upload their own data, have it classified by a machine learning algorithm, and then either uploaded to our website https://climat3.web.app/index.html or redownloaded for uploading to Zotero. The organizational structure of this portion of the project was developed by Dylan, as well as anything regarding the uploading/downloading of CSL JSON files, uploading to the website, and some of the basic TKinkter functionality. The design of the executable and functionality of the web scraper is Rafi's work, and the machine learning aspects are Olivia's.
+
+In more detail, the workflow of the executable is as follows. The user sees a main menu screen that allows them to either scrape data off of two predetermined websites or upload their own data. If the user decides to scrape data, they must go decide between two websites, enter a term to scrape, and how many pages to scrape. The program then automatically scrapes this data, runs it through our machine learning algorithm, and allows the user the choice to discard the data or upload it to the website. If the user uploads their own data to the executable, they are prompted to input a CSL JSON file, which is one of the forms Zotero allows exporting of. The program then reads this data, runs it through the machine learning, and gives it a tag, then allowing the user to discard the data or download it as a CSL JSON for re-importing into Zotero.
+
+
+
+Some notes about the Web Scraping aspects:
+RAFI ENTER A BUNCH OF STUFF HERE
+
+
+
+Some notes about the Machine Learning aspects:
+The dataset for this machine learning algorithm was provided by Dr. Karl Maier through Zotero.
+Author of this read me: Olivia Brague
+
+List of dependencies:
+-scikit-learn
+-pandas
+-spacy
+
+Status of the dataset: In its current state, the dataset does not have as many entries as
+we would hope for it to have. Dr. Maier is currently working on adding more onto the dataset
+in order to better aid the machine learning algorithm. This is an ongoing process and 
+at the point that I am writing this we do not have that dataset.
+
+Reasoning for choosing SVM: I chose SVM after running a series of experiments on the dataset using
+different algorithms. I found that overall SVM performs consistently better than the other algorithms
+for this particular set of data. I also performed hyperparameter tuning to select the best set
+of parameters for SVM. With the future expansion of the dataset, the best algorithm or parameters
+could be subject to change so more experiementation may be needed.
+
+Right now, in order to better increase the performance of the algorithm with the current state of the
+dataset, I have decided to only use the three main categories of biophysical, social, and psychological
+for classification instead of the subcategories as I feel that in its current state the subcategories
+are causing a lot of confusion for the algorithm. In the future, if the dataset gets more examples,
+it may be appropriate to add in the subcategories again instead of just the main categories.
+
+I attempted to try pickling the algorithm in order to have the slow part of vectorization be done ahead of time.
+The file I used to make the pickle file is still here if someone wishes to attempt to try to use it again, but we found it was
+taking just as long to load it as it would to just do the vectorization.
+
+
+
+Some notes about the Firebase:
+Right now we currently have a file called "FirebaseInfo.json" not being added to the github due to security issues involving the database. If your version of the project does not have this file, the program will not run correctly if at all. To find this file, visit the console website https://console.firebase.google.com/u/3/project/climat3/overview with the correct account logged in tiei.org.cloud@gmail.com. 

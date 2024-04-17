@@ -15,7 +15,6 @@ percentage = 0.0
 error = None
 
 
-
     
 # Create all the buttons and labels shown on starting the application
 def create_startup_buttons(root):
@@ -29,7 +28,6 @@ def create_startup_buttons(root):
     # Create buttons
     upload_button = tk.Button(root, text="Upload my own data", command=upload_own_data, width=20,bg='#347aeb',fg="white")
     scrape_button = tk.Button(root, text="Scrape from website", command=scrape_website_initialize,width =20,bg='#347aeb',fg="white")
-    machine_learning_test_button = tk.Button(root, text="Test Machine Learning", command=machine_learning_test_initialize,width = 20,bg='#347aeb',fg="white")
 
     # Pack the labels and buttons into the main window
     title_label.pack(pady=(100,10))
@@ -38,7 +36,6 @@ def create_startup_buttons(root):
     space_label2.pack()
     upload_button.pack(pady=10)
     scrape_button.pack(pady=10)
-    machine_learning_test_button.pack(pady=10)
 
 
 
@@ -70,8 +67,6 @@ def scrape_website_initialize():
     website_label = tk.Label(root, text="Select a website to scrape from",font=("Verdana",14),fg='#1a54b0')
     website_label.pack()
 
-    
-
     # Create the buttons to pick what website
     website_frame = tk.Frame(root,width= 200,height=250)
     website_frame.pack()
@@ -85,10 +80,9 @@ def scrape_website_initialize():
     space_label = tk.Label(root, text="", height=3)
     space_label.pack()
 
-    #createa border frame
+    #create a border frame
     border_frame = tk.Frame(root, borderwidth=2, relief="ridge",bg='#347aeb')
     border_frame.pack(padx=5, pady=5)
-
 
     #create a label
     label = tk.Label(border_frame, text="Enter term to search by",padx=10,pady=10,bg="white",font=('Verdana',10))
@@ -104,15 +98,11 @@ def scrape_website_initialize():
     # Create another label
     pages_label = tk.Label(root, text="How many pages of articles would you like to scrape?",font=('Verdana',10))
     pages_label.pack(pady=10)
-    # We are gonna ask the user for 2 entries that selects the range of pages 
-    # Adds a scale bar to select number of pages from 1 to 10
-    #Create the frame to select the pages
-    #pages_scale = Scale(root, from_=1, to=10, orient=tk.HORIZONTAL, length=200)
-    #pages_scale.pack()
 
     pages_frame = tk.Frame(root)
     pages_frame.pack()
 
+    #page range stuff
     start_page = tk.Label(pages_frame, text="Select Your Page range ")
     start_page.pack(side=tk.LEFT, pady=5)
 
@@ -121,6 +111,10 @@ def scrape_website_initialize():
 
     end_entry = tk.Entry(pages_frame, width=5)
     end_entry.pack(side=tk.LEFT, pady=5)
+
+    #add default entries
+    start_entry.insert(0, "1")  # "0" is the default value for start_entry
+    end_entry.insert(0, "5")   # "10" is the default value for end_entry
 
     space_label3 = tk.Label(root, text="", height=2)
     space_label3.pack()
@@ -146,9 +140,6 @@ def set_website_pubmed():
 def scrape_website_process(start,end, scrape_term):
     #if no website is chosen, button does nothing
     if website_chosen:
-        #grabs the value of the scale
-        
-
         #removes all widgets on the gui currently
         for widget in root.winfo_children():
             widget.pack_forget()
@@ -193,23 +184,13 @@ def show_err():
     for widget in root.winfo_children():
         widget.pack_forget()
     
-    label = tk.Label(text="You entered the wrong range for the page Number")
+    label = tk.Label(text="You entered the wrong range for the page Number",font=("Verdana",16))
     label.pack(pady=10)
 
-    scrape_again_button = tk.Button(root, text="Back to Title", command=scrape_again_initialize)
+    scrape_again_button = tk.Button(root, text="Back to Title", command=scrape_again_initialize,width=20,bg='red',fg="white")
     scrape_again_button.pack(pady=5)
     
 
-#a function to initialize preset data into the processed data for testing purposes
-
-def machine_learning_test_initialize():
-    global processed_data
-    processed_data = [
-        {"key1": "value1", "key2": "value2"},
-        {"key3": "value3", "key4": "value4"},
-        {"key5": "value5", "key6": "value6"}
-    ]
-    categorize_data_initialize()
 
 #at this point data will have been uploaded somehow, and the program will then use the machine learning algorithm to
 #to classify each article given into the correct category
@@ -244,23 +225,23 @@ def use_data_initialize():
         widget.pack_forget()
 
     # define label
-    label = tk.Label(root, text="What would you like to do with the data?")
+    label = tk.Label(root, text="What would you like to do with the data?",font=("Verdana",14),fg='green')
     label.pack(pady=10)
 
-    label2 = tk.Label(root, text="(The percentage of data that is missing is {:.2f}%)".format(percentage))
+    label2 = tk.Label(root, text="(The percentage of data that is missing is {:.2f}%)".format(percentage),font=("Verdana",10),fg="red")
     label2.pack(pady=10)
 
     global website_chosen
     if (website_chosen):
         # Button - Upload to website
-        upload_button = tk.Button(root, text="Upload to website", command=lambda: [upload_to_website(processed_data),show_results_initialize()])
+        upload_button = tk.Button(root, text="Upload to website", width=20,bg='#347aeb',fg="white", command=lambda: [upload_to_website(processed_data),show_results_initialize()])
         upload_button.pack(pady=5)
     else:
         # Button - Download as Zotero RDF file
-        download_button = tk.Button(root, text="Download as CSL JSON file", command=download_data_initialize)
+        download_button = tk.Button(root, text="Download as CSL JSON file",width=20,bg='#347aeb',fg="white" ,command=download_data_initialize)
         download_button.pack(pady=5)
 
-    scrape_again_button = tk.Button(root, text="Discard and Scrape again", command=scrape_again_initialize)
+    scrape_again_button = tk.Button(root, text="Discard and Scrape again",width=20,bg='#347aeb',fg="white" ,command=scrape_again_initialize)
     scrape_again_button.pack(pady=5)
 
 def download_data_initialize():
@@ -307,13 +288,13 @@ def show_results_initialize():
         widget.pack_forget()
     
     #label to show succesful processing of data
-    label = tk.Label(root, text="Congrats you have successfully Uploaded the data!")
+    label = tk.Label(root, text="Congrats you have successfully Uploaded the data!",font={"Verdana",14},fg="blue")
     label.pack(pady=15)
 
-    exit_button = tk.Button(root, text= "Exit",command = exit_gui)
+    exit_button = tk.Button(root, text= "Exit",command = exit_gui,width=20,bg='red',fg="white")
     exit_button.pack(pady=5)
 
-    scrape_again_button = tk.Button(root, text="Back to Title", command=scrape_again_initialize)
+    scrape_again_button = tk.Button(root, text="Back to Title", width=20,bg='red',fg="white",command=scrape_again_initialize)
     scrape_again_button.pack(pady=5)
 
 
