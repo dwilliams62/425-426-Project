@@ -6,8 +6,12 @@ This executable is the bread and butter of the project, allowing the user to eit
 
 In more detail, the workflow of the executable is as follows. The user sees a main menu screen that allows them to either scrape data off of two predetermined websites or upload their own data. If the user decides to scrape data, they must go decide between two websites, enter a term to scrape, and how many pages to scrape. The program then automatically scrapes this data, runs it through our machine learning algorithm, and allows the user the choice to discard the data or upload it to the website. If the user uploads their own data to the executable, they are prompted to input a CSL JSON file, which is one of the forms Zotero allows exporting of. The program then reads this data, runs it through the machine learning, and gives it a tag, then allowing the user to discard the data or download it as a CSL JSON for re-importing into Zotero.
 
+
+
 Some notes about the Web Scraping aspects:
 RAFI ENTER A BUNCH OF STUFF HERE
+
+
 
 Some notes about the Machine Learning aspects:
 The dataset for this machine learning algorithm was provided by Dr. Karl Maier through Zotero.
@@ -38,3 +42,8 @@ it may be appropriate to add in the subcategories again instead of just the main
 I attempted to try pickling the algorithm in order to have the slow part of vectorization be done ahead of time.
 The file I used to make the pickle file is still here if someone wishes to attempt to try to use it again, but we found it was
 taking just as long to load it as it would to just do the vectorization.
+
+
+
+Some notes about the Firebase:
+Right now we currently have a file called "FirebaseInfo.json" not being added to the github due to security issues involving the database. If your version of the project does not have this file, the program will not run correctly if at all. To find this file, visit the console website https://console.firebase.google.com/u/3/project/climat3/overview with the correct account logged in tiei.org.cloud@gmail.com. 

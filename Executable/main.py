@@ -140,9 +140,6 @@ def set_website_pubmed():
 def scrape_website_process(start,end, scrape_term):
     #if no website is chosen, button does nothing
     if website_chosen:
-        #grabs the value of the scale
-        
-
         #removes all widgets on the gui currently
         for widget in root.winfo_children():
             widget.pack_forget()
