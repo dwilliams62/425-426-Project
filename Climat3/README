@@ -27,4 +27,10 @@ The HTML and design aspect are the work of Vincent Fealy
 
 Web Development By: Vincent Fealy
 - There is always more to expand on, for this project we wanted to start by making the website really
-    simple and straight to the point. The website has all the necessary features that Dr. Maier wanted, although there could be things added to make the website more 
+    simple and straight to the point. The website has all the necessary features that Dr. Maier wanted, although there could be things added to make the website more in depth. Looking towards the future of the website more interactive features to attract people that dont know anything about the BioPsychoSocial framework, so they can explore the website and continue using it. In hopes that the project as a whole gets expanded to more categories.
+
+Web Dev Features
+- counter to show the amount of artcles stored in each category
+- Logo that might better fit the framework
+- user login/admin, this feature was beyond our scope of the project but it could be possible in the future
+- JavaScript to show a visual picture on each card signifying its classification
