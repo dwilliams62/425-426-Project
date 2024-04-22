@@ -109,6 +109,8 @@ function searchBy(doc) {
       }
   });
 
+  if (authorAll.charAt(authorAll.length - 1) === ',') { authorAll = authorAll.slice(0, -1); } //remove , at end
+
   //searches the title and authors of each document, and if what the user searched is inluded, create a card for it
   if (doc.data().title.toLowerCase().includes(document.getElementById('searchText').value.toLowerCase()) ||
       authorAll.toLowerCase().includes(document.getElementById('searchText').value.toLowerCase())) {

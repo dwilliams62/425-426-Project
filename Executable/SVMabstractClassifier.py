@@ -42,6 +42,11 @@ X_train, X_test, y_train, y_test = train_test_split(vectors, labels, test_size=0
 clf = SVC(C=1, gamma="scale", kernel="linear")
 clf.fit(X_train, y_train)
 
+y_pred = clf.predict(X_test)
+
 #After training the classifier, pickle everything so it can be used for the executable
-with open('svm_classifier.pkl', 'wb') as file:
-    pickle.dump((clf, tfidf_vectorizer, customTokenizer), file)
+#with open('svm_classifier.pkl', 'wb') as file:
+#    pickle.dump((clf, tfidf_vectorizer, customTokenizer), file)
+
+report = classification_report(y_test, y_pred)
+print(report)
