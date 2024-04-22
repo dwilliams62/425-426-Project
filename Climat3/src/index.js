@@ -4,7 +4,7 @@ DYLAN WILLIAMS SPRING 2024
 
 //import from other files for readability and organization
 import { DownloadXMLRDF } from "./downloadDocumentFunctions.js";
-import { startSearch, pageUp, pageDown, selectAllArticles } from "./searchDocumentFunctions.js";
+import { startSearch, pageUp, pageDown, selectAllArticles, deselectAllArticles } from "./searchDocumentFunctions.js";
 
 console.log('Hello Firebase!'); //just to show it's working in console (fn f12 i think?)
 
@@ -23,7 +23,7 @@ document.getElementById('pageDown').addEventListener('click', pageDown);
 
 //either selects or deselects all checkboxes in the output div
 document.getElementById('selectAll').addEventListener('click', selectAllArticles);
-document.getElementById('deselectAll').addEventListener('click', selectAllArticles);
+document.getElementById('deselectAll').addEventListener('click', deselectAllArticles);
 
 //make sure the page starts with displaying some data based off the defaults picked when booted up
 startSearch();
