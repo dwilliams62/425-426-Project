@@ -107,12 +107,7 @@ function addArticleRDFFile(document) {
     articleRDFString += '<dcterms:isPartOf rdf:resource="urn:issn:' + document.data().issn + '"/>\n';
     articleRDFString += '<bib:authors>\n';
     articleRDFString += '<rdf:Seq>\n';
-    articleRDFString += '<rdf:li>\n';
-    articleRDFString += '<foaf:Person>\n';
-    articleRDFString += '<foaf:surname>' + document.data().author_1 + '</foaf:surname>\n';
-    articleRDFString += '<foaf:givenName>' + 'Author First Name' + '</foaf:givenName>\n';
-    articleRDFString += '</foaf:Person>\n';
-    articleRDFString += '</rdf:li>\n';
+    articleRDFString += addAuthorsToRDF(document);
     articleRDFString += '</rdf:Seq>\n';
     articleRDFString += '</bib:authors>\n';
     articleRDFString += '<dc:subject>' + 'document.data().manualTags' + '</dc:subject>\n';
@@ -133,4 +128,15 @@ function addArticleRDFFile(document) {
     articleRDFString += '<dc:identifier>' + document.data().issn + '</dc:identifier>\n';
     articleRDFString += '</bib:Journal>\n';
     return articleRDFString;
+}
+
+function addAuthorsToRDF(document) {
+  let string = '';
+  let authorIndex = 1;
+  while (document.data()['author_' + authorIndex]) {
+      string += '<rdf:li> <foaf:Person> <foaf:surname>' + document.data()['author_' + authorIndex] + '</foaf:surname> </foaf:Person> </rdf:li>\n';
+      authorIndex++;
+  }
+  
+  return string;
 }
