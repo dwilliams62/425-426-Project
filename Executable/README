@@ -7,12 +7,13 @@ This executable is the bread and butter of the project, allowing the user to eit
 In more detail, the workflow of the executable is as follows. The user sees a main menu screen that allows them to either scrape data off of two predetermined websites or upload their own data. If the user decides to scrape data, they must go decide between two websites, enter a term to scrape, and how many pages to scrape. The program then automatically scrapes this data, runs it through our machine learning algorithm, and allows the user the choice to discard the data or upload it to the website. If the user uploads their own data to the executable, they are prompted to input a CSL JSON file, which is one of the forms Zotero allows exporting of. The program then reads this data, runs it through the machine learning, and gives it a tag, then allowing the user to discard the data or download it as a CSL JSON for re-importing into Zotero.
 
 List of dependencies (as commands I ran to install them):
-pip3.11 install rdflib
-pip3.11 install firebase-admin
-pip3.11 install -U scikit-learn
-pip3.11 install pandas
-pip3.11 install spacy      
-python3.11 -m spacy download en_core_web_sm
+pip install firebase-admin
+pip install -U scikit-learn
+pip install pandas
+pip install spacy      
+pip install beautifulsoup4
+pip install requests
+python -m spacy download en_core_web_sm
 
 
 
