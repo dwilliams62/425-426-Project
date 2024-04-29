@@ -3,9 +3,6 @@ from firebase_admin import credentials
 from firebase_admin import firestore
 import json
 
-from rdflib import Graph
-
-
 cred = credentials.Certificate("FirebaseInfo.json")
 firebase_admin.initialize_app(cred)
 db = firestore.client()
