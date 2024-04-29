@@ -26,6 +26,8 @@ Some notes about the Machine Learning aspects:
 The dataset for this machine learning algorithm was provided by Dr. Karl Maier through Zotero.
 Author of this read me: Olivia Brague
 
+The two files: machineLearning.py is the file that is being accessed by the main of the tkinter executable. It uses the SVM algorithm to make predictions on new data provided to it. SVMclassifier.py exists as a means for me to test out the algorithm with the data provided to me and to print out things such as a classification report to evaluate the algorithms performance. SVMclassifier.py is not necessary for the executable to work, but is important for testing.
+
 Status of the dataset: In its current state, the dataset does not have as many entries as
 we would hope for it to have. Dr. Maier is currently working on adding more onto the dataset
 in order to better aid the machine learning algorithm. This is an ongoing process and 
