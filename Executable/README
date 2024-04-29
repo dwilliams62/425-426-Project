@@ -43,6 +43,8 @@ for classification instead of the subcategories as I feel that in its current st
 are causing a lot of confusion for the algorithm. In the future, if the dataset gets more examples,
 it may be appropriate to add in the subcategories again instead of just the main categories.
 
+Despite this, there seems to be a bug where the algorithm will not classify articles as psychological. There is a good balance of classification between social and biophysical, but no psychological at all. I have tried to figure out how to fix this but at this point have resigned to just accepting that it is just another issue with class imbalance, as the psychological part of the dataset has significantly less articles than social and biophysical.
+
 Dataset	    SVM	Random Forest Logistic Regression Decision Tree Naive Bayes MLP
 3 category	58%	52.60%	      51%	              51%	        42%	        57%
 12 category	21%	14%	          11%	              17%	        9%	        15%
