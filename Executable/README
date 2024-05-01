@@ -6,6 +6,16 @@ This executable is the bread and butter of the project, allowing the user to eit
 
 In more detail, the workflow of the executable is as follows. The user sees a main menu screen that allows them to either scrape data off of two predetermined websites or upload their own data. If the user decides to scrape data, they must go decide between two websites, enter a term to scrape, and how many pages to scrape. The program then automatically scrapes this data, runs it through our machine learning algorithm, and allows the user the choice to discard the data or upload it to the website. If the user uploads their own data to the executable, they are prompted to input a CSL JSON file, which is one of the forms Zotero allows exporting of. The program then reads this data, runs it through the machine learning, and gives it a tag, then allowing the user to discard the data or download it as a CSL JSON for re-importing into Zotero.
 
+List of dependencies (as commands I ran to install them):
+pip install firebase-admin
+pip install -U scikit-learn
+pip install pandas
+pip install spacy      
+pip install beautifulsoup4
+pip install requests
+python -m spacy download en_core_web_sm
+
+
 
 
 Some notes about the Web Scraping aspects:
@@ -17,10 +27,7 @@ Some notes about the Machine Learning aspects:
 The dataset for this machine learning algorithm was provided by Dr. Karl Maier through Zotero.
 Author of this read me: Olivia Brague
 
-List of dependencies:
--scikit-learn
--pandas
--spacy
+The two files: machineLearning.py is the file that is being accessed by the main of the tkinter executable. It uses the SVM algorithm to make predictions on new data provided to it. SVMclassifier.py exists as a means for me to test out the algorithm with the data provided to me and to print out things such as a classification report to evaluate the algorithms performance. SVMclassifier.py is not necessary for the executable to work, but is important for testing.
 
 Status of the dataset: In its current state, the dataset does not have as many entries as
 we would hope for it to have. Dr. Maier is currently working on adding more onto the dataset
@@ -38,6 +45,18 @@ dataset, I have decided to only use the three main categories of biophysical, so
 for classification instead of the subcategories as I feel that in its current state the subcategories
 are causing a lot of confusion for the algorithm. In the future, if the dataset gets more examples,
 it may be appropriate to add in the subcategories again instead of just the main categories.
+
+Despite this, there seems to be a bug where the algorithm will not classify articles as psychological. There is a good balance of classification between social and biophysical, but no psychological at all. I have tried to figure out how to fix this but at this point have resigned to just accepting that it is just another issue with class imbalance, as the psychological part of the dataset has significantly less articles than social and biophysical.
+
+Dataset	    SVM	Random Forest Logistic Regression Decision Tree Naive Bayes MLP
+3 category	58%	52.60%	      51%	              51%	        42%	        57%
+12 category	21%	14%	          11%	              17%	        9%	        15%
+						
+SVM	            C	Gamma	Kernel			
+Best Parameters	1	Scale	Linear			
+						
+Random Forest	Estimators Max depth Type			
+Best Parameters	50	       20	     Entropy			
 
 I attempted to try pickling the algorithm in order to have the slow part of vectorization be done ahead of time.
 The file I used to make the pickle file is still here if someone wishes to attempt to try to use it again, but we found it was
