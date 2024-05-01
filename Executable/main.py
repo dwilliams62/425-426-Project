@@ -1,6 +1,5 @@
 import tkinter as tk
 from tkinter import filedialog
-from tkinter import Scale
 from tkinter import ttk
 
 # import functions from files that we define
