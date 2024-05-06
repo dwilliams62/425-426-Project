@@ -19,8 +19,22 @@ python -m spacy download en_core_web_sm
 
 
 Some notes about the Web Scraping aspects:
-RAFI ENTER A BUNCH OF STUFF HERE
+Additional Imports 
+pip install tkinter
+pip install re
+pip install itertools
+The web scraper scrapes data from websites like Pubmed and Springer. 
+Author of web Scraper: Rafiedul Islam and Dylan Williams
 
+The web scraper uses three files in order to perform its tasks. The websites are being parsed in the file websiteScraping.py. Here open pages on the website selected( either pubmed or springer) and parse the contents of each article per page in the website using beautiful soup. The data being collected consists of title, author name(s) and affiliation(s), publication, abstract, issue, volume, ISSN, keywords and the url link of the article. The scraper will also calculate how much data is missing and display the percentage of missing data for each search to the application. 
+
+Next the two other files need for the web scraper is  main.py and fileFunctions.py. main.py creates the interface for the web scraper, it takes user input such as website, search term and number of pages and transfers it to the websiteScraping.py file to perform the parsing. The file functions simply allows the scraper to pass the scraped information into the website or allows the user to download it. 
+
+How the web scraper is used : 
+
+When you start the scraper in the main menu you can choose to upload your own file of articles for machine learning or choose to scrape from the website. When you hit scrape from website you will be taken to the scraping screen. You must perform click each button sequentially. So first you choose the website you want to scrape from. Hit either pubmed or springer. Next enter your search term in the search term box. Then you can choose the pages you want to scrape. Be sure to enter the starting page you want followed by the ending page. For example if you want results from page 5 to 7 you must enter 5 on the first box and 7 on the second. If you only want 1 page enter the same page number twice( so if you want only page 9 enter 9,9). You can now hit scrape and wait till the scraping process finishes. Once it scrapes all of the articles it will categorize with machine learning(explained below). Once its done doing that it will display how much data was missing( if it missed like the publication date or something) you can decide to discard and scrape again or you can upload it to the website. Once you hit upload it will print a success message alerting you that the data you've scraped has gone to the website. 
+
+The web scraper can be still further improved, it can be modified to run a bit faster, it also has minor bugs due to parsing restrictions, some fields we need to parse are missing in the website. 
 
 
 Some notes about the Machine Learning aspects:

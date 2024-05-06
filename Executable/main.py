@@ -186,7 +186,11 @@ def show_err():
     label = tk.Label(text="You entered the wrong range for the page Number",font=("Verdana",16))
     label.pack(pady=10)
 
-    scrape_again_button = tk.Button(root, text="Back to Title", command=scrape_again_initialize,width=20,bg='red',fg="white")
+
+    space_label = tk.Label(root, text="", height=3)
+    space_label.pack()
+
+    scrape_again_button = tk.Button(root, text="Main Menu", command=scrape_again_initialize,width=20,bg='red',fg="white")
     scrape_again_button.pack(pady=5)
     
 
@@ -230,13 +234,16 @@ def use_data_initialize():
     label2 = tk.Label(root, text="(The percentage of data that is missing is {:.2f}%)".format(percentage),font=("Verdana",10),fg="red")
     label2.pack(pady=10)
 
+    space_label = tk.Label(root, text="", height=4)
+    space_label.pack()
+
     global website_chosen
     if (website_chosen):
         # Button - Upload to website
         upload_button = tk.Button(root, text="Upload to website", width=20,bg='#347aeb',fg="white", command=lambda: [upload_to_website(processed_data),show_results_initialize()])
         upload_button.pack(pady=5)
     else:
-        # Button - Download as Zotero RDF file
+        # Button - Download as csl json file
         download_button = tk.Button(root, text="Download as CSL JSON file",width=20,bg='#347aeb',fg="white" ,command=download_data_initialize)
         download_button.pack(pady=5)
 
@@ -248,7 +255,7 @@ def download_data_initialize():
         widget.pack_forget()
 
     #create a label
-    label = tk.Label(root, text="Enter directory path")
+    label = tk.Label(root, text="Enter directory path",font=("Verdana",14),fg="green")
     label.pack(pady=10)
 
     #create a bar the user can type in a search term to search by
@@ -256,14 +263,17 @@ def download_data_initialize():
     entry.pack()
 
     #create a label
-    label1 = tk.Label(root, text="Enter filename")
+    label1 = tk.Label(root, text="Enter filename",font=("Verdana",14),fg="green")
     label1.pack(pady=10)
 
     #create a bar the user can type in a search term to search by
     entry1 = tk.Entry(root)
     entry1.pack()
 
-    download_button = tk.Button(root, text="Download", 
+    space_label = tk.Label(root, text="", height=2)
+    space_label.pack()
+
+    download_button = tk.Button(root, text="Download", bg='#347aeb',fg="white",font=("Arial",14),
                                     command=lambda: [download_data(processed_data, entry.get(), entry1.get()),show_results_initialize()])
     download_button.pack(pady=5)
 
@@ -290,10 +300,13 @@ def show_results_initialize():
     label = tk.Label(root, text="Congrats you have successfully Uploaded the data!",font={"Verdana",14},fg="blue")
     label.pack(pady=15)
 
+    space_label = tk.Label(root, text="", height=4)
+    space_label.pack()
+
     exit_button = tk.Button(root, text= "Exit",command = exit_gui,width=20,bg='red',fg="white")
     exit_button.pack(pady=5)
 
-    scrape_again_button = tk.Button(root, text="Back to Title", width=20,bg='red',fg="white",command=scrape_again_initialize)
+    scrape_again_button = tk.Button(root, text="Main Menu", width=20,bg='red',fg="white",command=scrape_again_initialize)
     scrape_again_button.pack(pady=5)
 
 
