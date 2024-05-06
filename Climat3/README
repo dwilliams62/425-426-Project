@@ -20,7 +20,7 @@ The HTML and design aspect are the work of Vincent Fealy
 
 - Other files that are lose in the CLIMAT3 folder that shouldn't be touched include
     - database.rules.json - for use with cloud firestore database
-    - firebase.json - for use with firebase
+    - firebase.json - for use with firebase (f you dont have this, it can be found on the firebase console, ask Karl Maier for login)
     - .firebasesrc - same used for firebase
     - package-lock.json - for use with npm
     - package.json - also for use with npm
